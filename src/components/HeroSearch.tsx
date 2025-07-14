@@ -12,10 +12,10 @@ export default function HeroSearch() {
     return (
         
         <section style={{ backgroundColor: '#2D3E2E' }}>
-            <AirportAutocomplete label="From" onSelect={setFrom} />
-    <AirportAutocomplete label="To" onSelect={setTo} />
+            {/* <AirportAutocomplete label="From" onSelect={setFrom} />
+    <AirportAutocomplete label="To" onSelect={setTo} /> */}
             {/* Tabs with Icons */}
-            <Nav className="mb-4 gap-3" style={{ backgroundColor: '#14A15F', padding: '0.5rem 5rem'}}>
+            <Nav className="mb-4 gap-3" style={{ backgroundColor: '#14A15F', padding: '1rem 18rem'}}>
                 <Nav.Item>
                     <Button variant="light" className="rounded-pill d-flex align-items-center gap-2 px-3 py-1">
                         <Plane size={16} /> Flights

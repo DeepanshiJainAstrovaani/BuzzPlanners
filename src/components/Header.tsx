@@ -16,8 +16,8 @@ export default function Header() {
                         <Image
                             src="/buzzplannersLogo.png"
                             alt="Buzz Planners"
-                            width={120}
-                            height={40}
+                            width={150}
+                            height={70}
                             style={{ objectFit: 'contain' }}
                         />
                     </Col>
@@ -26,9 +26,8 @@ export default function Header() {
                     <Col xs="auto" className="text-end">
                         {/* Top line: Enquiry */}
                         <div
-                            className="text-muted"
+                            className="text-muted fs-7"
                             style={{
-                                fontSize: '10px',
                                 fontWeight: 500,
                                 lineHeight: '100%',
                             }}
@@ -37,7 +36,6 @@ export default function Header() {
                             <span
                                 className="text-success"
                                 style={{
-                                    fontSize: '10px',
                                     fontWeight: 500,
                                     cursor: 'pointer',
                                     color: '#14A15F',
@@ -53,13 +51,12 @@ export default function Header() {
                                 href="#"
                                 className="d-flex align-items-center gap-1 text-decoration-none"
                                 style={{
-                                    fontSize: '10px',
                                     fontWeight: 500,
                                     color: '#222222',
                                     lineHeight: '100%',
                                 }}
                             >
-                                <CircleUserRound size={14} />
+                                <CircleUserRound size={18} />
                                 Become a vendor
                             </Link>
 
@@ -68,7 +65,6 @@ export default function Header() {
                                 style={{
                                     backgroundColor: '#C8E8D9',
                                     color: '#147C2B',
-                                    fontSize: '12px',
                                     fontWeight: '600',
                                     lineHeight: '100%',
                                     border: 'none',
