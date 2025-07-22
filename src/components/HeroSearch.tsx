@@ -2,11 +2,12 @@
 
 import { Container, Row, Col, Button, Form, Nav } from 'react-bootstrap';
 import { CalendarDays, Plane, Building2, TreePalm, Car } from 'lucide-react';
-import AirportAutocomplete from './AirportAutocomplete';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Place } from '../../types/types';
 
 export default function HeroSearch() {
+    const router = useRouter();
     const [from, setFrom] = useState<Place | null>(null);
     const [to, setTo] = useState<Place | null>(null);
     return (
@@ -17,8 +18,12 @@ export default function HeroSearch() {
             {/* Tabs with Icons */}
             <Nav className="mb-4 gap-3" style={{ backgroundColor: '#14A15F', padding: '1rem 18rem'}}>
                 <Nav.Item>
-                    <Button variant="light" className="rounded-pill d-flex align-items-center gap-2 px-3 py-1">
-                        <Plane size={16} /> Flights
+                    <Button
+                      variant="light"
+                      className="rounded-pill d-flex align-items-center gap-2 px-3 py-1"
+                      onClick={() => router.push('/flight-search')}
+                    >
+                      <Plane size={16} /> Flights
                     </Button>
                 </Nav.Item>
                 <Nav.Item>
