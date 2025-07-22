@@ -5,6 +5,7 @@ import { fetchFlightsFromAirport } from '@/api/getFlights';
 import FlightCard from '@/components/FlightCard';
 import FlightSearchForm from '@/components/FlightSearchForm';
 import FlightFilterSidebar from '@/components/FlightFilterSidebar';
+import Header from '@/components/Header';
 
 const DEFAULT_AIRLINES = [
     'Air India',
@@ -81,18 +82,37 @@ export default function FlightSearchPage() {
     );
 
     return (
-        <div className="d-flex gap-4">
-            <FlightFilterSidebar
-                filters={filters}
-                setFilters={setFilters}
-                airlines={airlinesList}
-            />
-            <div className="flex-grow-1">
-                <FlightSearchForm onSearch={handleSearch} />
-                <div className="mt-4">
-                    {filteredFlights.map((flight, index) => (
-                        <FlightCard key={index} flight={flight} />
-                    ))}
+        <div>
+            <Header />
+            <div style={{ background: "#f5f6f8", minHeight: "100vh" }}>
+                {/* --- Top Search Bar --- */}
+                <div className="searchbar-sticky-wrapper py-4 px-5" style={{ background: "#222829" }}>
+                    <div
+                        className="container"
+                        style={{
+                            maxWidth: '100%'
+                        }}
+                    >
+                        <FlightSearchForm onSearch={handleSearch} />
+                    </div>
+                </div>
+
+                {/* --- Main Content (Sidebar + Results) --- */}
+                <div className="container px-5" style={{ maxWidth: '100%' }}>
+                    <div className="d-flex gap-4 align-items-start" style={{ marginTop: 32 }}>
+                        <FlightFilterSidebar
+                            filters={filters}
+                            setFilters={setFilters}
+                            airlines={airlinesList}
+                        />
+                        <div className="flex-grow-1">
+                            <div className="mt-0"> {/* No margin needed now; already spaced */}
+                                {filteredFlights.map((flight, index) => (
+                                    <FlightCard key={index} flight={flight} />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
