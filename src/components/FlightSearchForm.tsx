@@ -4,83 +4,106 @@ import React, { useState } from 'react';
 import AirportSelect from './AirportSelect';
 
 export default function FlightSearchForm({ onSearch }: { onSearch: Function }) {
-  const [from, setFrom] = useState<{ label: string; value: string } | null>(null);
-  const [to, setTo] = useState<{ label: string; value: string } | null>(null);
-  const [departureDate, setDepartureDate] = useState(new Date().toISOString().split('T')[0]);
+    const [from, setFrom] = useState<{ label: string; value: string } | null>(null);
+    const [to, setTo] = useState<{ label: string; value: string } | null>(null);
+    const [departureDate, setDepartureDate] = useState(new Date().toISOString().split('T')[0]);
+    const [returnDate] = useState<string>('');
+    const [traveller] = useState({ count: 1, class: 'Economy' });
 
-  // For visual/UX parity with screenshot2
-  const [returnDate] = useState<string>(''); // Placeholder, not yet functional
-  const [traveller] = useState({ count: 1, class: 'Economy' }); // Static for now
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!from?.value || !to?.value) return;
+        onSearch({ from: from.value, to: to.value, departureDate });
+    };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!from?.value || !to?.value) return;
-    onSearch({ from: from.value, to: to.value, departureDate });
-  };
+    return (
+        <div className='d-flex' style={{ width: '100%' }}>
+            <form
+                onSubmit={handleSubmit}
+                className="bg-white p-4 rounded-start-4 shadow d-flex flex-wrap align-items-end gap-3"
+                style={{
+                    flexGrow: 1,
+                    border: '1px solid #ddd',
+                    borderRight: 'none', // Remove right border to merge with button
+                }}
+            >
+                {/* FROM */}
+                <div className="flex-grow-1" style={{ minWidth: 180 }}>
+                    <div className="text-xs text-secondary fw-semibold mb-1 fs-5">FROM</div>
+                    <AirportSelect label="" value={from} onChange={setFrom} />
+                </div>
 
-  return (
-    <form 
-      onSubmit={handleSubmit}
-      className="w-100 bg-white p-4 rounded-3 shadow flex items-end gap-3"
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        borderRadius: '0.75rem',
-      }}
-    >
-      {/* FROM */}
-      <div style={{ flex: 1, minWidth: 180 }}>
-        <div className="text-xs font-semibold text-gray-500 mb-1">FROM</div>
-        <AirportSelect label="" value={from} onChange={setFrom} />
-      </div>
-      {/* TO */}
-      <div style={{ flex: 1, minWidth: 180 }}>
-        <div className="text-xs font-semibold text-gray-500 mb-1">TO</div>
-        <AirportSelect label="" value={to} onChange={setTo} />
-      </div>
-      {/* DEPARTURE DATE */}
-      <div style={{ minWidth: 180 }}>
-        <div className="text-xs font-semibold text-gray-500 mb-1">DEPARTURE DATE</div>
-        <input
-          type="date"
-          value={departureDate}
-          onChange={e => setDepartureDate(e.target.value)}
-          className="form-control border rounded py-2 px-3 w-full"
-          style={{height: 40}}
-        />
-      </div>
-      {/* RETURN DATE (placeholder) */}
-      <div style={{ minWidth: 180 }}>
-        <div className="text-xs font-semibold text-gray-500 mb-1">RETURN DATE</div>
-        <input
-          type="text"
-          className="form-control border rounded py-2 px-3 w-full text-gray-400"
-          style={{height: 40}}
-          placeholder="Book a round trip"
-          disabled
-        />
-      </div>
-      {/* TRAVELLER */}
-      <div style={{ minWidth: 120 }}>
-        <div className="text-xs font-semibold text-gray-500 mb-1">TRAVELLER</div>
-        <div
-          className="border rounded px-3 py-2 bg-gray-50 text-gray-600"
-          style={{height: 40, display: 'flex', alignItems: 'center'}}
-        >
-          {traveller.count} Traveller{traveller.count > 1 ? 's' : ''} <span className="mx-1">•</span> {traveller.class}
+                {/* TO */}
+                <div className="flex-grow-1" style={{ minWidth: 180 }}>
+                    <div className="text-xs text-secondary fw-semibold mb-1 fs-5">TO</div>
+                    <AirportSelect label="" value={to} onChange={setTo} />
+                </div>
+
+                {/* DEPARTURE DATE */}
+                <div className="flex-grow-1" style={{ minWidth: 180 }}>
+                    <div className="text-xs text-secondary fw-semibold mb-4 fs-5">DEPARTURE DATE</div>
+                    <div className="mb-3">
+                        <input
+                            type="date"
+                            value={departureDate}
+                            onChange={e => setDepartureDate(e.target.value)}
+                            className="form-control"
+                            style={{ height: 40 }}
+                        />
+                    </div>
+                </div>
+
+                {/* RETURN DATE */}
+                <div className="flex-grow-1" style={{ minWidth: 180 }}>
+                    <div className="text-xs text-secondary fw-semibold mb-4 fs-5">RETURN DATE</div>
+                    <div className="mb-3">
+                        <input
+                            type="text"
+                            className="form-control text-muted"
+                            placeholder="Book a round trip"
+                            disabled
+                            style={{ height: 40 }}
+                        />
+                    </div>
+                </div>
+
+                {/* TRAVELLER */}
+                <div className="flex-grow-1" style={{ minWidth: 180 }}>
+                    <div className="text-xs text-secondary fw-semibold mb-4 fs-5">TRAVELLER</div>
+                    <div className="mb-3">
+                        <div
+                            className="form-control bg-light text-dark"
+                            style={{
+                                height: 40,
+                                display: 'flex',
+                                alignItems: 'center',
+                                padding: '0 12px',
+                            }}
+                        >
+                            {traveller.count} Traveller{traveller.count > 1 ? 's' : ''} • {traveller.class}
+                        </div>
+                    </div>
+                </div>
+            </form>
+            
+            {/* SEARCH BUTTON */}
+            <button
+                type="submit"
+                className="btn btn-success fw-bold text-white"
+                style={{
+                    padding: '0 30px',
+                    fontSize: '1.5rem',
+                    borderTopLeftRadius: 0,
+                    borderBottomLeftRadius: 0,
+                    borderTopRightRadius: '1rem',
+                    borderBottomRightRadius: '1rem',
+                    whiteSpace: 'nowrap',
+                }}
+                onClick={handleSubmit}
+            >
+                SEARCH
+            </button>
         </div>
-      </div>
-      {/* SEARCH BUTTON */}
-      <div>
-        <button
-          type="submit"
-          style={{ height: 48, minWidth: 100, borderRadius: 25 }}
-          className="btn btn-success px-4 text-white fw-bold"
-        >
-          SEARCH
-        </button>
-      </div>
-    </form>
-  );
+    );
+
 }

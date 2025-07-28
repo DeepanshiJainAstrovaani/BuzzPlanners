@@ -1,28 +1,88 @@
 import React from 'react';
 
 export default function FlightCard({ flight }: { flight: any }) {
-  const departureTime = flight?.departure?.scheduledTimeLocal?.split('T')[1]?.slice(0, 5) || 'N/A';
-  const arrivalTime = flight?.arrival?.scheduledTimeLocal?.split('T')[1]?.slice(0, 5) || 'N/A';
+    const departureTime = flight?.departure?.scheduledTime?.local?.split(' ')[1]?.slice(0, 5) || 'N/A';
+    const arrivalTime = flight?.arrival?.scheduledTime?.local?.split(' ')[1]?.slice(0, 5) || 'N/A';
 
-  return (
-    <div className="card mb-3 shadow-sm">
-      <div className="card-body d-flex justify-content-between align-items-center">
-        <div>
-          <h5 className="mb-1">{flight.airline?.name || 'Unknown Airline'}</h5>
-          <p className="mb-0 text-muted">{flight.number}</p>
-          <small>{flight.departure?.airport?.name} → {flight.arrival?.airport?.name}</small>
+    const departureCity = flight?.departure?.airport?.name?.split(' ')[0] || 'N/A';
+    const arrivalCity = flight?.arrival?.airport?.name?.split(' ')[0] || 'N/A';
+
+    // Fake duration for example (you may calculate real one from datetime)
+    const duration = '03h 15m';
+    const isNonstop = true;
+
+    return (
+        <div
+            className="card mb-3 border-0 shadow-sm"
+            style={{ borderRadius: '1rem', padding: '16px' }}
+        >
+            <div className="d-flex justify-content-between align-items-center">
+                {/* Airline + Aircraft Info */}
+                <div className='col-4'>
+                    <div className="mb-2">
+                        <span
+                            className="badge rounded-bottom-2 rounded-top-0 fw-lighter mb-2"
+                            style={{ 
+                                backgroundColor: '#F6EFCE',
+                                fontSize: '0.9rem',
+                                top: 0,
+                                position: 'absolute',
+                                color: '#866308'
+                             }}
+                        >
+                            {flight.aircraft?.model || 'Aircraft'}
+                        </span>
+                    </div>
+                    <div>
+                        {/* Airline logo placeholder */}
+                        <img
+                            className='my-3'
+                            src={`https://content.airhex.com/content/logos/airlines_${flight.airline?.iata}_200_70_r.png`}
+                            alt={`${flight.airline?.name} Logo`}
+                            style={{ width: 120, height: 'auto' }}
+                            onError={(e) => {
+                                (e.target as HTMLImageElement).src = '/fallback-airline-logo.png';
+                            }}
+                        />
+
+
+                        <div>
+                            <div className="fw-bold">{flight.airline?.name}</div>
+                            <div className="text-muted" style={{ fontSize: '0.85rem' }}>{flight.number}</div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Times & Duration */}
+                <div className="d-flex align-items-center col-4">
+                    <div className="text-center mx-3 col-4">
+                        <div className="fw-bold fs-5">{departureTime}</div>
+                        <div className="text-muted">{departureCity}</div>
+                    </div>
+
+                    {/* Middle Line and Duration */}
+                    <div className="text-center px-2 col-4" style={{ width: 100 }}>
+                        <div className="small fw-semibold">{duration}</div>
+                        <div className="border-top mb-1" />
+                        <div className="text-muted small">{isNonstop ? 'Nonstop' : '1 Stop'}</div>
+                    </div>
+
+                    <div className="text-center mx-3 col-4">
+                        <div className="fw-bold fs-5">{arrivalTime}</div>
+                        <div className="text-muted">{arrivalCity}</div>
+                    </div>
+                </div>
+
+                {/* Price + Button */}
+                <div className="text-center col-4">
+                    <div className="fw-bold text-danger fs-4 mb-2">
+                        ₹{flight.price.toLocaleString('en-IN')}
+                    </div>
+                    <button className="btn btn-success rounded-pill px-4 fw-semibold">
+                        BOOK NOW
+                    </button>
+                </div>
+            </div>
         </div>
-        <div className="text-center">
-          <div className="fw-bold">{departureTime}</div>
-          <div className="text-muted">→</div>
-          <div className="fw-bold">{arrivalTime}</div>
-        </div>
-        <div className="text-end">
-          <h4 className="text-success">₹{flight.price}</h4>
-          <button className="btn btn-success btn-sm">BOOK NOW</button>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }
-

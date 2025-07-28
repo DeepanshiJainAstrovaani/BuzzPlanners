@@ -6,6 +6,7 @@ import FlightCard from '@/components/FlightCard';
 import FlightSearchForm from '@/components/FlightSearchForm';
 import FlightFilterSidebar from '@/components/FlightFilterSidebar';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 const DEFAULT_AIRLINES = [
     'Air India',
@@ -81,14 +82,18 @@ export default function FlightSearchPage() {
             true
     );
 
+    console.log('Filtered Flights:', filteredFlights);
+    console.log('Airlines List:', airlinesList);
+    console.log('Filters:', filters);
+
     return (
         <div>
             <Header />
             <div style={{ background: "#f5f6f8", minHeight: "100vh" }}>
                 {/* --- Top Search Bar --- */}
-                <div className="searchbar-sticky-wrapper py-4 px-5" style={{ background: "#222829" }}>
+                <div className="searchbar-sticky-wrapper py-4 px-5" style={{ background: "#2D3E2E" }}>
                     <div
-                        className="container"
+                        className="container px-0"
                         style={{
                             maxWidth: '100%'
                         }}
@@ -115,6 +120,7 @@ export default function FlightSearchPage() {
                     </div>
                 </div>
             </div>
+            <Footer/>
         </div>
     );
 }
