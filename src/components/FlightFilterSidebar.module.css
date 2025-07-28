@@ -2,3 +2,23 @@
     background-color: #33A46F;
     border-color: #33A46F;
 }
+
+.custom-slider {
+  height: 6px;
+  background: #ddd;
+  margin-bottom: 10px;
+}
+
+.custom-track {
+  background: #14A15F;
+  height: 100%;
+}
+
+.custom-thumb {
+  height: 20px;
+  width: 20px;
+  background-color: #14A15F;
+  border-radius: 50%;
+  cursor: grab;
+  margin-top: -7px;
+}

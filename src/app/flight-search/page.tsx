@@ -24,6 +24,7 @@ export default function FlightSearchPage() {
 
     const [filters, setFilters] = useState({
         airlines: DEFAULT_AIRLINES,
+        priceRange: [3000, 18000],
         class: 'Economy',
     });
 
@@ -73,14 +74,24 @@ export default function FlightSearchPage() {
         });
     };
 
+
     // Filter flights using user selections
-    const filteredFlights = flights.filter(
-        f =>
-            (filters.airlines.length === 0 ||
-                filters.airlines.includes(f.airline?.name)) &&
-            // add more filter conditions if needed
-            true
-    );
+    const filteredFlights = flights.filter(flight => {
+        const airlineMatch =
+            filters.airlines.length === 0 || filters.airlines.includes(flight.airline?.name);
+
+        const priceMatch =
+            flight.price >= filters.priceRange[0] && flight.price <= filters.priceRange[1];
+
+        const classMatch =
+            !filters.class || flight.flightClass === filters.class || filters.class === 'Economy'; // assuming default
+
+        const match = airlineMatch && priceMatch && classMatch;
+
+        console.log(`Flight: ${flight.airline?.name}, ₹${flight.price} -> Match: ${match}`);
+
+        return match;
+    });
 
     console.log('Filtered Flights:', filteredFlights);
     console.log('Airlines List:', airlinesList);
@@ -89,21 +100,19 @@ export default function FlightSearchPage() {
     return (
         <div>
             <Header />
+            
             <div style={{ background: "#f5f6f8", minHeight: "100vh" }}>
                 {/* --- Top Search Bar --- */}
                 <div className="searchbar-sticky-wrapper py-4 px-5" style={{ background: "#2D3E2E" }}>
                     <div
-                        className="container px-0"
-                        style={{
-                            maxWidth: '100%'
-                        }}
+                        className="container"
                     >
                         <FlightSearchForm onSearch={handleSearch} />
                     </div>
                 </div>
 
                 {/* --- Main Content (Sidebar + Results) --- */}
-                <div className="container px-5" style={{ maxWidth: '100%' }}>
+                <div className="container">
                     <div className="d-flex gap-4 align-items-start" style={{ marginTop: 32 }}>
                         <FlightFilterSidebar
                             filters={filters}
@@ -120,7 +129,7 @@ export default function FlightSearchPage() {
                     </div>
                 </div>
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 }

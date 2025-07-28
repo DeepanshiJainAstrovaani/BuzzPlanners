@@ -17,10 +17,10 @@ export default function FlightSearchForm({ onSearch }: { onSearch: Function }) {
     };
 
     return (
-        <div className='d-flex' style={{ width: '100%' }}>
+        <div className='d-flex col-12' style={{ width: '100%' }}>
             <form
                 onSubmit={handleSubmit}
-                className="bg-white p-4 rounded-start-4 shadow d-flex flex-wrap align-items-end gap-3"
+                className="bg-white p-4 rounded-start-4 shadow d-flex flex-wrap align-items-end gap-3 col-10"
                 style={{
                     flexGrow: 1,
                     border: '1px solid #ddd',
@@ -28,19 +28,19 @@ export default function FlightSearchForm({ onSearch }: { onSearch: Function }) {
                 }}
             >
                 {/* FROM */}
-                <div className="flex-grow-1" style={{ minWidth: 180 }}>
+                <div className="col-3">
                     <div className="text-xs text-secondary fw-semibold mb-1 fs-5">FROM</div>
                     <AirportSelect label="" value={from} onChange={setFrom} />
                 </div>
 
                 {/* TO */}
-                <div className="flex-grow-1" style={{ minWidth: 180 }}>
+                <div className="col-3">
                     <div className="text-xs text-secondary fw-semibold mb-1 fs-5">TO</div>
                     <AirportSelect label="" value={to} onChange={setTo} />
                 </div>
 
                 {/* DEPARTURE DATE */}
-                <div className="flex-grow-1" style={{ minWidth: 180 }}>
+                <div className="col-3">
                     <div className="text-xs text-secondary fw-semibold mb-4 fs-5">DEPARTURE DATE</div>
                     <div className="mb-3">
                         <input
@@ -54,7 +54,7 @@ export default function FlightSearchForm({ onSearch }: { onSearch: Function }) {
                 </div>
 
                 {/* RETURN DATE */}
-                <div className="flex-grow-1" style={{ minWidth: 180 }}>
+                <div className="col-2">
                     <div className="text-xs text-secondary fw-semibold mb-4 fs-5">RETURN DATE</div>
                     <div className="mb-3">
                         <input
@@ -68,7 +68,7 @@ export default function FlightSearchForm({ onSearch }: { onSearch: Function }) {
                 </div>
 
                 {/* TRAVELLER */}
-                <div className="flex-grow-1" style={{ minWidth: 180 }}>
+                {/* <div className="col-2">
                     <div className="text-xs text-secondary fw-semibold mb-4 fs-5">TRAVELLER</div>
                     <div className="mb-3">
                         <div
@@ -83,7 +83,7 @@ export default function FlightSearchForm({ onSearch }: { onSearch: Function }) {
                             {traveller.count} Traveller{traveller.count > 1 ? 's' : ''} • {traveller.class}
                         </div>
                     </div>
-                </div>
+                </div> */}
             </form>
             
             {/* SEARCH BUTTON */}
