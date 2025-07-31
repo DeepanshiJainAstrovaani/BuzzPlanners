@@ -59,7 +59,7 @@ export default function FlightFilterSidebar({
             {/* Airlines Filter */}
             <div>
                 <p className="fs-5 fw-medium mb-2">Popular Airlines</p>
-                <div className='mt-2' style={{ height: '20rem', overflowY: 'auto', overflowX: 'hidden' }}>
+                <div className='mt-2 hide-scrollbar' style={{ height: '50rem', overflowY: 'auto', overflowX: 'hidden' }}>
                     {airlines.length === 0 && <div className="text-muted">No airlines found</div>}
                     {airlines.map((airline) => (
                         <div key={airline} className="form-check">

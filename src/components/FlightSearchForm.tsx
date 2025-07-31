@@ -41,8 +41,8 @@ export default function FlightSearchForm({ onSearch }: { onSearch: Function }) {
 
                 {/* DEPARTURE DATE */}
                 <div className="col-3">
-                    <div className="text-xs text-secondary fw-semibold mb-4 fs-5">DEPARTURE DATE</div>
-                    <div className="mb-3">
+                    <div className="text-xs text-secondary fw-semibold mb-1 fs-5">DEPARTURE DATE</div>
+                    <div className="mb-1">
                         <input
                             type="date"
                             value={departureDate}
@@ -55,8 +55,8 @@ export default function FlightSearchForm({ onSearch }: { onSearch: Function }) {
 
                 {/* RETURN DATE */}
                 <div className="col-2">
-                    <div className="text-xs text-secondary fw-semibold mb-4 fs-5">RETURN DATE</div>
-                    <div className="mb-3">
+                    <div className="text-xs text-secondary fw-semibold mb-1 fs-5">RETURN DATE</div>
+                    <div className="mb-1">
                         <input
                             type="text"
                             className="form-control text-muted"

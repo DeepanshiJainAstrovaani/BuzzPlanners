@@ -71,8 +71,7 @@ export default function AirportSelect({ label, onChange, value }: Props) {
   };
 
   return (
-    <div className="mb-3">
-      <label className="form-label">{label}</label>
+    <div className="mb-1">
       <AsyncSelect
         value={value}
         onChange={onChange}
