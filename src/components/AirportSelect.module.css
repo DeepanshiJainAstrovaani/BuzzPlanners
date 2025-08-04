@@ -1,0 +1,44 @@
+.displayBox {
+  cursor: pointer;
+  background-color: #fdfdfd;
+}
+
+.displayBox .fw-bold {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.displayBox .text-muted {
+  color: #6c757d;
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
+
+.inputWithIcon {
+  padding-left: 36px !important; /* leave space for icon */
+  border: none !important;
+  border-bottom: 1px solid #dce0de !important;
+  border-radius: 0px !important;
+  background: transparent;
+  font-size: 1.06rem;
+  box-shadow: none !important;
+}
+
+.inputWithIcon::placeholder {
+  color: #98a6ad;
+  opacity: 1;
+  font-size: 1.04rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+.inputIcon {
+  position: absolute;
+  left: 7px;
+  top: 8%;
+  transform: translateY(-53%);
+  width: 17px;
+  color: #ababab;
+  opacity: 0.85;
+  pointer-events: none;
+}

@@ -14,11 +14,11 @@ export default function FlightCard({ flight }: { flight: any }) {
     return (
         <div
             className="card mb-3 border-0 shadow-sm"
-            style={{ borderRadius: '1rem', padding: '16px' }}
+            style={{ borderRadius: '1rem', padding: '2% 0 2% 4%' }}
         >
             <div className="d-flex justify-content-between align-items-center">
                 {/* Airline + Aircraft Info */}
-                <div className='col-4'>
+                <div className='col-3'>
                     <div className="mb-2">
                         <span
                             className="badge rounded-bottom-2 rounded-top-0 fw-lighter mb-2"
@@ -54,7 +54,7 @@ export default function FlightCard({ flight }: { flight: any }) {
                 </div>
 
                 {/* Times & Duration */}
-                <div className="d-flex align-items-center col-4">
+                <div className="d-flex align-items-center col-5">
                     <div className="text-center mx-3 col-4">
                         <div className="fw-bold fs-5">{departureTime}</div>
                         <div className="text-muted">{departureCity}</div>
@@ -75,7 +75,7 @@ export default function FlightCard({ flight }: { flight: any }) {
 
                 {/* Price + Button */}
                 <div className="text-center col-4">
-                    <div className="fw-bold text-danger fs-4 mb-2">
+                    <div className="fw-bold text-danger fs-3 mb-4 mt-2">
                         ₹{flight.price.toLocaleString('en-IN')}
                     </div>
                     <button className="btn btn-success rounded-pill px-4 fw-semibold">
