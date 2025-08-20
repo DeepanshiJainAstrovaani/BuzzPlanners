@@ -1,12 +1,12 @@
 // src/api/getFlights.ts
 
-export async function fetchFlightsFromAirport(iataCode: string, date: string) {
+export async function fetchFlightsFromAirport(iataCode: string, date: string) {  // eslint-disable-line @typescript-eslint/no-unused-vars
   const url = `https://aerodatabox.p.rapidapi.com/flights/airports/iata/${iataCode}?offsetMinutes=-120&durationMinutes=720&withLeg=true&direction=Both&withCancelled=true&withCodeshared=true&withCargo=true&withPrivate=true&withLocation=false`;
 
   const options = {
     method: 'GET',
     headers: {
-      'x-rapidapi-key': 'd8044ed75fmshff41b6fef3fb0bdp100fd5jsn8a9d5b0713ae',
+      'x-rapidapi-key': '65c3fe1f51mshf313f0d66fe7083p1fab7ajsn18157d1cb668',
       'x-rapidapi-host': 'aerodatabox.p.rapidapi.com',
     },
   };

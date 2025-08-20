@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 'use client';
+
 
 import React from 'react';
 import styles from './FlightFilterSidebar.module.css';
@@ -59,7 +62,7 @@ export default function FlightFilterSidebar({
             {/* Airlines Filter */}
             <div>
                 <p className="fs-5 fw-medium mb-2">Popular Airlines</p>
-                <div className='mt-2 hide-scrollbar' style={{ height: '50rem', overflowY: 'auto', overflowX: 'hidden' }}>
+                <div className='mt-2 hide-scrollbar' style={{ height: '35rem', overflowY: 'auto', overflowX: 'hidden' }}>
                     {airlines.length === 0 && <div className="text-muted">No airlines found</div>}
                     {airlines.map((airline) => (
                         <div key={airline} className="form-check">

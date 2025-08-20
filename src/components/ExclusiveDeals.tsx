@@ -4,27 +4,8 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import Image from 'next/image';
 import travellerImg from '../../public/images/traveller.png'; // replace with your image
-import flightOfferImg from '../../public/images/deal1.png'; // replace with your image
-import hourlyRentalImg from '../../public/images/deal2.png';
 
 const tabOptions = ['Flights', 'Events', 'Hotels', 'Trips', 'Holiday'];
-
-const offers = [
-  {
-    title: 'New User Offer on',
-    highlight: 'First Flight',
-    code: 'EMTFIRST',
-    image: flightOfferImg,
-    bgColor: '#0D6EFD'
-  },
-  {
-    title: 'Grab 10% OFF* on',
-    highlight: 'Hourly Rentals',
-    code: 'EMTHOURLY',
-    image: hourlyRentalImg,
-    bgColor: '#B857F6'
-  }
-];
 
 export default function ExclusiveDeals() {
   const [activeTab, setActiveTab] = useState('Flights');

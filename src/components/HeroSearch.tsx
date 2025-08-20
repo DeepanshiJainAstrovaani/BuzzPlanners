@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 'use client';
 
-import { Container, Row, Col, Button, Form, Nav } from 'react-bootstrap';
+import { Container, Row, Col, Button, Nav } from 'react-bootstrap';
 import { CalendarDays, Plane, Building2, TreePalm, Car } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -8,8 +10,8 @@ import { Place } from '../../types/types';
 
 export default function HeroSearch() {
     const router = useRouter();
-    const [from, setFrom] = useState<Place | null>(null);
-    const [to, setTo] = useState<Place | null>(null);
+    // const [from, setFrom] = useState<Place | null>(null);
+    // const [to, setTo] = useState<Place | null>(null);
     return (
         
         <section style={{ backgroundColor: '#2D3E2E' }}>
@@ -32,7 +34,9 @@ export default function HeroSearch() {
                     </Button>
                 </Nav.Item>
                 <Nav.Item>
-                    <Button variant="light" className="rounded-pill d-flex align-items-center gap-2 px-3 py-1">
+                    <Button variant="light" className="rounded-pill d-flex align-items-center gap-2 px-3 py-1"
+                        onClick={() => router.push('/travel-packages')}
+                    >
                         <Building2 size={16} /> Hotels
                     </Button>
                 </Nav.Item>
