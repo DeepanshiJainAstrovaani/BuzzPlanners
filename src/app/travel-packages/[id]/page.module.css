@@ -1,0 +1,25 @@
+.sticky-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  padding: 16px 0 12px 0;
+}
+.tab-btn {
+  border: 1px solid #cfe5d7;
+  background: #fff;
+  color: #168b3f;
+  border-radius: 7px;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-weight: 600;
+  padding: 8px 18px;
+  margin-right: 8px;
+  transition: background 0.2s, border 0.2s, color 0.2s;
+  cursor: pointer;
+}
+.tab-btn.active,
+.tab-btn:focus {
+  background: #168b3f;
+  color: #fff;
+  border: 1px solid #168b3f;
+}

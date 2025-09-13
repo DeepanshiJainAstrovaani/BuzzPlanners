@@ -9,7 +9,7 @@ export async function fetchTravelPackages(destination: string, date: string) {
         packages: [
           {
             id: 1,
-            title: "hii",
+            title: "Kasauli 3D/2N Trip From Delhi",
             star: 4.5,
             departure: "Delhi",
             destination: "Kasauli",
@@ -26,7 +26,7 @@ export async function fetchTravelPackages(destination: string, date: string) {
           },
           {
             id: 2,
-            title: "hello",
+            title: "Kasauli 3D/2N Trip From Delhi",
             star: 4.5,
             departure: "Delhi",
             destination: "Kasauli",
@@ -43,7 +43,7 @@ export async function fetchTravelPackages(destination: string, date: string) {
           },
           {
             id: 3,
-            title: "hii",
+            title: "Kasauli 3D/2N Trip From Delhi",
             star: 4.5,
             departure: "Delhi",
             destination: "Kasauli",

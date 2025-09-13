@@ -1,0 +1,37 @@
+.header {
+  width: 100vw;
+  height: auto;
+  background: #181818;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+.logoSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand {
+  color: #ffb300;
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+  font-family: 'Montserrat', sans-serif;
+}
+.logout {
+  background: none;
+  border: none;
+  color: #e57373;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.logout:hover {
+  color: #ff1744;
+}

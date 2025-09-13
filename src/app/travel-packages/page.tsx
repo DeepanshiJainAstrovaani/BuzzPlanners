@@ -73,7 +73,7 @@ export default function TravelPackageSearchPage() {
               filters={filters}
               setFilters={setFilters}
               destinations={DEFAULT_DESTINATIONS}
-            />Hi
+            />
             <div className="flex-grow-1 hide-scrollbar mb-4" style={{ height: '87rem', overflowY: 'scroll' }}>
               <div className="mt-0">
                 {filteredPackages.length > 0 ? (

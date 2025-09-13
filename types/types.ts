@@ -21,3 +21,38 @@ export interface AeroFlight {
   departure: { iata: string; scheduledTime: string };
   arrival: { iata: string; scheduledTime: string };
 }
+
+// Wedding Management Types
+export interface VendorMasterSheetRow {
+  item: string; // e.g., Venue, Hotel, DJ
+  status: 'Booked' | 'Pending';
+  advance: number;
+  cost: number;
+  pending: number;
+  vendor: string; // Vendor name/type
+  vendorContact: string;
+}
+
+export interface Wedding {
+  id: string; // e.g., WED453
+  title: string; // e.g., Jatin weds Roshni
+  date: string; // ISO date string
+  venue: string;
+  contactPersonGroomSide: string;
+  contactPersonBrideSide: string;
+  mobileGroomSide: string;
+  mobileBrideSide: string;
+  status: 'Upcoming' | 'Completed' | 'Cancelled';
+  vendorMasterSheet: VendorMasterSheetRow[];
+  brideSide?: any[];
+  groomSide?: any[];
+  makeupArtist?: any[];
+  performanceLineups?: any[];
+  // Add more tables as needed
+}
+
+export interface Guest {
+  name: string;
+  side: 'Bride' | 'Groom';
+  contactNumber: string;
+}

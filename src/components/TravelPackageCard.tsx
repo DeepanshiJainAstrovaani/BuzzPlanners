@@ -187,7 +187,7 @@ export default function TravelPackageCard({ pkg }: { pkg: any }) {
             
           </div>
           <span className="text-success">
-              +3 more amenities
+              +6 more amenities
             </span>
           <div className="fs-4 mt-3" style={{ color: '#FF5F5F' }}>
             {pkg.seatsLeft === 'few' && 'Only few seats left'}
@@ -225,7 +225,7 @@ export default function TravelPackageCard({ pkg }: { pkg: any }) {
                 router.push(`/travel-packages/${pkg.id}`);
                 }}
             >
-              BOOK NOW hi
+              BOOK NOW
             </Button>
             <button
               className="btn btn-outline-success fw-semibold"
