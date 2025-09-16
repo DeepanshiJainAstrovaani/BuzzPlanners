@@ -46,6 +46,13 @@ export default function DashboardSidebar() {
     }
   }, [safePathname]);
 
+  // Filter out Vendor Master Sheet from dynamic sections to avoid duplication
+  const otherSections = weddingSections.filter((s: any) => {
+    const key = String(s?.key || '').toLowerCase();
+    const label = String(s?.label || '').toLowerCase();
+    return key !== 'vendormastersheet' && label !== 'vendor master sheet';
+  });
+
   return (
     <aside
       style={{
@@ -121,8 +128,26 @@ export default function DashboardSidebar() {
                       Wedding Info
                     </a>
                   </li>
-                  {/* Render other dynamic sections */}
-                  {weddingSections.map((section: any) => (
+                  {/* Vendor Master Sheet always second */}
+                  <li key="vendorMasterSheet">
+                    <a
+                      style={{
+                        color: activeSection === 'vendorMasterSheet' ? '#222' : '#848a8e',
+                        background: activeSection === 'vendorMasterSheet' ? '#fdf5d5' : 'transparent',
+                        borderRadius: 4,
+                        display: 'block',
+                        padding: '8px 36px',
+                        fontWeight: activeSection === 'vendorMasterSheet' ? 700 : 500,
+                        cursor: 'pointer',
+                        margin: '2px 0',
+                      }}
+                      onClick={() => router.push(`/dashboard/wedding-management/${weddingId}/vendorMasterSheet`)}
+                    >
+                      Vendor Master Sheet
+                    </a>
+                  </li>
+                  {/* Render other dynamic sections (any order) */}
+                  {otherSections.map((section: any) => (
                     <li key={section.key}>
                       <a
                         style={{
