@@ -163,7 +163,7 @@ export default function WeddingManagementPage() {
                     <td style={{ padding: '16px' }}>
                       <button
                         style={{ border: '1px solid #2196f3', color: '#2196f3', background: '#fff', borderRadius: 6, padding: '6px 18px', fontWeight: 600, fontSize: 15, marginRight: 8, cursor: 'pointer' }}
-                        onClick={() => router.push(`/dashboard/wedding-management/${wedding._id}`)}
+                        onClick={() => router.push(`/dashboard/wedding-management/${wedding._id}/info`)}
                       >
                         View Details
                       </button>
@@ -185,7 +185,7 @@ export default function WeddingManagementPage() {
 
 const modalOverlayStyle = {
   position: 'fixed' as const,
-  top: 0,
+  top: 40,
   left: 0,
   width: '100vw',
   height: '100vh',
@@ -203,6 +203,6 @@ const modalStyle = {
   padding: '40px 48px',
   boxShadow: '0 4px 32px #0002',
   textAlign: 'center' as const,
-  minWidth: 320,
+  minWidth: '90rem',
   animation: 'popIn 0.3s',
 };

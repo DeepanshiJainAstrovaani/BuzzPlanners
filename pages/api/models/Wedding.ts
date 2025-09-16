@@ -4,6 +4,11 @@ export interface ISectionRow {
   [key: string]: any;
 }
 
+export interface IColumnMeta {
+  id: string;
+  name: string;
+}
+
 export interface ISection {
   _id: Types.ObjectId;
   key: string;
@@ -11,6 +16,9 @@ export interface ISection {
   type: string; // e.g. 'table', 'form', etc.
   columns: string[];
   rows: ISectionRow[];
+  // New fields for stable columns
+  columnsMeta?: IColumnMeta[];
+  rowsByColId?: Record<string, string>[];
 }
 
 export interface IWedding extends Document {
@@ -28,12 +36,22 @@ export interface IWedding extends Document {
 
 const SectionRowSchema = new Schema<ISectionRow>({}, { strict: false, _id: false });
 
+const ColumnMetaSchema = new Schema<IColumnMeta>({
+  id: { type: String, required: true },
+  name: { type: String, required: true },
+}, { _id: false });
+
+const RowsByColIdSchema = new Schema<Record<string, string>>({}, { strict: false, _id: false });
+
 const SectionSchema = new Schema<ISection>({
   key: { type: String, required: true },
   label: { type: String, required: true },
   type: { type: String, required: true },
   columns: { type: [String], required: true },
   rows: { type: [SectionRowSchema], default: [] },
+  // Persist stable column metadata and id-mapped rows
+  columnsMeta: { type: [ColumnMetaSchema], default: undefined },
+  rowsByColId: { type: [RowsByColIdSchema], default: undefined },
 }, { _id: true });
 
 const WeddingSchema = new Schema<IWedding>({
