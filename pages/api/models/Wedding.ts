@@ -1,17 +1,20 @@
-import mongoose, { Schema, Document, models, model } from 'mongoose';
+import mongoose, { Schema, Document, models, model, Types } from 'mongoose';
 
-export interface IVendorMasterSheetRow {
-  item: string;
-  status: 'Booked' | 'Pending';
-  advance: number;
-  cost: number;
-  pending: number;
-  vendor: string;
-  vendorContact: string;
+export interface ISectionRow {
+  [key: string]: any;
+}
+
+export interface ISection {
+  _id: Types.ObjectId;
+  key: string;
+  label: string;
+  type: string; // e.g. 'table', 'form', etc.
+  columns: string[];
+  rows: ISectionRow[];
 }
 
 export interface IWedding extends Document {
-  id: string;
+  weddingId: string;
   title: string;
   date: string;
   venue: string;
@@ -20,25 +23,21 @@ export interface IWedding extends Document {
   mobileGroomSide: string;
   mobileBrideSide: string;
   status: 'Upcoming' | 'Completed' | 'Cancelled';
-  vendorMasterSheet: IVendorMasterSheetRow[];
-  brideSide?: any[];
-  groomSide?: any[];
-  makeupArtist?: any[];
-  performanceLineups?: any[];
+  sections: ISection[];
 }
 
-const VendorMasterSheetRowSchema = new Schema<IVendorMasterSheetRow>({
-  item: { type: String, required: true },
-  status: { type: String, enum: ['Booked', 'Pending'], required: true },
-  advance: { type: Number, required: true },
-  cost: { type: Number, required: true },
-  pending: { type: Number, required: true },
-  vendor: { type: String, required: true },
-  vendorContact: { type: String, required: true },
-});
+const SectionRowSchema = new Schema<ISectionRow>({}, { strict: false, _id: false });
+
+const SectionSchema = new Schema<ISection>({
+  key: { type: String, required: true },
+  label: { type: String, required: true },
+  type: { type: String, required: true },
+  columns: { type: [String], required: true },
+  rows: { type: [SectionRowSchema], default: [] },
+}, { _id: true });
 
 const WeddingSchema = new Schema<IWedding>({
-  id: { type: String, required: true, unique: true },
+  weddingId: { type: String, required: true, unique: true },
   title: { type: String, required: true },
   date: { type: String, required: true },
   venue: { type: String, required: true },
@@ -47,11 +46,16 @@ const WeddingSchema = new Schema<IWedding>({
   mobileGroomSide: { type: String, required: true },
   mobileBrideSide: { type: String, required: true },
   status: { type: String, enum: ['Upcoming', 'Completed', 'Cancelled'], required: true },
-  vendorMasterSheet: { type: [VendorMasterSheetRowSchema], default: [] },
-  brideSide: { type: Array, default: [] },
-  groomSide: { type: Array, default: [] },
-  makeupArtist: { type: Array, default: [] },
-  performanceLineups: { type: Array, default: [] },
+  sections: { type: [SectionSchema], default: [] },
+});
+
+WeddingSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: function (doc, ret) {
+    ret.weddingId = doc.weddingId;
+    return ret;
+  }
 });
 
 export default models.Wedding || model<IWedding>('Wedding', WeddingSchema);

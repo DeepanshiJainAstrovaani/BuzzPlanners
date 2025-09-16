@@ -11,7 +11,7 @@ export interface IVendorMasterSheetRow {
 }
 
 export interface IWedding extends Document {
-  id: string;
+  weddingId: string;
   title: string;
   date: string;
   venue: string;
@@ -38,7 +38,7 @@ const VendorMasterSheetRowSchema = new Schema<IVendorMasterSheetRow>({
 });
 
 const WeddingSchema = new Schema<IWedding>({
-  id: { type: String, required: true, unique: true },
+  weddingId: { type: String, required: true, unique: true },
   title: { type: String, required: true },
   date: { type: String, required: true },
   venue: { type: String, required: true },
@@ -52,6 +52,15 @@ const WeddingSchema = new Schema<IWedding>({
   groomSide: { type: Array, default: [] },
   makeupArtist: { type: Array, default: [] },
   performanceLineups: { type: Array, default: [] },
+});
+
+WeddingSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: function (doc, ret) {
+    ret.weddingId = doc.weddingId;
+    return ret;
+  }
 });
 
 export default models.Wedding || model<IWedding>('Wedding', WeddingSchema);

@@ -34,7 +34,7 @@ export interface VendorMasterSheetRow {
 }
 
 export interface Wedding {
-  id: string; // e.g., WED453
+  weddingId: string; // e.g., WED453
   title: string; // e.g., Jatin weds Roshni
   date: string; // ISO date string
   venue: string;
