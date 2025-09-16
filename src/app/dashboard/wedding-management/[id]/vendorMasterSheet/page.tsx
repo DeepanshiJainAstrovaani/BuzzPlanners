@@ -431,7 +431,7 @@ export default function VendorMasterSheetPage() {
           <div style={{ color: '#1abc5b', fontWeight: 500, fontSize: 16, marginBottom: 8 }}>
             Wedding Management / {wedding?.title || ''}
           </div>
-          <h1 style={{ fontWeight: 800, fontSize: 28, margin: '30px 0 35px 0' }}>Vendor Master Sheet</h1>
+          <h1 style={{ fontWeight: 500, fontSize: 28, margin: '30px 0 35px 0' }}>Vendor Master Sheet</h1>
 
           {/* Search + header edit and global actions */}
           <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 30 }}>

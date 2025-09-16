@@ -15,9 +15,18 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Buzz Planners',
   description: 'Plan weddings, travel & celebrations with ease',
+  icons: {
+    icon: [
+      { url: '/buzz-small-logo.png', sizes: 'any' },
+    ],
+    apple: [
+      { url: '/buzz-small-logo.png' },
+    ],
+    shortcut: ['/buzz-small-logo.png'],
+  },
 };
 
 export default function RootLayout({
@@ -27,6 +36,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Explicit links to ensure our favicon overrides any default */}
+        <link rel="icon" href="/buzz-small-logo.png" sizes="any" />
+        <link rel="apple-touch-icon" href="/buzz-small-logo.png" />
+      </head>
       <body> {children} </body>
     </html>
   );

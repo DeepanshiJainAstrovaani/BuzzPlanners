@@ -486,7 +486,7 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
 
       {/* Add new row */}
       <div style={{ background: '#fff8e1', border: '1px solid #f0e0a0', borderRadius: 8, padding: 15, marginTop: 40 }}>
-        <div style={{ fontWeight: 700, marginBottom: 8 }}>Adding new row</div>
+        <div style={{ fontWeight: 500, marginBottom: 8 }}>Adding new row</div>
         <div style={{ display: 'grid', gridTemplateColumns: `repeat(${inputColumns.length}, minmax(140px, 1fr))`, gap: 12 }}>
           {inputColumns.map((cm) => (
             <input

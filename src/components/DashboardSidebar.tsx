@@ -24,6 +24,10 @@ export default function DashboardSidebar() {
 
   const safePathname = pathname ?? '';
 
+  // Determine if user is inside a submenu of any main menu
+  const submenuHostItem = menuItems.find((item) => safePathname.startsWith(item.path + '/'));
+  const visibleMenuItems = submenuHostItem ? [submenuHostItem] : menuItems;
+
   useEffect(() => {
     // Detect if on a wedding dashboard route
     const match = safePathname.match(/\/dashboard\/wedding-management\/(\w+)/);
@@ -75,7 +79,8 @@ export default function DashboardSidebar() {
         style={{
           fontWeight: 'bold',
           fontSize: '1.2rem',
-          textAlign: 'center',
+          textAlign: 'left',
+          paddingLeft: 30,
           letterSpacing: 0.5,
           color: pathname === '/dashboard' ? '#ffb300' : '#fff',
           textDecoration: 'none',
@@ -86,7 +91,7 @@ export default function DashboardSidebar() {
       </Link>
       <nav>
         <ul style={{ listStyle: 'none', padding: 0 }}>
-          {menuItems.map((item) => (
+          {visibleMenuItems.map((item) => (
             <li key={item.path} style={{ margin: '8px 0', borderBottom: '1px solid white' }}>
               <Link
                 href={item.path}
