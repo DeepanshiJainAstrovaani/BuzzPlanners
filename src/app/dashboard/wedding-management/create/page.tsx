@@ -5,7 +5,7 @@ import DashboardSidebar from '@/components/DashboardSidebar';
 import { useRouter, useSearchParams } from 'next/navigation';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useState, ChangeEvent, FormEvent, useRef, useEffect } from 'react';
+import { useState, ChangeEvent, FormEvent, useRef, useEffect, Suspense } from 'react';
 import './datepicker-fix.css';
 import { IconButton, Chip, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -27,7 +27,7 @@ type FormFields = {
 
 type ErrorFields = Partial<Record<keyof FormFields, string>>;
 
-export default function CreateWeddingPage() {
+function CreateWeddingClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   // Form state
@@ -442,6 +442,15 @@ export default function CreateWeddingPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+// Provide a Suspense boundary at the page level
+export default function CreateWeddingPage() {
+  return (
+    <Suspense fallback={<div />}>
+      <CreateWeddingClient />
+    </Suspense>
   );
 }
 

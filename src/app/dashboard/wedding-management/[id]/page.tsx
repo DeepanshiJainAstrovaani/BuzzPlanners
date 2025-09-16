@@ -1,7 +1,6 @@
-'use client';
-
 import { redirect } from 'next/navigation';
 
-export default function WeddingDashboardRedirect({ params }: { params: { id: string } }) {
-  redirect(`/dashboard/wedding-management/${params.id}/info`);
+export default async function WeddingDashboardRedirect({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  redirect(`/dashboard/wedding-management/${id}/info`);
 }
