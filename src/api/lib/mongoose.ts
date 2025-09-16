@@ -1,10 +1,12 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = 'mongodb+srv://buzz-planners:buzzplanners@buzzplanners.htdbuw9.mongodb.net/?retryWrites=true&w=majority&appName=BuzzPlanners';
+const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable');
+  throw new Error('MONGODB_URI is not set. Define it in your environment variables (Vercel Project > Settings > Environment Variables).');
 }
+
+const uri = MONGODB_URI as string;
 
 let cached = (global as any).mongoose;
 
@@ -17,11 +19,9 @@ export async function dbConnect() {
     return cached.conn;
   }
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, {
-      bufferCommands: false,
-    }).then((mongoose) => {
-      return mongoose;
-    });
+    cached.promise = mongoose
+      .connect(uri, { bufferCommands: false })
+      .then((mongoose) => mongoose);
   }
   cached.conn = await cached.promise;
   return cached.conn;
