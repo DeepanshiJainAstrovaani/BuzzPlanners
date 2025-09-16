@@ -15,6 +15,9 @@ const menuItems = [
   { label: 'Site Management', path: '/dashboard/site-management' },
 ];
 
+// Ensure the very first character is uppercase regardless of source casing
+const capitalizeFirst = (s: string) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : '');
+
 export default function DashboardSidebar() {
   const pathname = usePathname();
   const router = useRouter();
@@ -167,7 +170,7 @@ export default function DashboardSidebar() {
                         }}
                         onClick={() => router.push(`/dashboard/wedding-management/${weddingId}/${section.key}`)}
                       >
-                        {section.label}
+                        {capitalizeFirst(String(section.label || ''))}
                       </a>
                     </li>
                   ))}

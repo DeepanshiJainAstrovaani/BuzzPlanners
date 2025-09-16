@@ -52,6 +52,12 @@ function titleCaseFromKey(key: string) {
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+// Ensure the very first character is uppercase regardless of source casing
+function capitalizeFirst(s: string) {
+  if (!s) return '';
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 export default function SectionTableEditor({ weddingMongoId, sectionKey }: { weddingMongoId: string; sectionKey: string }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -385,7 +391,7 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
     );
   }
 
-  const heading = section?.label || titleCaseFromKey(sectionKey);
+  const heading = capitalizeFirst(section?.label || titleCaseFromKey(sectionKey));
 
   return (
     <div>
@@ -393,7 +399,7 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
       <div style={{ color: '#1abc5b', fontWeight: 500, fontSize: 16, marginBottom: 8 }}>
         Wedding Management / {wedding?.title || ''} / {heading}
       </div>
-      <h1 style={{ fontWeight: 800, fontSize: 28, margin: '30px 0 35px 0' }}>{heading}</h1>
+      <h1 style={{ fontWeight: 500, fontSize: 28, margin: '30px 0 35px 0' }}>{heading}</h1>
 
       {/* Actions */}
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 30 }}>
