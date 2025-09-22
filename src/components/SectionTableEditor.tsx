@@ -1,7 +1,9 @@
 'use client';
 
-import { IoPencilOutline, IoTrashOutline, IoAddOutline } from 'react-icons/io5';
+import { IoPencilOutline, IoTrashOutline, IoAddOutline, IoChevronUpOutline, IoChevronDownOutline, IoCheckmarkOutline } from 'react-icons/io5';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import styles from './SectionTableEditor.module.css';
+import { GrEdit } from "react-icons/gr";
 
 interface VendorRow {
   [key: string]: string | number;
@@ -61,29 +63,19 @@ function capitalizeFirst(s: string) {
 export default function SectionTableEditor({ weddingMongoId, sectionKey }: { weddingMongoId: string; sectionKey: string }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
+  const justSavedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [wedding, setWedding] = useState<WeddingResp | null>(null);
   const [section, setSection] = useState<Section | null>(null);
   const [filter, setFilter] = useState('');
-  const [dirty, setDirty] = useState(false);
 
-  const bypassGuardRef = useRef(false);
-
-  // beforeunload guard
-  useEffect(() => {
-    const beforeUnload = (e: BeforeUnloadEvent) => {
-      if (!dirty) return;
-      e.preventDefault();
-      e.returnValue = '';
-    };
-    window.addEventListener('beforeunload', beforeUnload);
-    return () => window.removeEventListener('beforeunload', beforeUnload);
-  }, [dirty]);
+  // Debounced autosave timer
+  const autosaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [columnsMeta, setColumnsMeta] = useState<ColumnMeta[]>([]);
   const [rowsByColId, setRowsByColId] = useState<Record<string, string>[]>([]);
 
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [editedRow, setEditedRow] = useState<Record<string, string>>({});
 
   const [newRow, setNewRow] = useState<Record<string, string>>({});
 
@@ -119,6 +111,21 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
     });
     return { columns, rows };
   };
+
+  const scheduleAutosave = (meta: ColumnMeta[] = columnsMeta, idRows: Record<string, string>[] = rowsByColId) => {
+    if (!wedding) return;
+    if (autosaveTimer.current) clearTimeout(autosaveTimer.current);
+    autosaveTimer.current = setTimeout(() => {
+      persistSection(meta, idRows);
+    }, 600);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (autosaveTimer.current) clearTimeout(autosaveTimer.current);
+      if (justSavedTimer.current) clearTimeout(justSavedTimer.current);
+    };
+  }, []);
 
   const loadFromServer = async (mongoId: string) => {
     setLoading(true);
@@ -166,7 +173,6 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
       setColumnsMeta(meta);
       setRowsByColId(idRows);
       setColumnsDraft(meta.map((m) => ({ ...m })));
-      setDirty(false);
     } catch (e) {
       console.error('[SectionTableEditor] Failed to load:', e);
       alert('Failed to load section data.');
@@ -256,7 +262,11 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
       setColumnsMeta(newMeta);
       setRowsByColId(newIdRows);
       setColumnsDraft(newMeta.map((m) => ({ ...m })));
-      setDirty(false);
+
+      // Pulse "Saved" indicator
+      if (justSavedTimer.current) clearTimeout(justSavedTimer.current);
+      setJustSaved(true);
+      justSavedTimer.current = setTimeout(() => setJustSaved(false), 1200);
     } catch (e) {
       console.error('[SectionTableEditor] Save failed:', e);
       alert('Failed to save section.');
@@ -267,31 +277,21 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
 
   const startEditRow = (idx: number) => {
     setEditingIndex(idx);
-    setEditedRow(ensureRowShapeByIds(rowsByColId[idx] || {}, columnsMeta));
   };
-  const cancelEditRow = () => {
+  const finishEditRow = () => {
     setEditingIndex(null);
-    setEditedRow({});
-  };
-  const saveRow = () => {
-    if (editingIndex === null) return;
-    const nextRows = [...rowsByColId];
-    nextRows[editingIndex] = ensureRowShapeByIds(editedRow, columnsMeta);
-    setRowsByColId(nextRows);
-    setEditingIndex(null);
-    setEditedRow({});
-    setDirty(true);
   };
   const deleteRow = (idx: number) => {
     const nextRows = rowsByColId.filter((_, i) => i !== idx);
     setRowsByColId(nextRows);
-    setDirty(true);
+    scheduleAutosave(columnsMeta, nextRows);
   };
   const addRow = () => {
     const shaped = ensureRowShapeByIds(newRow, columnsMeta);
-    setRowsByColId([...rowsByColId, shaped]);
+    const nextRows = [...rowsByColId, shaped];
+    setRowsByColId(nextRows);
     setNewRow({});
-    setDirty(true);
+    scheduleAutosave(columnsMeta, nextRows);
   };
 
   const openHeaderEdit = () => {
@@ -311,79 +311,8 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
     setRowsByColId(nextRows);
     setColumnsDraft(normalized.map((m) => ({ ...m })));
     setEditHeaderOpen(false);
-    setDirty(true);
+    scheduleAutosave(normalized, nextRows);
   };
-
-  // Navigation guards (anchor clicks)
-  useEffect(() => {
-    const onDocClick = (e: MouseEvent) => {
-      if (!dirty) return;
-      const mouseEvent = e as MouseEvent & { metaKey?: boolean; ctrlKey?: boolean; shiftKey?: boolean; button?: number };
-      if (mouseEvent.metaKey || mouseEvent.ctrlKey || mouseEvent.shiftKey || mouseEvent.button !== 0) return;
-      const target = e.target as HTMLElement | null;
-      const anchor = target?.closest?.('a') as HTMLAnchorElement | null;
-      if (!anchor) return;
-      const href = anchor.getAttribute('href');
-      if (href && href.startsWith('#')) return;
-      if (!href || anchor.target === '_blank') return;
-      const url = new URL(anchor.href, window.location.href);
-      if (url.origin !== window.location.origin) return;
-      if (url.href === window.location.href) return;
-      const ok = window.confirm('You have unsaved changes. Do you want to leave without saving?');
-      if (!ok) {
-        e.preventDefault();
-        (e as any).stopImmediatePropagation?.();
-        e.stopPropagation();
-        return;
-      }
-    };
-    document.addEventListener('click', onDocClick, { capture: true });
-    return () => document.removeEventListener('click', onDocClick, { capture: true } as any);
-  }, [dirty]);
-
-  // Intercept SPA history changes and back/forward
-  useEffect(() => {
-    const origPushState = history.pushState;
-    const origReplaceState = history.replaceState;
-
-    const guard = (fn: typeof history.pushState) =>
-      function (this: History, ...args: Parameters<typeof history.pushState>) {
-        if (bypassGuardRef.current) {
-          bypassGuardRef.current = false;
-          return fn.apply(this, args as any);
-        }
-        if (dirty) {
-          const ok = window.confirm('You have unsaved changes. Do you want to leave without saving?');
-          if (!ok) return;
-        }
-        return fn.apply(this, args as any);
-      } as typeof history.pushState;
-
-    history.pushState = guard(origPushState);
-    history.replaceState = guard(origReplaceState);
-
-    const onPopState = (e: PopStateEvent) => {
-      if (bypassGuardRef.current) {
-        bypassGuardRef.current = false;
-        return;
-      }
-      if (!dirty) return;
-      const ok = window.confirm('You have unsaved changes. Do you want to leave without saving?');
-      if (!ok) {
-        (e as any).stopImmediatePropagation?.();
-        e.stopPropagation();
-        bypassGuardRef.current = true;
-        history.go(1);
-      }
-    };
-    window.addEventListener('popstate', onPopState, { capture: true });
-
-    return () => {
-      history.pushState = origPushState;
-      history.replaceState = origReplaceState;
-      window.removeEventListener('popstate', onPopState, { capture: true } as any);
-    };
-  }, [dirty]);
 
   if (loading || !section) {
     return (
@@ -394,37 +323,26 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
   const heading = capitalizeFirst(section?.label || titleCaseFromKey(sectionKey));
 
   return (
-    <div>
+    <div className={styles.editor}>
       {/* Breadcrumb */}
-      <div style={{ color: '#1abc5b', fontWeight: 500, fontSize: 16, marginBottom: 8 }}>
-        Wedding Management / {wedding?.title || ''} / {heading}
+      <div style={{ color: '#0CA04E', fontWeight: 500, fontSize: '12px', marginBottom: 8, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+        <span>Wedding Management / {wedding?.title || ''} / {heading}</span>
+        <span aria-live="polite" style={{ fontSize: '12px', color: saving ? '#666' : '#0CA04E', opacity: saving || justSaved ? 1 : 0, transition: 'opacity .2s' }}>
+          {saving ? 'Saving…' : justSaved ? 'Saved' : ''}
+        </span>
       </div>
-      <h1 style={{ fontWeight: 500, fontSize: 28, margin: '30px 0 35px 0' }}>{heading}</h1>
+      <h1 style={{ fontWeight: 600, fontSize: '20px', margin: '30px 0 20px 0' }}>{heading}</h1>
 
       {/* Actions */}
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 30 }}>
-        <div style={{ flex: 1, position: 'relative' }}>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 30, flexWrap: 'wrap' }}>
+        <div style={{ flex: 1, minWidth: 240, position: 'relative' }}>
           <input
-            placeholder="🔍︎  Search any item"
+            placeholder="🔎︎  Search any item"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            style={{ width: '100%', padding: '12px 14px', borderRadius: 8, border: '1.5px solid #ccc', fontSize: 16 }}
+            style={{ width: '100%', padding: '5px 10px', borderRadius: 8, border: '1px solid #ccc', fontSize: '13px' }}
           />
         </div>
-        <button
-          onClick={() => persistSection(columnsMeta, rowsByColId)}
-          disabled={saving || !dirty}
-          style={{ background: dirty ? '#1abc5b' : '#a5d6a7', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 15, padding: '10px 18px', cursor: dirty ? 'pointer' : 'not-allowed' }}
-        >
-          {saving ? 'Saving...' : 'Save Changes'}
-        </button>
-        <button
-          onClick={() => wedding && loadFromServer(wedding._id)}
-          disabled={saving || !dirty}
-          style={{ background: '#fff', color: dirty ? '#e57373' : '#bbb', border: `1.5px solid ${dirty ? '#e57373' : '#ddd'}`, borderRadius: 8, fontWeight: 700, fontSize: 15, padding: '10px 18px', cursor: dirty ? 'pointer' : 'not-allowed' }}
-        >
-          Discard
-        </button>
       </div>
 
       {/* Table */}
@@ -432,17 +350,17 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
         <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0 }}>
           <thead>
             <tr style={{ background: '#EBE9E9', color: '#222' }}>
-              <th style={{ textAlign: 'left', padding: '12px 12px'}}>S.No</th>
+              <th className='px-2 py-1' style={{ textAlign: 'left', fontSize: '12px', fontWeight: 600 }}>S.No</th>
               {displayColumns.map((cm) => (
-                <th key={cm.id} style={{ textAlign: 'left', padding: '12px 12px' }}>{cm.name}</th>
+                <th className='px-2 py-1' key={cm.id} style={{ textAlign: 'left', fontSize: '12px', fontWeight: 600 }}>{cm.name}</th>
               ))}
-              <th style={{ textAlign: 'left', padding: '12px 12px' }}>
+              <th className='px-2 py-1' style={{ textAlign: 'left' }}>
                 <button
                   onClick={openHeaderEdit}
                   title="Edit columns"
-                  style={{ background: 'transparent', border: 'none', color: '#222', cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}
+                  style={{ background: 'white', border: 'none', color: '#222', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', padding: '4px', borderRadius: 10 }}
                 >
-                  <IoPencilOutline size={18} />
+                  <GrEdit size={13} />
                 </button>
               </th>
             </tr>
@@ -450,78 +368,67 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
           <tbody>
             {filteredRows.map((row, idx) => (
               <tr key={idx} style={{ background: idx % 2 ? '#eaf7fb' : '#fff' }}>
-                <td style={{ padding: '12px 12px', fontWeight: 700 }}>{idx + 1}</td>
+                <td style={{ padding: 'var(--cell-pad, 12px 12px)', fontWeight: 600, fontSize: '10px' }}>{idx + 1}</td>
                 {displayColumns.map((cm) => (
-                  <td key={cm.id} style={{ padding: '12px 12px' }}>
+                  <td key={cm.id} style={{ padding: 'var(--cell-pad, 12px 12px)', fontSize: '10px' }}>
                     {editingIndex === idx ? (
                       <input
-                        value={String(editedRow[cm.id] ?? '')}
+                        value={String(rowsByColId[idx]?.[cm.id] ?? '')}
                         onChange={(e) => {
-                          setEditedRow({ ...editedRow, [cm.id]: e.target.value });
-                          setDirty(true);
+                          const next = [...rowsByColId];
+                          next[idx] = { ...next[idx], [cm.id]: e.target.value };
+                          setRowsByColId(next);
+                          scheduleAutosave(columnsMeta, next);
                         }}
-                        style={{ width: '100%', padding: '8px 10px', border: '1px solid #ccc', borderRadius: 6 }}
+                        style={{ width: '100%', padding: '8px 10px', border: '1px solid #ccc', borderRadius: 6, fontSize: 'var(--input-fs, 15px)' }}
                       />
                     ) : (
                       <span>{String(row[cm.id] ?? '')}</span>
                     )}
                   </td>
                 ))}
-                <td style={{ padding: '12px 12px', whiteSpace: 'nowrap' }}>
-                  {editingIndex === idx ? (
-                    <>
-                      <button onClick={saveRow} disabled={saving} style={{ border: '1px solid #4caf50', color: '#4caf50', background: '#fff', borderRadius: 6, padding: '6px 12px', marginRight: 8, cursor: 'pointer' }}>Save</button>
-                      <button onClick={cancelEditRow} style={{ border: '1px solid #999', color: '#666', background: '#fff', borderRadius: 6, padding: '6px 12px', cursor: 'pointer' }}>Cancel</button>
-                    </>
-                  ) : (
-                    <>
-                      <button onClick={() => startEditRow(idx)} title="Edit row" style={{ border: '1px solid #2196f3', color: '#2196f3', background: '#fff', borderRadius: 6, padding: '6px 12px', marginRight: 8, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                        <IoPencilOutline size={16} />
-                      </button>
-                      <button onClick={() => deleteRow(idx)} title="Delete row" style={{ border: '1px solid #e57373', color: '#e57373', background: '#fff', borderRadius: 6, padding: '6px 12px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                        <IoTrashOutline size={16} />
-                      </button>
-                    </>
-                  )}
+                <td style={{ padding: 'var(--cell-pad, 12px 12px)', whiteSpace: 'nowrap' }}>
+                  {/* Toggle edit/done for consistency with VendorMasterSheet */}
+                  <button onClick={() => setEditingIndex(editingIndex === idx ? null : idx)} title={editingIndex === idx ? 'Done' : 'Edit row'} style={{ background: 'transparent', color: '#288DD0', marginRight: 6, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, border: 'none' }}>
+                    {editingIndex === idx ? <IoCheckmarkOutline size={16} /> : <GrEdit size={16} />}
+                  </button>
+                  <button onClick={() => deleteRow(idx)} title="Delete row" style={{ background: 'transparent', color: '#e57373', border: 'none', borderRadius: 6, padding: 'var(--icon-btn-pad, 6px 12px)', fontWeight: 700, fontSize: 'var(--btn-sm-fs, 14px)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                    <IoTrashOutline size={16} />
+                  </button>
                 </td>
               </tr>
             ))}
+            {/* Add row */}
+            <tr>
+              <td style={{ padding: 'var(--cell-pad, 12px 12px)', color: '#888' }}>#</td>
+              {displayColumns.map((cm) => (
+                <td key={cm.id} style={{ padding: 'var(--cell-pad, 12px 12px' }}>
+                  <input
+                    value={String(newRow[cm.id] ?? '')}
+                    onChange={(e) => setNewRow({ ...newRow, [cm.id]: e.target.value })}
+                    style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #ccc', fontSize: '10px' }}
+                  />
+                </td>
+              ))}
+              <td style={{ padding: 'var(--cell-pad, 12px 12px)' }}>
+                <button onClick={() => { const shaped = ensureRowShapeByIds(newRow, columnsMeta); const next = [...rowsByColId, shaped]; setRowsByColId(next); setNewRow({}); scheduleAutosave(columnsMeta, next); }} style={{ background: '#2196f3', color: '#fff', border: 'none', borderRadius: 6, padding: '6px 14px', fontWeight: 700, fontSize: '10px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                  <IoAddOutline size={14} />
+                  Add
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
-      </div>
-
-      {/* Add new row */}
-      <div style={{ background: '#fff8e1', border: '1px solid #f0e0a0', borderRadius: 8, padding: 15, marginTop: 40 }}>
-        <div style={{ fontWeight: 500, marginBottom: 8 }}>Adding new row</div>
-        <div style={{ display: 'grid', gridTemplateColumns: `repeat(${inputColumns.length}, minmax(140px, 1fr))`, gap: 12 }}>
-          {inputColumns.map((cm) => (
-            <input
-              key={cm.id}
-              placeholder={cm.name}
-              value={String(newRow[cm.id] ?? '')}
-              onChange={(e) => {
-                setNewRow({ ...newRow, [cm.id]: e.target.value });
-                setDirty(true);
-              }}
-              style={{ padding: '10px 12px', borderRadius: 8, border: '1.5px solid #e0e0e0', fontSize: 15 }}
-            />
-          ))}
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <button onClick={addRow} disabled={saving} style={{ background: '#1abc5b', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 16, padding: '10px 28px', marginTop: 12, cursor: 'pointer' }}>
-            Add Row
-          </button>
-        </div>
       </div>
 
       {/* Header edit modal */}
       {editHeaderOpen && (
         <div style={modalOverlayStyle}>
-          <div style={modalStyle}>
-            <div style={{ color: '#1abc5b', fontWeight: 500, fontSize: 16, marginBottom: 8 }}>
+          <div style={modalStyle} className={styles.modalCard}>
+            <div style={{ color: '#1abc5b', fontWeight: 500, fontSize: 'var(--tbl-breadcrumb-fs, 16px)', marginBottom: 8 }}>
               Wedding Management / {wedding?.weddingId || ''} / {heading}
             </div>
-            <h2 style={{ fontWeight: 800, fontSize: 26, margin: '16px 0 40px 0' }}>{heading} table</h2>
+            <h2 style={{ fontWeight: 800, fontSize: 'var(--modal-title-fs, 26px)', margin: '16px 0 24px 0' }}>{heading} table</h2>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
               {columnsDraft.map((c, i) => (
@@ -534,7 +441,7 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
                       copy[i] = { ...copy[i], name: e.target.value };
                       setColumnsDraft(copy);
                     }}
-                    style={{ flex: 1, padding: '14px 16px', borderRadius: 8, border: '1.5px solid #e0e0e0', fontSize: 16 }}
+                    style={{ flex: 1, padding: '14px 16px', borderRadius: 8, border: '1.5px solid #e0e0e0', fontSize: 'var(--input-fs, 16px)' }}
                   />
                   <div style={{ display: 'flex', gap: 6 }}>
                     <button
@@ -548,9 +455,9 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
                         copy[i] = temp;
                         setColumnsDraft(copy);
                       }}
-                      style={{ background: '#fff', border: '1px solid #ccc', borderRadius: 6, padding: '8px 10px', cursor: i === 0 ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
+                      style={{ background: '#fff', border: '1px solid #ccc', borderRadius: 6, padding: '8px 10px', cursor: i === 0 ? 'not-allowed' : 'pointer', display: 'inline-flex', alignItems: 'center' }}
                     >
-                      ↑
+                      <IoChevronUpOutline size={16} />
                     </button>
                     <button
                       title="Move down"
@@ -563,9 +470,9 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
                         copy[i] = temp;
                         setColumnsDraft(copy);
                       }}
-                      style={{ background: '#fff', border: '1px solid #ccc', borderRadius: 6, padding: '8px 10px', cursor: i === columnsDraft.length - 1 ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
+                      style={{ background: '#fff', border: '1px solid #ccc', borderRadius: 6, padding: '8px 10px', cursor: i === columnsDraft.length - 1 ? 'not-allowed' : 'pointer', display: 'inline-flex', alignItems: 'center' }}
                     >
-                      ↓
+                      <IoChevronDownOutline size={16} />
                     </button>
                     <button
                       title="Delete column"
@@ -581,13 +488,13 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
                 </div>
               ))}
             </div>
-            <div style={{ display: 'flex', gap: 12, marginTop: 50 }}>
-              <button onClick={() => setColumnsDraft([...columnsDraft, { id: uid(), name: '' }])} style={{ background: '#2196f3', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 16, padding: '10px 28px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ display: 'flex', gap: 12, marginTop: 32, flexWrap: 'wrap' }}>
+              <button onClick={() => setColumnsDraft([...columnsDraft, { id: uid(), name: '' }])} style={{ background: '#2196f3', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 'var(--btn-fs, 16px)', padding: '10px 24px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                 <IoAddOutline size={18} />
                 Add field
               </button>
-              <button onClick={applyHeaderUpdate} disabled={saving} style={{ background: '#1abc5b', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 16, padding: '10px 28px', cursor: 'pointer' }}>Update</button>
-              <button onClick={() => setEditHeaderOpen(false)} style={{ background: '#fff', color: '#222', border: '1.5px solid #ccc', borderRadius: 8, fontWeight: 700, fontSize: 16, padding: '10px 28px', cursor: 'pointer' }}>Cancel</button>
+              <button onClick={applyHeaderUpdate} disabled={saving} style={{ background: '#1abc5b', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 'var(--btn-fs, 16px)', padding: '10px 24px', cursor: 'pointer' }}>Update</button>
+              <button onClick={() => setEditHeaderOpen(false)} style={{ background: '#fff', color: '#222', border: '1.5px solid #ccc', borderRadius: 8, fontWeight: 700, fontSize: 'var(--btn-fs, 16px)', padding: '10px 24px', cursor: 'pointer' }}>Cancel</button>
             </div>
           </div>
         </div>

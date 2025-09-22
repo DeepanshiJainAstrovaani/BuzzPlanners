@@ -1,0 +1,64 @@
+.editor {
+  --tbl-breadcrumb-fs: 15px;
+  --tbl-heading-fs: 26px;
+  --input-fs: 15px;
+  --btn-fs: 15px;
+  --btn-sm-fs: 14px;
+  --btn-pad: 10px 16px;
+  --icon-btn-pad: 6px 10px;
+  --cell-pad: 10px 10px;
+}
+
+/* Keep input borders consistent on focus (no darker border) */
+.editor :where(input, select, textarea) {
+  border-color: #ccc;
+}
+.editor :where(input, select, textarea):focus,
+.editor :where(input, select, textarea):focus-visible {
+  outline: none;
+  border-color: #ccc !important;
+  box-shadow: none;
+}
+
+@media (max-width: 1024px) {
+  .editor {
+    --tbl-breadcrumb-fs: 14px;
+    --tbl-heading-fs: 24px;
+    --input-fs: 14px;
+    --btn-fs: 14px;
+    --btn-sm-fs: 13px;
+    --btn-pad: 10px 14px;
+    --icon-btn-pad: 6px 10px;
+    --cell-pad: 10px 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .editor {
+    --tbl-breadcrumb-fs: 13px;
+    --tbl-heading-fs: 22px;
+    --input-fs: 13px;
+    --btn-fs: 13px;
+    --btn-sm-fs: 12px;
+    --btn-pad: 8px 12px;
+    --icon-btn-pad: 6px 8px;
+    --cell-pad: 8px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .editor {
+    --tbl-breadcrumb-fs: 12px;
+    --tbl-heading-fs: 20px;
+    --input-fs: 12px;
+    --btn-fs: 12px;
+    --btn-sm-fs: 11px;
+    --btn-pad: 8px 10px;
+    --icon-btn-pad: 6px 8px;
+    --cell-pad: 8px 6px;
+  }
+}
+
+.modalCard {
+  width: min(560px, 94vw);
+}
