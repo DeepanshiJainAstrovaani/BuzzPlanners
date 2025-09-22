@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import { IoPencilOutline, IoTrashOutline, IoAddOutline } from 'react-icons/io5';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 interface VendorRow {
@@ -431,7 +431,7 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0 }}>
           <thead>
-            <tr style={{ background: '#555555', color: 'white'}}>
+            <tr style={{ background: '#EBE9E9', color: '#222' }}>
               <th style={{ textAlign: 'left', padding: '12px 12px'}}>S.No</th>
               {displayColumns.map((cm) => (
                 <th key={cm.id} style={{ textAlign: 'left', padding: '12px 12px' }}>{cm.name}</th>
@@ -440,9 +440,9 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
                 <button
                   onClick={openHeaderEdit}
                   title="Edit columns"
-                  style={{ background: '#555555', border: 'none', color: 'white', cursor: 'pointer' }}
+                  style={{ background: 'transparent', border: 'none', color: '#222', cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}
                 >
-                  <Image src="/icons/edit.png" alt="edit" width={20} height={20} />
+                  <IoPencilOutline size={18} />
                 </button>
               </th>
             </tr>
@@ -475,11 +475,11 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
                     </>
                   ) : (
                     <>
-                      <button onClick={() => startEditRow(idx)} title="Edit row" style={{ border: '1px solid #2196f3', color: '#2196f3', background: '#fff', borderRadius: 6, padding: '6px 12px', marginRight: 8, cursor: 'pointer' }}>
-                        ✏️
+                      <button onClick={() => startEditRow(idx)} title="Edit row" style={{ border: '1px solid #2196f3', color: '#2196f3', background: '#fff', borderRadius: 6, padding: '6px 12px', marginRight: 8, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                        <IoPencilOutline size={16} />
                       </button>
-                      <button onClick={() => deleteRow(idx)} title="Delete row" style={{ border: '1px solid #e57373', color: '#e57373', background: '#fff', borderRadius: 6, padding: '6px 12px', cursor: 'pointer' }}>
-                        <Image src="/icons/delete.png" alt="delete" width={16} height={16} />
+                      <button onClick={() => deleteRow(idx)} title="Delete row" style={{ border: '1px solid #e57373', color: '#e57373', background: '#fff', borderRadius: 6, padding: '6px 12px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                        <IoTrashOutline size={16} />
                       </button>
                     </>
                   )}
@@ -523,7 +523,7 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
             </div>
             <h2 style={{ fontWeight: 800, fontSize: 26, margin: '16px 0 40px 0' }}>{heading} table</h2>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(200px, 1fr))', gap: 16 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
               {columnsDraft.map((c, i) => (
                 <div key={c.id} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                   <input
@@ -573,16 +573,19 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
                         const copy = columnsDraft.filter((_, idx) => idx !== i);
                         setColumnsDraft(copy);
                       }}
-                      style={{ background: '#fff', border: '1px solid #e57373', color: '#e57373', borderRadius: 6, padding: '8px 10px', cursor: 'pointer' }}
+                      style={{ background: '#fff', border: '1px solid #e57373', color: '#e57373', borderRadius: 6, padding: '8px 10px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}
                     >
-                      <Image src="/icons/delete.png" alt="delete" width={16} height={16} />
+                      <IoTrashOutline size={16} />
                     </button>
                   </div>
                 </div>
               ))}
             </div>
             <div style={{ display: 'flex', gap: 12, marginTop: 50 }}>
-              <button onClick={() => setColumnsDraft([...columnsDraft, { id: uid(), name: '' }])} style={{ background: '#2196f3', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 16, padding: '10px 28px', cursor: 'pointer' }}>Add field</button>
+              <button onClick={() => setColumnsDraft([...columnsDraft, { id: uid(), name: '' }])} style={{ background: '#2196f3', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 16, padding: '10px 28px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                <IoAddOutline size={18} />
+                Add field
+              </button>
               <button onClick={applyHeaderUpdate} disabled={saving} style={{ background: '#1abc5b', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 16, padding: '10px 28px', cursor: 'pointer' }}>Update</button>
               <button onClick={() => setEditHeaderOpen(false)} style={{ background: '#fff', color: '#222', border: '1.5px solid #ccc', borderRadius: 8, fontWeight: 700, fontSize: 16, padding: '10px 28px', cursor: 'pointer' }}>Cancel</button>
             </div>
@@ -598,18 +601,19 @@ const modalOverlayStyle: React.CSSProperties = {
   top: 0,
   left: 0,
   width: '100vw',
-  height: '115vh',
+  height: '100vh',
   background: 'rgba(0,0,0,0.18)',
   zIndex: 9999,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  padding: 10,
 };
 
 const modalStyle: React.CSSProperties = {
   background: '#fff',
-  borderRadius: 16,
-  padding: '32px 36px',
-  boxShadow: '0 4px 32px #0002',
-  minWidth: 720,
+  borderRadius: 12,
+  padding: '12px',
+  boxShadow: '0 4px 20px #0002',
+  width: 'min(520px, 92vw)',
 };

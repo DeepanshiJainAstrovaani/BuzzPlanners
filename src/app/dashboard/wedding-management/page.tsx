@@ -2,16 +2,60 @@
 
 import DashboardHeader from '@/components/DashboardHeader';
 import DashboardSidebar from '@/components/DashboardSidebar';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+// Removed unused Image import and added Ionicons to match main dashboard styling
+import { IoChevronForward, IoTrashOutline, IoFunnelOutline, IoEyeOutline } from 'react-icons/io5';
+import { useRouter, usePathname } from 'next/navigation';
+import { useEffect, useState, useMemo } from 'react';
 
 export default function WeddingManagementPage() {
   const router = useRouter();
+  const pathname = usePathname();
   const [weddings, setWeddings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState<{ open: boolean; wedding?: any }>({ open: false });
   const [deleting, setDeleting] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  // Phone breakpoint for compact icon-only actions
+  const [isPhone, setIsPhone] = useState(false);
+  // Search text for client-side filtering
+  const [searchText, setSearchText] = useState('');
+
+  // Track viewport for mobile-only drawer
+  useEffect(() => {
+    const check = () => setIsMobile(window.matchMedia('(max-width: 1024px)').matches);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  // Track phone width (≤576px) to swap View button with eye icon
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 576px)');
+    const onChange = () => setIsPhone(mql.matches);
+    onChange();
+    mql.addEventListener?.('change', onChange);
+    // Safari fallback
+    mql.addListener?.(onChange as any);
+    return () => {
+      mql.removeEventListener?.('change', onChange);
+      mql.removeListener?.(onChange as any);
+    };
+  }, []);
+
+  // Close drawer on route change
+  useEffect(() => { setDrawerOpen(false); }, [pathname]);
+
+  // Ensure drawer closes when switching to desktop/tablet
+  useEffect(() => { if (!isMobile && drawerOpen) setDrawerOpen(false); }, [isMobile, drawerOpen]);
+
+  // Lock body scroll when drawer open on mobile
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    if (isMobile && drawerOpen) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isMobile, drawerOpen]);
 
   const fetchWeddings = async () => {
     setLoading(true);
@@ -51,6 +95,16 @@ export default function WeddingManagementPage() {
     }
   };
 
+  // Memoized filtered list based on the search text
+  const filteredWeddings = useMemo(() => {
+    if (!searchText.trim()) return weddings;
+    const tokens = searchText.toLowerCase().split(/\s+/).filter(Boolean);
+    return weddings.filter((w: any) => {
+      const hay = `${w?.weddingId ?? ''} ${w?.title ?? ''} ${w?.date ?? ''} ${w?.status ?? ''}`.toLowerCase();
+      return tokens.every(t => hay.includes(t));
+    });
+  }, [weddings, searchText]);
+
   return (
     <div style={{ minHeight: '100vh', background: '#f7f7f7' }}>
       {deleteModal.open && (
@@ -58,134 +112,208 @@ export default function WeddingManagementPage() {
           <div style={modalStyle}>
             {/* Header */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 0 }}>
-              <span style={{ fontSize: 64, color: '#e53935', marginBottom: 12, lineHeight: 1 }}>
-                <Image src="/icons/delete.png" alt="delete" width={50} height={50} />
+              <span style={{ fontSize: 28, color: '#e53935', marginBottom: 6, lineHeight: 1 }}>
+                <IoTrashOutline size={24} />
               </span>
-              <div style={{ fontWeight: 700, fontSize: 22, color: '#e53935', marginBottom: 0, textAlign: 'center' }}>
+              <div style={{ fontWeight: 600, fontSize: 16, color: '#e53935', marginBottom: 0, textAlign: 'center' }}>
                 Delete {deleteModal.wedding?.title} <span style={{ color: '#2196f3', marginLeft: 6 }}>({deleteModal.wedding?._id})</span>
               </div>
             </div>
             {/* Body */}
-            <div style={{ fontWeight: 600, fontSize: 18, margin: '24px 0 8px 0', color: '#222', textAlign: 'center' }}>
+            <div style={{ fontWeight: 500, fontSize: 13, margin: '12px 0 6px 0', color: '#222', textAlign: 'center' }}>
               Are you sure?
             </div>
             {/* Footer */}
-            <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginTop: 24 }}>
-              <button onClick={handleDelete} disabled={deleting} style={{ background: '#e53935', color: '#fff', border: 'none', borderRadius: 8, padding: '10px 32px', fontWeight: 700, fontSize: 17, cursor: 'pointer' }}>{deleting ? 'Deleting...' : 'Yes, Delete'}</button>
-              <button onClick={() => setDeleteModal({ open: false })} style={{ background: '#fff', color: '#222', border: '1.5px solid #ccc', borderRadius: 8, padding: '10px 32px', fontWeight: 700, fontSize: 17, cursor: 'pointer' }}>Cancel</button>
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginTop: 12 }}>
+              <button onClick={handleDelete} disabled={deleting} style={{ background: '#e53935', color: '#fff', border: 'none', borderRadius: 8, padding: '7px 14px', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>{deleting ? 'Deleting...' : 'Yes, Delete'}</button>
+              <button onClick={() => setDeleteModal({ open: false })} style={{ background: '#fff', color: '#222', border: '1.5px solid #ccc', borderRadius: 8, padding: '7px 14px', fontWeight: 500, fontSize: 13, cursor: 'pointer' }}>Cancel</button>
             </div>
           </div>
         </div>
       )}
-      {/* Fixed Header */}
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 100 }}>
-        <DashboardHeader />
-      </div>
-      {/* Fixed Sidebar */}
-      <div style={{ position: 'fixed', top: 72, left: 0, height: 'calc(100vh - 72px)', width: 240, zIndex: 99 }}>
-        <DashboardSidebar />
-      </div>
+
+      {/* Header and Sidebar (both fixed by their own components) */}
+      <DashboardHeader onMenuClick={() => { if (isMobile) setDrawerOpen(true); }} />
+      <DashboardSidebar open={isMobile && drawerOpen} onClose={() => isMobile && setDrawerOpen(false)} />
+
       {/* Main Content */}
-      <main style={{ marginLeft: 240, marginTop: 72, flex: 1, padding: '40px 48px 0 48px' }}>
+      <main
+        className="container-fluid"
+        style={{
+          marginLeft: isMobile ? 0 : 'var(--sidebar-w)',
+          marginTop: 'var(--header-h)',
+          flex: 1,
+          background: '#f7f7f7',
+          overflowX: 'hidden',
+          width: '-webkit-fill-available',
+        }}
+        aria-hidden={isMobile && drawerOpen}
+      >
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
-          <h1 style={{ fontWeight: 700, fontSize: '2rem' }}>Wedding Management</h1>
+        <div className="d-flex align-items-center justify-content-between mb-3 gap-2 mt-2 flex-wrap">
+          <h1 className="m-0" style={{ fontWeight: 600, fontSize: '1.2rem' }}>Wedding Management</h1>
+          
         </div>
 
-        {/* Cards */}
-        <div style={{ display: 'flex', gap: 32, marginBottom: 40 }}>
-          <div style={{ background: '#d6effa', borderRadius: 12, padding: '28px 36px', minWidth: '25rem', boxShadow: '0 2px 8px #0001' }}>
-            <div style={{ fontSize: 32, fontWeight: 700, color: '#222' }}>106</div>
-            <div style={{ color: '#222', fontWeight: 500, fontSize: 25, marginTop: 4 }}>Weddings</div>
+        {/* Cards - match main dashboard sizing and arrow placement */}
+        <div className="row g-3 mb-4">
+          <div className="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div style={{ background: '#d6effa', padding: '18px 20px' }}>
+              <div style={{ fontSize: 20, fontWeight: 600, color: '#222' }}>106</div>
+              <div style={{ color: '#222', fontWeight: 500, fontSize: 15, marginTop: 4, display: 'flex', alignItems: 'center' }}>
+                <span>Weddings</span>
+                <IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '1rem' }} />
+              </div>
+            </div>
           </div>
-          <div style={{ background: '#fdf5d5', borderRadius: 12, padding: '28px 36px', minWidth: '25rem', boxShadow: '0 2px 8px #0001' }}>
-            <div style={{ fontSize: 32, fontWeight: 700, color: '#222' }}>23</div>
-            <div style={{ color: '#222', fontWeight: 500, fontSize: 25, marginTop: 4 }}>Upcoming</div>
+          <div className="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div style={{ background: '#fdf5d5', padding: '18px 20px' }}>
+              <div style={{ fontSize: 20, fontWeight: 600, color: '#222' }}>23</div>
+              <div style={{ color: '#222', fontWeight: 500, fontSize: 15, marginTop: 4, display: 'flex', alignItems: 'center' }}>
+                <span>Upcoming</span>
+                <IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '1rem' }} />
+              </div>
+            </div>
           </div>
-          <div style={{ background: '#fbe7d7', borderRadius: 12, padding: '28px 36px', minWidth: '25rem', boxShadow: '0 2px 8px #0001' }}>
-            <div style={{ fontSize: 32, fontWeight: 700, color: '#222' }}>2.5 Lac</div>
-            <div style={{ color: '#222', fontWeight: 500, fontSize: 25, marginTop: 4 }}>Guest</div>
+          <div className="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div style={{ background: '#fbe7d7', padding: '18px 20px' }}>
+              <div style={{ fontSize: 20, fontWeight: 600, color: '#222' }}>2.5 Lac</div>
+              <div style={{ color: '#222', fontWeight: 500, fontSize: 15, marginTop: 4, display: 'flex', alignItems: 'center' }}>
+                <span>Guest</span>
+                <IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '1rem' }} />
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Wedding List Section */}
-        <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #0001', padding: 32, width: '100%' }} className='col-md-12'>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-            <h2 style={{ fontWeight: 700, fontSize: 24, margin: 0 }}>Wedding List</h2>
-            <div style={{ display: 'flex', gap: 16 }}>
-              <button style={{ border: '1px solid #222', borderRadius: 8, background: '#fff', fontWeight: 600, fontSize: 18, padding: '8px 24px', display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
-                <span style={{ fontSize: 18 }}> ↓↑ </span> Filter
-              </button>
-                <button
-                style={{ background: '#1abc5b', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 18, padding: '8px 32px', cursor: 'pointer' }}
-                onClick={() => router.push('/dashboard/wedding-management/create')}
-                >
-                Create
+        <div className='bg-white p-3 p-md-4'>
+          <div className="d-flex align-items-center justify-content-between mb-3 gap-2 flex-wrap">
+            <h2 className="m-0" style={{ fontWeight: 600, fontSize: 16 }}>Wedding List</h2>
+            <div className="d-flex gap-2 flex-wrap">
+                <button className="btn btn-outline-dark btn-sm" style={{ fontSize: '13px',
+                fontWeight: 400,
+                padding: '1px 20px' }}>
+                <span style={{ fontSize: 18, verticalAlign: 'middle', marginRight: 6 }}>
+                  <IoFunnelOutline />
+                </span>
+                Filter
                 </button>
+              <button className="btn btn-success create-btn" onClick={() => router.push('/dashboard/wedding-management/create')} style={{
+                fontSize: '13px',
+                fontWeight: 400,
+                padding: '1px 20px',
+              }}>Create</button>
             </div>
           </div>
-          <div style={{ marginBottom: 24 }}>
+          <div className="mb-3">
             <input
               type="text"
-              placeholder="🔍︎   Search any Wedding"
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                borderRadius: 8,
-                border: '1px solid #ccc',
-                fontSize: 16,
-                marginBottom: 8,
-              }}
+              placeholder="🔎︎   Search any Wedding"
+              className="form-control"
+              style={{ fontSize: 12, padding: '10px 12px' }}
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              aria-label="Search weddings"
             />
           </div>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 16 }}>
-            <thead>
-              <tr style={{ background: '#f5f5f5' }}>
-                <th style={{ textAlign: 'left', padding: '12px 16px', fontWeight: 700 }}>Id</th>
-                <th style={{ textAlign: 'left', padding: '12px 16px', fontWeight: 700 }}>Title</th>
-                <th style={{ textAlign: 'left', padding: '12px 16px', fontWeight: 700 }}>Wedding Date</th>
-                <th style={{ textAlign: 'left', padding: '12px 16px', fontWeight: 700 }}>Status</th>
-                <th style={{ textAlign: 'left', padding: '12px 16px', fontWeight: 700 }}>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr><td colSpan={5} style={{ textAlign: 'center', padding: 24 }}>Loading...</td></tr>
-              ) : weddings.length === 0 ? (
-                <tr><td colSpan={5} style={{ textAlign: 'center', padding: 24 }}>No weddings found.</td></tr>
-              ) : (
-                weddings.map((wedding, i) => (
-                  <tr key={wedding._id || i} style={{ borderBottom: '1px solid #eee' }}>
-                    <td style={{ padding: '16px', color: '#2196f3', fontWeight: 700, cursor: 'pointer' }}>{wedding.weddingId}</td>
-                    <td style={{ padding: '16px' }}>{wedding.title}</td>
-                    <td style={{ padding: '16px' }}>{wedding.date}</td>
-                    <td style={{ padding: '16px' }}>{wedding.status}</td>
-                    <td style={{ padding: '16px' }}>
-                      <button
-                        style={{ border: '1px solid #2196f3', color: '#2196f3', background: '#fff', borderRadius: 6, padding: '6px 18px', fontWeight: 600, fontSize: 15, marginRight: 8, cursor: 'pointer' }}
-                        onClick={() => router.push(`/dashboard/wedding-management/${wedding._id}/info`)}
-                      >
-                        View Details
-                      </button>
-                      <span style={{ color: '#e57373', fontSize: 22, cursor: 'pointer', verticalAlign: 'middle', marginLeft: 15 }}
-                        onClick={() => setDeleteModal({ open: true, wedding })}>
-                        <Image src="/icons/delete.png" alt="delete" width={25} height={25} />
-                      </span>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+          <div className="table-responsive">
+            <table className="table align-middle mb-0" style={{ fontSize: 14 }}>
+              <thead>
+                <tr>
+                  <th style={{ background: '#EBE9E9', fontSize: '14px' }}>Id</th>
+                  <th style={{ background: '#EBE9E9', fontSize: '14px' }}>Title</th>
+                  <th style={{ background: '#EBE9E9', fontSize: '14px' }}>Wedding Date</th>
+                  <th style={{ background: '#EBE9E9', fontSize: '14px' }}>Status</th>
+                  <th style={{ background: '#EBE9E9', fontSize: '14px' }}>Action</th>
+                  <th style={{ background: '#EBE9E9', fontSize: '14px' }}></th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr><td colSpan={5} className="text-center py-4">Loading...</td></tr>
+                ) : filteredWeddings.length === 0 ? (
+                  <tr><td colSpan={5} className="text-center py-4">No matching weddings found.</td></tr>
+                ) : (
+                  filteredWeddings.map((wedding, i) => (
+                    <tr key={wedding._id || i}>
+                      <td className="py-3" style={{ color: '#2196f3', fontWeight: 500, cursor: 'pointer', fontSize: '12px' }}>{wedding.weddingId}</td>
+                      <td className="py-3" style={{ fontSize: '12px' }}>{wedding.title}</td>
+                      <td className="py-3" style={{ fontSize: '12px' }}>{wedding.date}</td>
+                      <td className="py-3" style={{ fontSize: '12px' }}>{wedding.status}</td>
+                      <td className="py-3">
+                        <div className="action-cell">
+                          {isPhone ? (
+                            <button
+                              type="button"
+                              className="icon-btn view-icon-btn"
+                              aria-label="View details"
+                              onClick={() => router.push(`/dashboard/wedding-management/${wedding._id}/info`)}
+                            >
+                              <IoEyeOutline size={18} />
+                            </button>
+                          ) : (
+                            <button
+                              className="btn btn-sm view-btn"
+                              style={{ fontSize: '13px' }}
+                              onClick={() => router.push(`/dashboard/wedding-management/${wedding._id}/info`)}
+                            >
+                              View Details
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                      <td className='py-3'>
+                        <button
+                            type="button"
+                            className="icon-btn delete-btn"
+                            aria-label="Delete wedding"
+                            onClick={() => setDeleteModal({ open: true, wedding })}
+                          >
+                            <IoTrashOutline size={18} />
+                          </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </main>
+      <style jsx>{`
+        .action-cell { display: inline-flex; align-items: center; gap: 10px; }
+        .icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; border: 1px solid transparent; border-radius: 6px; background: transparent; color: #e57373; cursor: pointer; transition: all .2s ease; }
+        .icon-btn:hover { background: #fdecec; color: #d9534f; border-color: #f5c6c6; }
+        .icon-btn:focus-visible { outline: 2px solid rgba(217,83,79,.45); outline-offset: 2px; }
+        /* Eye icon (View) on phones: black */
+        .view-icon-btn { color: #000; }
+        .view-icon-btn:hover { background: #f2f2f2; color: #000; border-color: #d0d0d0; }
+        .create-btn { background: #2BB96B; border-color: #2BB96B; transition: all .2s ease; }
+        .create-btn:hover { background: #23a95f; border-color: #23a95f; box-shadow: 0 4px 12px rgba(43,185,107,.35); transform: translateY(-1px); }
+        .create-btn:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(43,185,107,.25); }
+        .create-btn:focus-visible { outline: 2px solid #1e8c4a; outline-offset: 2px; }
+        /* View Details button: invert colors on hover */
+        .view-btn { background: #fff; color: #3698D9; border: var(--bs-border-width) solid #3698D9; transition: all .2s ease; }
+        .view-btn:hover { background: #3698D9; color: #fff; border-color: #3698D9; }
+        .view-btn:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(54,152,217,.25); }
+        .view-btn:focus-visible { outline: 2px solid rgba(54,152,217,.5); outline-offset: 2px; }
+        /* Keep form control border unchanged on focus */
+        .form-control:focus { border: var(--bs-border-width) solid var(--bs-border-color) !important; box-shadow: none; }
+        @media (max-width: 1024px) {
+          main { margin-left: 0; padding: 12px 12px 28px 12px; }
+        }
+        @media (max-width: 576px) {
+          .action-cell { flex-direction: column; align-items: flex-start; gap: 6px; }
+        }
+      `}</style>
     </div>
   );
 }
 
 const modalOverlayStyle = {
   position: 'fixed' as const,
-  top: 40,
+  top: 0,
   left: 0,
   width: '100vw',
   height: '100vh',
@@ -194,15 +322,16 @@ const modalOverlayStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  animation: 'fadeIn 0.3s',
+  padding: 12,
+  animation: 'fadeIn 0.25s',
 };
 
 const modalStyle = {
   background: '#fff',
-  borderRadius: 16,
-  padding: '40px 48px',
-  boxShadow: '0 4px 32px #0002',
+  borderRadius: 12,
+  padding: '12px',
+  boxShadow: '0 4px 24px #0002',
   textAlign: 'center' as const,
-  minWidth: '90rem',
-  animation: 'popIn 0.3s',
+  minWidth: 'min(20rem, 92vw)',
+  animation: 'popIn 0.25s',
 };

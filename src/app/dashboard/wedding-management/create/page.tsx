@@ -2,16 +2,14 @@
 
 import DashboardHeader from '@/components/DashboardHeader';
 import DashboardSidebar from '@/components/DashboardSidebar';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useState, ChangeEvent, FormEvent, useRef, useEffect, Suspense } from 'react';
 import './datepicker-fix.css';
 import { IconButton, Chip, TextField } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
-import CheckIcon from '@mui/icons-material/Check';
-import EditIcon from '@mui/icons-material/Edit';
+// Replace MUI icons with Ionicons
+import { IoAdd, IoClose, IoCheckmark, IoCheckmarkCircleOutline, IoCreateOutline } from 'react-icons/io5';
 
 type FormFields = {
   weddingId: string;
@@ -30,6 +28,32 @@ type ErrorFields = Partial<Record<keyof FormFields, string>>;
 function CreateWeddingClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Enable drawer only on mobile
+  useEffect(() => {
+    const check = () => setIsMobile(window.matchMedia('(max-width: 1024px)').matches);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  // Close drawer on route change
+  useEffect(() => { setDrawerOpen(false); }, [pathname]);
+
+  // Ensure drawer closes when switching to desktop/tablet
+  useEffect(() => { if (!isMobile && drawerOpen) setDrawerOpen(false); }, [isMobile, drawerOpen]);
+
+  // Lock body scroll when drawer is open on mobile
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    if (isMobile && drawerOpen) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isMobile, drawerOpen]);
+
   // Form state
   const [form, setForm] = useState<FormFields>({
     weddingId: '',
@@ -310,40 +334,43 @@ function CreateWeddingClient() {
       {showSuccess && (
         <div style={modalOverlayStyle}>
           <div style={modalStyle} className="modal-animate">
-            <div style={{ fontSize: 48, color: isEditMode ? '#2196f3' : '#1abc5b', marginBottom: 16 }}>{isEditMode ? '✏️' : '✅️'}</div>
-            <div style={{ fontWeight: 700, fontSize: 24, marginBottom: 8 }}>{isEditMode ? 'Wedding updated successfully!' : 'Wedding created successfully!'}</div>
-            <div style={{ color: '#666', fontSize: 16 }}>Redirecting to dashboard...</div>
+            <div style={{ marginBottom: 12 }}>
+              {isEditMode ? (
+                <IoCreateOutline size={36} color="#2196f3" />
+              ) : (
+                <IoCheckmarkCircleOutline size={36} color="#1abc5b" />
+              )}
+            </div>
+            <div style={{ fontWeight: 600, fontSize: 18, marginBottom: 6 }}>{isEditMode ? 'Wedding updated successfully!' : 'Wedding created successfully!'}</div>
+            <div style={{ color: '#666', fontSize: 14 }}>Redirecting to dashboard...</div>
           </div>
         </div>
       )}
-      {/* Fixed Header */}
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 100 }}>
-        <DashboardHeader />
-      </div>
-      {/* Fixed Sidebar */}
-      <div style={{ position: 'fixed', top: 72, left: 0, height: 'calc(100vh - 72px)', width: 240, zIndex: 99 }}>
-        <DashboardSidebar />
-      </div>
+
+      {/* Header & Sidebar (fixed) */}
+      <DashboardHeader onMenuClick={() => { if (isMobile) setDrawerOpen(true); }} />
+      <DashboardSidebar open={isMobile && drawerOpen} onClose={() => isMobile && setDrawerOpen(false)} />
+
       {/* Main Content */}
-      <main style={{ marginLeft: 240, marginTop: 72, flex: 1, padding: '40px 48px 0 48px' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', background: '#fff', borderRadius: 16, boxShadow: '0 2px 8px #0001', padding: 40 }}>
+      <main style={{ marginLeft: isMobile ? 0 : 'var(--sidebar-w)', marginTop: 'var(--header-h)', flex: 1, width: '-webkit-fill-available' }} aria-hidden={isMobile && drawerOpen}>
+        <div style={{ margin: '0 auto', background: '#fff', borderRadius: 14, boxShadow: '0 2px 8px #0001', padding: 18 }}>
           {/* Breadcrumb */}
-          <div style={{ color: '#1abc5b', fontWeight: 500, fontSize: 18, marginBottom: 16 }}>
+          <div style={{ color: '#1abc5b', fontWeight: 500, fontSize: 14, marginBottom: 10 }}>
             Dashboard / Wedding Management
           </div>
           {/* Title Row */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-            <h1 style={{ fontWeight: 700, fontSize: '2.2rem', margin: 0 }}>{isEditMode ? 'Edit wedding' : 'Create new wedding'}</h1>
-            <span style={{ color: '#2196f3', fontWeight: 700, fontSize: 22 }}>Wedding Id: {weddingId}</span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, gap: 10, flexWrap: 'wrap' }}>
+            <h1 style={{ fontWeight: 600, fontSize: '1rem', margin: 0 }}>{isEditMode ? 'Edit wedding' : 'Create new wedding'}</h1>
+            <span style={{ color: '#2196f3', fontWeight: 600, fontSize: 14 }}>Wedding Id: {weddingId}</span>
           </div>
           {/* Form */}
           <form onSubmit={handleSubmit} noValidate>
-            <div className='row col-md-12' style={{ display: 'flex', marginBottom: 24 }}>
-              <div className='col-md-4 mb-4'>
+            <div className='row g-3 mb-3'>
+              <div className='col-12 col-md-4'>
                 <input name="title" type="text" placeholder="Wedding Title" style={inputStyle} value={form.title} onChange={handleChange} />
                 {errors.title && <div style={errorStyle}>{errors.title}</div>}
               </div>
-              <div className='col-md-4 mb-4'>
+              <div className='col-12 col-md-4'>
                 <DatePicker
                   selected={dateValue}
                   onChange={(date: Date | null) => {
@@ -358,31 +385,33 @@ function CreateWeddingClient() {
                 />
                 {errors.date && <div style={errorStyle}>{errors.date}</div>}
               </div>
-              <div className='col-md-4 mb-4'>
+              <div className='col-12 col-md-4'>
                 <input name="venue" type="text" placeholder="Venue" style={inputStyle} value={form.venue} onChange={handleChange} />
                 {errors.venue && <div style={errorStyle}>{errors.venue}</div>}
               </div>
-            <div className='col-md-4 mb-4'>
+              
+              
+              <div className='col-12 col-md-4'>
                 <input name="groomContact" type="text" placeholder="Contact Person (Groom side)" style={inputStyle} value={form.groomContact} onChange={handleChange} />
                 {errors.groomContact && <div style={errorStyle}>{errors.groomContact}</div>}
               </div>
-              <div className='col-md-4 mb-4'>
+              <div className='col-12 col-md-4'>
                 <input name="groomMobile" type="text" placeholder="Mobile Number (Groom side)" style={inputStyle} value={form.groomMobile} onChange={handleChange} maxLength={10} />
                 {errors.groomMobile && <div style={errorStyle}>{errors.groomMobile}</div>}
               </div>
-              <div className='col-md-4 mb-4'>
+              <div className='col-12 col-md-4'>
                 <input name="brideContact" type="text" placeholder="Contact Person (Bride side)" style={inputStyle} value={form.brideContact} onChange={handleChange} />
                 {errors.brideContact && <div style={errorStyle}>{errors.brideContact}</div>}
               </div>
-            <div className='col-md-4 mb-4'>
+              <div className='col-12 col-md-4'>
                 <input name="brideMobile" type="text" placeholder="Mobile Number (Bride side)" style={inputStyle} value={form.brideMobile} onChange={handleChange} maxLength={10} />
                 {errors.brideMobile && <div style={errorStyle}>{errors.brideMobile}</div>}
               </div>
             </div>
             {/* Add tables section */}
-            <div style={{ background: '#eaf7fb', borderRadius: 12, padding: 24, marginBottom: 32 }}>
-              <div style={{ fontWeight: 700, fontSize: 22, marginBottom: 18 }}>Add tables to this wedding</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', minHeight: 60 }}>
+            <div style={{ background: '#eaf7fb', borderRadius: 12, padding: 14, marginBottom: 14 }}>
+              <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Add tables to this wedding</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', minHeight: 44 }}>
                 {chips.map((chip, idx) => (
                   editIndex === idx ? (
                     <span key={chip} ref={editInputRef}>
@@ -392,16 +421,18 @@ function CreateWeddingClient() {
                         style={{ background: '#fffbe7', borderRadius: 2, minWidth: 120 }}
                         inputProps={{ maxLength: 32 }}
                       />
-                      <IconButton onClick={handleSaveEdit} size="small" color="success"><CheckIcon /></IconButton>
+                      <IconButton onClick={handleSaveEdit} size="small" color="success">
+                        <IoCheckmark size={16} />
+                      </IconButton>
                     </span>
                   ) : (
                     <Chip
                       key={chip}
                       label={chip}
-                      style={chip === permanentChip ? { background: '#fdf5d5', fontWeight: 300, fontSize: 17, marginRight: 0, borderRadius: 2, padding: '1.5rem' } : { background: '#fdf5d5', fontWeight: 300, fontSize: 17, borderRadius: 2, padding: '1.5rem' }}
+                      style={chip === permanentChip ? { background: '#fdf5d5', fontWeight: 400, fontSize: 13, marginRight: 0, borderRadius: 2, padding: '0.55rem 0.7rem' } : { background: '#fdf5d5', fontWeight: 400, fontSize: 13, borderRadius: 2, padding: '0.55rem 0.7rem' }}
                       onClick={() => handleChipClick(chip, idx)}
                       onDelete={chip === permanentChip ? undefined : () => handleDeleteChip(chip)}
-                      deleteIcon={chip === permanentChip ? undefined : <CloseIcon />}
+                      deleteIcon={chip === permanentChip ? undefined : <IoClose size={16} />}
                       clickable={chip !== permanentChip && !addMode && editIndex === null}
                     />
                   )
@@ -414,22 +445,24 @@ function CreateWeddingClient() {
                       style={{ background: '#fffbe7', borderRadius: 2, minWidth: 120 }}
                       inputProps={{ maxLength: 32 }}
                     />
-                    <IconButton onClick={handleAddChip} size="small" color="success"><CheckIcon /></IconButton>
+                    <IconButton onClick={handleAddChip} size="small" color="success">
+                      <IoCheckmark size={16} />
+                    </IconButton>
                   </span>
                 ) : null}
-                <IconButton onClick={() => { if (!addMode && editIndex === null) { setAddMode(true); setChipInput(''); } }} size="small" color="primary" style={{ background: '#2196f3', color: '#fff', borderRadius: 8 }}>
-                  <AddIcon />
+                <IconButton onClick={() => { if (!addMode && editIndex === null) { setAddMode(true); setChipInput(''); } }} size="small" color="primary" style={{ background: '#2196f3', color: '#fff', borderRadius: 8, padding: 4 }}>
+                  <IoAdd size={16} />
                 </IconButton>
               </div>
               {/* Suggestion chips on next line */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', marginTop: '5rem' }}>
-                <span style={{ fontWeight: 600, color: '#666' }}>Suggestions: </span>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginTop: '0.75rem' }}>
+                <span style={{ fontWeight: 500, color: '#666', fontSize: 13 }}>Suggestions: </span>
                 {suggestions.map(chip => (
                   <Chip
                     key={chip}
                     label={chip}
                     variant="outlined"
-                    style={{ border: '1px solid #2196f3', color: '#2196f3', fontWeight: 400, fontSize: 17, background: '#fff', borderRadius: 2, padding: '1.5rem'}}
+                    style={{ border: '1px solid #2196f3', color: '#2196f3', fontWeight: 400, fontSize: 13, background: '#fff', borderRadius: 2, padding: '0.55rem 0.7rem'}}
                     onClick={() => handleAddSuggestion(chip)}
                     clickable={!addMode && editIndex === null}
                   />
@@ -441,6 +474,14 @@ function CreateWeddingClient() {
           </form>
         </div>
       </main>
+      <style jsx>{`
+        @media (max-width: 1024px) {
+          main { margin-left: 0; padding: 14px 10px 20px 10px; }
+        }
+        @media (max-width: 600px) {
+          h1 { font-size: 1.1rem !important; }
+        }
+      `}</style>
     </div>
   );
 }
@@ -455,81 +496,72 @@ export default function CreateWeddingPage() {
 }
 
 const inputStyle = {
-  padding: '18px',
+  padding: '12px',
   borderRadius: 8,
   border: '1.5px solid #e0e0e0',
-  fontSize: 18,
+  fontSize: 14,
   background: '#fafafa',
   fontWeight: 500,
   marginBottom: 0,
   outline: 'none',
   transition: 'border 0.2s',
   width: '100%',
-};
+} as const;
 
 const tagStyle = {
   background: '#fdf5d5',
   color: '#222',
   borderRadius: 8,
-  padding: '10px 22px',
+  padding: '8px 18px',
   fontWeight: 600,
-  fontSize: 17,
+  fontSize: 14,
   display: 'inline-block',
   border: 'none',
-};
+} as const;
 
 const tagStyleBlue = {
   background: '#fff',
   color: '#2196f3',
   border: '2px solid #2196f3',
   borderRadius: 8,
-  padding: '10px 22px',
+  padding: '8px 18px',
   fontWeight: 600,
-  fontSize: 17,
+  fontSize: 14,
   display: 'inline-block',
-};
+} as const;
 
 const addNewBtnStyle = {
   background: '#2196f3',
   color: '#fff',
   border: 'none',
   borderRadius: 8,
-  padding: '10px 28px',
-  fontWeight: 700,
-  fontSize: 17,
+  padding: '10px 22px',
+  fontWeight: 600,
+  fontSize: 16,
   cursor: 'pointer',
-  marginLeft: 8,
-  boxShadow: '0 2px 8px #2196f322',
-  transition: 'background 0.2s',
-};
+} as const;
 
 const createBtnStyle = {
   background: '#1abc5b',
   color: '#fff',
   border: 'none',
   borderRadius: 8,
-  fontWeight: 700,
-  fontSize: 22,
-  padding: '16px 0',
-  marginTop: 16,
+  padding: '7px 20px',
+  fontWeight: 500,
+  fontSize: 12,
   cursor: 'pointer',
-  display: 'block',
-  width: '100%',
-  boxShadow: '0 2px 8px #1abc5b22',
-  letterSpacing: 1,
-};
+} as const;
 
 const errorStyle = {
   color: '#e53935',
   fontWeight: 600,
-  fontSize: 14,
-  marginTop: 4,
-  marginLeft: 2,
-};
+  fontSize: 12,
+  marginTop: 6,
+} as const;
 
 const modalOverlayStyle = {
   position: 'fixed' as const,
-  top: 0,
+  top: 40,
   left: 0,
   width: '100vw',
   height: '100vh',
@@ -539,14 +571,14 @@ const modalOverlayStyle = {
   alignItems: 'center',
   justifyContent: 'center',
   animation: 'fadeIn 0.3s',
-};
+} as const;
 
 const modalStyle = {
   background: '#fff',
-  borderRadius: 16,
-  padding: '40px 48px',
-  boxShadow: '0 4px 32px #0002',
+  borderRadius: 14,
+  padding: '18px',
+  boxShadow: '0 4px 24px #0002',
   textAlign: 'center' as const,
-  minWidth: 320,
+  minWidth: 'min(28rem, 96vw)',
   animation: 'popIn 0.3s',
-};
+} as const;

@@ -1,0 +1,23 @@
+.infoCard { background: #FBF3DB; border-radius: 12px; padding: 20px 20px; margin-bottom: 16px; }
+.topRow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.leftCol { min-width: 0; }
+.idText { color: #ff4d4f; font-weight: 500; font-size: 14px; margin-bottom: 2px; }
+.titleText { font-weight: 700; font-size: 18px; margin-bottom: 2px; color: #222; }
+.dateText { font-size: 14px; color: #222; opacity: 0.95; }
+.divider { border: none; border-top: 2px solid #E2D29C; margin: 12px 0; }
+.kv { font-size: 14px; margin-bottom: 6px; color: #222; }
+/* Edit button aligned to right, with hover inversion */
+.editLink { background: #fbf3db; color: #222; border: 1px solid #222; border-radius: 10px; padding: 6px 18px; font-weight: 500; font-size: 12px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: all .2s ease; white-space: nowrap; }
+.editLink:hover { background: #222; color: #fff; }
+.editLink:active { transform: translateY(1px); }
+.editLink:focus-visible { outline: 2px solid rgba(0,0,0,.35); outline-offset: 2px; }
+
+@media (max-width: 768px) {
+  .infoCard { padding: 14px; border-radius: 10px; }
+  /* Keep a row layout so Edit stays on the right */
+  .topRow { flex-direction: row; align-items: flex-start; gap: 8px; flex-wrap: nowrap; }
+  .leftCol { flex: 1; min-width: 0; }
+  .titleText { font-size: 16px; }
+  .idText, .dateText, .kv { font-size: 13px; }
+  .editLink { margin-left: auto; padding: 5px 14px; }
+}

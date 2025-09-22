@@ -1,19 +1,20 @@
 import React from 'react';
+import styles from './WeddingInfoStats.module.css';
 
 export default function WeddingInfoStats({ stats }: { stats: { cost: number, pending: number, guest: number } }) {
   return (
-    <div style={{ display: 'flex', gap: 30 }} className='row col-md-12'>
-      <div style={{ background: '#d9f3fc', borderRadius: 16, padding: 35, minWidth: '31rem', textAlign: 'center' }} className='col-md-3'>
-        <div style={{ fontWeight: 700, fontSize: 24, marginBottom: 4 }}>₹{stats.cost.toLocaleString('en-IN')}</div>
-        <div style={{ fontWeight: 500, color: '#222' }}>Wedding Cost</div>
+    <div className={styles.wrapper}>
+      <div className={styles.statCard}>
+        <div className={styles.value}>₹{stats.cost.toLocaleString('en-IN')}</div>
+        <div className={styles.label}>Wedding Cost</div>
       </div>
-      <div style={{ background: '#d9f3fc', borderRadius: 16, padding: 35, minWidth: '31rem', textAlign: 'center' }} className='col-md-3'>
-        <div style={{ fontWeight: 700, fontSize: 24, marginBottom: 4 }}>₹{stats.pending.toLocaleString('en-IN')}</div>
-        <div style={{ fontWeight: 500, color: '#222' }}>Pending</div>
+      <div className={styles.statCard}>
+        <div className={styles.value}>₹{stats.pending.toLocaleString('en-IN')}</div>
+        <div className={styles.label}>Pending</div>
       </div>
-      <div style={{ background: '#d9f3fc', borderRadius: 16, padding: 35, minWidth: '31rem', textAlign: 'center' }} className='col-md-3'>
-        <div style={{ fontWeight: 700, fontSize: 24, marginBottom: 4 }}>{stats.guest.toLocaleString('en-IN')}</div>
-        <div style={{ fontWeight: 500, color: '#222' }}>Guest</div>
+      <div className={styles.statCard}>
+        <div className={styles.value}>{stats.guest.toLocaleString('en-IN')}</div>
+        <div className={styles.label}>Guest</div>
       </div>
     </div>
   );

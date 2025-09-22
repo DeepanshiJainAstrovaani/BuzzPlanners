@@ -1,10 +1,9 @@
 'use client';
 
-import DashboardHeader from '@/components/DashboardHeader';
-import DashboardSidebar from '@/components/DashboardSidebar';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { IoPencilOutline, IoTrashOutline, IoAddOutline } from 'react-icons/io5';
 
 interface VendorRow {
   [key: string]: string | number;
@@ -400,227 +399,164 @@ export default function VendorMasterSheetPage() {
 
   if (loading || !section) {
     return (
-      <div style={{ minHeight: '100vh', background: '#f7f7f7' }}>
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 100 }}>
-          <DashboardHeader />
-        </div>
-        <div style={{ position: 'fixed', top: 72, left: 0, height: 'calc(100vh - 72px)', width: 240, zIndex: 99 }}>
-          <DashboardSidebar />
-        </div>
-        <main style={{ marginLeft: 240, marginTop: 72, flex: 1, padding: '40px 48px 0 48px' }}>
-          <div style={{ background: '#fff', borderRadius: 16, padding: 40, boxShadow: '0 2px 8px #0001' }}>Loading...</div>
-        </main>
+      <div>
+        <div style={{ background: '#fff', borderRadius: 16, padding: 24, boxShadow: '0 2px 8px #0001' }}>Loading...</div>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f7f7f7' }}>
-      {/* Fixed Header */}
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 100 }}>
-        <DashboardHeader />
+    <div>
+      {/* Breadcrumb */}
+      <div style={{ color: '#1abc5b', fontWeight: 500, fontSize: 16, marginBottom: 8 }}>
+        Wedding Management / {wedding?.title || ''}
       </div>
-      {/* Fixed Sidebar */}
-      <div style={{ position: 'fixed', top: 72, left: 0, height: 'calc(100vh - 72px)', width: 240, zIndex: 99 }}>
-        <DashboardSidebar />
-      </div>
-      {/* Main Content */}
-      <main style={{ flex: 1 }}>
-        <div>
-          {/* Breadcrumb */}
-          <div style={{ color: '#1abc5b', fontWeight: 500, fontSize: 16, marginBottom: 8 }}>
-            Wedding Management / {wedding?.title || ''}
-          </div>
-          <h1 style={{ fontWeight: 500, fontSize: 28, margin: '30px 0 35px 0' }}>Vendor Master Sheet</h1>
+      <h1 style={{ fontWeight: 500, fontSize: 28, margin: '30px 0 35px 0' }}>Vendor Master Sheet</h1>
 
-          {/* Search + header edit and global actions */}
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 30 }}>
-            <div style={{ flex: 1, position: 'relative' }}>
-              <input
-                placeholder="🔍︎  Search any item"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                style={{ width: '100%', padding: '12px 14px', borderRadius: 8, border: '1.5px solid #ccc', fontSize: 16 }}
-              />
-            </div>
-            <button
-              onClick={() => persistSection(columnsMeta, rowsByColId)}
-              disabled={saving || !dirty}
-              style={{ background: dirty ? '#1abc5b' : '#a5d6a7', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 15, padding: '10px 18px', cursor: dirty ? 'pointer' : 'not-allowed' }}
-            >
-              {saving ? 'Saving...' : 'Save Changes'}
-            </button>
-            <button
-              onClick={() => wedding && loadFromServer(wedding._id)}
-              disabled={saving || !dirty}
-              style={{ background: '#fff', color: dirty ? '#e57373' : '#bbb', border: `1.5px solid ${dirty ? '#e57373' : '#ddd'}`, borderRadius: 8, fontWeight: 700, fontSize: 15, padding: '10px 18px', cursor: dirty ? 'pointer' : 'not-allowed' }}
-            >
-              Discard
-            </button>
-          </div>
-
-          {/* Table */}
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0 }}>
-              <thead>
-                <tr style={{ background: '#555555', color: 'white'}}>
-                  <th style={{ textAlign: 'left', padding: '12px 12px'}}>S.No</th>
-                  {displayColumns.map((cm) => (
-                    <th key={cm.id} style={{ textAlign: 'left', padding: '12px 12px' }}>{cm.name}</th>
-                  ))}
-                  <th style={{ textAlign: 'left', padding: '12px 12px' }}>
-                    <button
-              onClick={openHeaderEdit}
-              title="Edit columns"
-              style={{ background: '#555555', border: 'none', color: 'white', cursor: 'pointer' }}
-            >
-              <Image src="/icons/edit.png" alt="edit" width={20} height={20} />
-            </button>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredRows.map((row, idx) => (
-                  <tr key={idx} style={{ background: idx % 2 ? '#eaf7fb' : '#fff' }}>
-                    <td style={{ padding: '12px 12px', fontWeight: 700 }}>{idx + 1}</td>
-                    {displayColumns.map((cm) => (
-                      <td key={cm.id} style={{ padding: '12px 12px' }}>
-                        {editingIndex === idx ? (
-                          <input
-                            value={String(editedRow[cm.id] ?? '')}
-                            onChange={(e) => {
-                              setEditedRow({ ...editedRow, [cm.id]: e.target.value });
-                              setDirty(true);
-                            }}
-                            style={{ width: '100%', padding: '8px 10px', border: '1px solid #ccc', borderRadius: 6 }}
-                          />
-                        ) : (
-                          <span>{String(row[cm.id] ?? '')}</span>
-                        )}
-                      </td>
-                    ))}
-                    <td style={{ padding: '12px 12px', whiteSpace: 'nowrap' }}>
-                      {editingIndex === idx ? (
-                        <>
-                          <button onClick={saveRow} disabled={saving} style={{ border: '1px solid #4caf50', color: '#4caf50', background: '#fff', borderRadius: 6, padding: '6px 12px', marginRight: 8, cursor: 'pointer' }}>Save</button>
-                          <button onClick={cancelEditRow} style={{ border: '1px solid #999', color: '#666', background: '#fff', borderRadius: 6, padding: '6px 12px', cursor: 'pointer' }}>Cancel</button>
-                        </>
-                      ) : (
-                        <>
-                          <button onClick={() => startEditRow(idx)} title="Edit row" style={{ border: '1px solid #2196f3', color: '#2196f3', background: '#fff', borderRadius: 6, padding: '6px 12px', marginRight: 8, cursor: 'pointer' }}>
-                            ✏️
-                          </button>
-                          <button onClick={() => deleteRow(idx)} title="Delete row" style={{ border: '1px solid #e57373', color: '#e57373', background: '#fff', borderRadius: 6, padding: '6px 12px', cursor: 'pointer' }}>
-                            <Image src="/icons/delete.png" alt="delete" width={16} height={16} />
-                          </button>
-                        </>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Add new row */}
-          <div style={{ background: '#fff8e1', border: '1px solid #f0e0a0', borderRadius: 8, padding: 15, marginTop: 40 }}>
-            <div style={{ fontWeight: 700, marginBottom: 8 }}>Adding new row</div>
-            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${inputColumns.length}, minmax(140px, 1fr))`, gap: 12 }}>
-              {inputColumns.map((cm) => (
-                <input
-                  key={cm.id}
-                  placeholder={cm.name}
-                  value={String(newRow[cm.id] ?? '')}
-                  onChange={(e) => {
-                    setNewRow({ ...newRow, [cm.id]: e.target.value });
-                    setDirty(true);
-                  }}
-                  style={{ padding: '10px 12px', borderRadius: 8, border: "1.5px solid #e0e0e0", fontSize: 15 }}
-                />
-              ))}
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <button onClick={addRow} disabled={saving} style={{ background: '#1abc5b', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 16, padding: '10px 28px', marginTop: 12, cursor: 'pointer' }}>
-                Add Row
-              </button>
-            </div>
-          </div>
+      {/* Search + header edit and global actions */}
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 30, flexWrap: 'wrap' }}>
+        <div style={{ flex: 1, minWidth: 240, position: 'relative' }}>
+          <input
+            placeholder="🔎︎  Search any item"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            style={{ width: '100%', padding: '12px 14px', borderRadius: 8, border: '1.5px solid #ccc', fontSize: 16 }}
+          />
         </div>
-      </main>
+        <button
+          onClick={() => persistSection(columnsMeta, rowsByColId)}
+          disabled={saving || !dirty}
+          style={{ background: dirty ? '#1abc5b' : '#a5d6a7', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 15, padding: '10px 18px', cursor: dirty ? 'pointer' : 'not-allowed' }}
+        >
+          {saving ? 'Saving...' : 'Save Changes'}
+        </button>
+        <button
+          onClick={() => wedding && loadFromServer(wedding._id)}
+          disabled={saving || !dirty}
+          style={{ background: '#fff', color: dirty ? '#e57373' : '#bbb', border: `1.5px solid ${dirty ? '#e57373' : '#ddd'}`, borderRadius: 8, fontWeight: 700, fontSize: 15, padding: '10px 18px', cursor: dirty ? 'pointer' : 'not-allowed' }}
+        >
+          Discard
+        </button>
+      </div>
+
+      {/* Table */}
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0 }}>
+          <thead>
+            <tr style={{ background: '#EBE9E9', color: '#222' }}>
+              <th style={{ textAlign: 'left', padding: '12px 12px'}}>S.No</th>
+              {displayColumns.map((cm) => (
+                <th key={cm.id} style={{ textAlign: 'left', padding: '12px 12px' }}>{cm.name}</th>
+              ))}
+              <th style={{ textAlign: 'left', padding: '12px 12px' }}>
+                <button
+                  onClick={openHeaderEdit}
+                  title="Edit columns"
+                  style={{ background: 'transparent', border: 'none', color: '#222', cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}
+                >
+                  <IoPencilOutline size={18} />
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredRows.map((row, idx) => (
+              <tr key={idx} style={{ background: idx % 2 ? '#eaf7fb' : '#fff' }}>
+                <td style={{ padding: '12px 12px', fontWeight: 700 }}>{idx + 1}</td>
+                {displayColumns.map((cm) => (
+                  <td key={cm.id} style={{ padding: '12px 12px' }}>
+                    {editingIndex === idx ? (
+                      <input
+                        value={String(editedRow[cm.id] ?? '')}
+                        onChange={(e) => {
+                          setEditedRow({ ...editedRow, [cm.id]: e.target.value });
+                          setDirty(true);
+                        }}
+                        style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #ccc' }}
+                      />
+                    ) : (
+                      <span>{String(row[cm.id] ?? '')}</span>
+                    )}
+                  </td>
+                ))}
+                <td style={{ padding: '12px 12px', whiteSpace: 'nowrap' }}>
+                  {editingIndex === idx ? (
+                    <>
+                      <button onClick={saveRow} style={{ background: '#1abc5b', color: '#fff', border: 'none', borderRadius: 6, padding: '6px 14px', fontWeight: 700, fontSize: 14, marginRight: 6, cursor: 'pointer' }}>Save</button>
+                      <button onClick={cancelEditRow} style={{ background: '#fff', color: '#222', border: '1px solid #ccc', borderRadius: 6, padding: '6px 14px', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>Cancel</button>
+                    </>
+                  ) : (
+                    <>
+                      <button title="Edit row" onClick={() => startEditRow(idx)} style={{ background: '#fff', color: '#222', border: '1px solid #ccc', borderRadius: 6, padding: '6px 12px', fontWeight: 700, fontSize: 14, marginRight: 6, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                        <IoPencilOutline size={16} />
+                      </button>
+                      <button title="Delete row" onClick={() => deleteRow(idx)} style={{ background: '#fff', color: '#e57373', border: '1px solid #e57373', borderRadius: 6, padding: '6px 12px', fontWeight: 700, fontSize: 14, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                        <IoTrashOutline size={16} />
+                      </button>
+                    </>
+                  )}
+                </td>
+              </tr>
+            ))}
+            {/* Add row */}
+            <tr>
+              <td style={{ padding: '12px 12px', color: '#888' }}>#</td>
+              {displayColumns.map((cm) => (
+                <td key={cm.id} style={{ padding: '12px 12px' }}>
+                  <input
+                    value={String(newRow[cm.id] ?? '')}
+                    onChange={(e) => setNewRow({ ...newRow, [cm.id]: e.target.value })}
+                    style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #ccc' }}
+                  />
+                </td>
+              ))}
+              <td style={{ padding: '12px 12px' }}>
+                <button onClick={addRow} style={{ background: '#2196f3', color: '#fff', border: 'none', borderRadius: 6, padding: '6px 14px', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>Add</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       {/* Header edit modal */}
       {editHeaderOpen && (
-        <div style={modalOverlayStyle}>
-          <div style={modalStyle}>
-            {/* Breadcrumb */}
-            <div style={{ color: '#1abc5b', fontWeight: 500, fontSize: 16, marginBottom: 8 }}>
-              Wedding Management / {wedding?.weddingId || ''} / Vendor Master Sheet
-            </div>
-            <h2 style={{ fontWeight: 800, fontSize: 26, margin: '16px 0 40px 0' }}>Vendor master sheet table</h2>
-
-            {/* Column inputs */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(200px, 1fr))', gap: 16 }}>
-              {columnsDraft.map((c, i) => (
-                <div key={c.id} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.18)', zIndex: 1100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 12 }}>
+          <div style={{ background: '#fff', borderRadius: 14, padding: 18, width: 'min(640px, 96vw)', boxShadow: '0 4px 24px #0002' }}>
+            <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 12 }}>Edit Columns</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {columnsDraft.map((c, idx) => (
+                <div key={c.id || idx} style={{ display: 'flex', gap: 8 }}>
                   <input
-                    placeholder={`Column ${i + 1}`}
                     value={c.name}
                     onChange={(e) => {
-                      const copy = [...columnsDraft];
-                      copy[i] = { ...copy[i], name: e.target.value };
-                      setColumnsDraft(copy);
+                      const next = [...columnsDraft];
+                      next[idx] = { ...next[idx], name: e.target.value };
+                      setColumnsDraft(next);
                     }}
-                    style={{ flex: 1, padding: '14px 16px', borderRadius: 8, border: '1.5px solid #e0e0e0', fontSize: 16 }}
+                    style={{ flex: 1, padding: '8px 10px', borderRadius: 6, border: '1px solid #ccc' }}
                   />
-                  <div style={{ display: 'flex', gap: 6 }}>
-                    <button
-                      title="Move up"
-                      disabled={i === 0}
-                      onClick={() => {
-                        if (i === 0) return;
-                        const copy = [...columnsDraft];
-                        const temp = copy[i - 1];
-                        copy[i - 1] = copy[i];
-                        copy[i] = temp;
-                        setColumnsDraft(copy);
-                      }}
-                      style={{ background: '#fff', border: '1px solid #ccc', borderRadius: 6, padding: '8px 10px', cursor: i === 0 ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
-                    >
-                      ↑
-                    </button>
-                    <button
-                      title="Move down"
-                      disabled={i === columnsDraft.length - 1}
-                      onClick={() => {
-                        if (i === columnsDraft.length - 1) return;
-                        const copy = [...columnsDraft];
-                        const temp = copy[i + 1];
-                        copy[i + 1] = copy[i];
-                        copy[i] = temp;
-                        setColumnsDraft(copy);
-                      }}
-                      style={{ background: '#fff', border: '1px solid #ccc', borderRadius: 6, padding: '8px 10px', cursor: i === columnsDraft.length - 1 ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
-                    >
-                      ↓
-                    </button>
-                    <button
-                      title="Delete column"
-                      onClick={() => {
-                        const copy = columnsDraft.filter((_, idx) => idx !== i);
-                        setColumnsDraft(copy);
-                      }}
-                      style={{ background: '#fff', border: '1px solid #e57373', color: '#e57373', borderRadius: 6, padding: '8px 10px', cursor: 'pointer' }}
-                    >
-                      <Image src="/icons/delete.png" alt="delete" width={16} height={16} />
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => setColumnsDraft(columnsDraft.filter((_, i) => i !== idx))}
+                    style={{ background: '#fff', color: '#e57373', border: '1px solid #e57373', borderRadius: 6, padding: '6px 12px', fontWeight: 700, fontSize: 14, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                  >
+                    <IoTrashOutline size={16} />
+                    Remove
+                  </button>
                 </div>
               ))}
+              <div>
+                <button
+                  onClick={() => setColumnsDraft([...columnsDraft, { id: '', name: '' }])}
+                  style={{ background: '#fff', color: '#2196f3', border: '1px solid #2196f3', borderRadius: 6, padding: '6px 12px', fontWeight: 700, fontSize: 14, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                >
+                  <IoAddOutline size={16} />
+                  Add column
+                </button>
+              </div>
             </div>
-            <div style={{ display: 'flex', gap: 12, marginTop: 50 }}>
-              <button onClick={() => setColumnsDraft([...columnsDraft, { id: uid(), name: '' }])} style={{ background: '#2196f3', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 16, padding: '10px 28px', cursor: 'pointer' }}>Add field</button>
-              <button onClick={applyHeaderUpdate} disabled={saving} style={{ background: '#1abc5b', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 16, padding: '10px 28px', cursor: 'pointer' }}>Update</button>
-              <button onClick={() => setEditHeaderOpen(false)} style={{ background: '#fff', color: '#222', border: '1.5px solid #ccc', borderRadius: 8, fontWeight: 700, fontSize: 16, padding: '10px 28px', cursor: 'pointer' }}>Cancel</button>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 12 }}>
+              <button onClick={() => setEditHeaderOpen(false)} style={{ background: '#fff', color: '#222', border: '1px solid #ccc', borderRadius: 6, padding: '6px 12px', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>Cancel</button>
+              <button onClick={applyHeaderUpdate} style={{ background: '#1abc5b', color: '#fff', border: 'none', borderRadius: 6, padding: '6px 12px', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>Apply</button>
             </div>
           </div>
         </div>
@@ -637,18 +573,19 @@ const modalOverlayStyle: React.CSSProperties = {
   top: 0,
   left: 0,
   width: '100vw',
-  height: '115vh',
+  height: '100vh',
   background: 'rgba(0,0,0,0.18)',
   zIndex: 9999,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  padding: 10,
 };
 
 const modalStyle: React.CSSProperties = {
   background: '#fff',
-  borderRadius: 16,
-  padding: '32px 36px',
-  boxShadow: '0 4px 32px #0002',
-  minWidth: 720,
+  borderRadius: 12,
+  padding: '12px',
+  boxShadow: '0 4px 20px #0002',
+  width: 'min(520px, 92vw)',
 };

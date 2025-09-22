@@ -1,0 +1,118 @@
+.sidebar {
+  background: #222222;
+  color: #fff;
+  height: calc(100vh - var(--header-h));
+  padding: 5px 0;
+  position: fixed;
+  left: 0;
+  top: calc(var(--header-h) - 10px);
+  display: flex;
+  flex-direction: column;
+  z-index: 99;
+  border-right: 1px solid rgba(255,255,255,0.15);
+  border-top: 1px solid white;
+  width: var(--sidebar-w);
+  box-sizing: border-box;
+}
+
+/* Mobile/Tablet: turn into an off-canvas drawer */
+@media (max-width: 1024px) {
+  .sidebar {
+    height: calc(100vh - var(--header-h));
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 20px;
+    will-change: transform;
+  }
+  .open {
+    transform: translateX(0);
+  }
+}
+
+.titleLink {
+  font-weight: 500;
+  font-size: 1rem;
+  text-align: left;
+  padding-left: 24px;
+  letter-spacing: 0.3px;
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  margin-top: 10px;
+}
+
+.menuRoot {
+  list-style: none;
+  padding: 0;
+}
+.menuItem {
+  border-bottom: 1px solid white;
+  position: relative; /* for right chevron positioning */
+}
+.menuLink {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.8rem; /* bigger font */
+  display: block; /* full row clickable */
+  padding: 12px 40px 12px 24px; /* leave room for chevron on right */
+  transition: background 0.2s, color 0.2s;
+  line-height: 1.2;
+  position: relative; /* ensure chevron positions relative to the main row, not the whole li */
+}
+/* Hover: pale yellow background, black text */
+.menuLink:hover { background: #fdf5d5; color: #000; }
+/* Active link hover should match other menus (remove orange) */
+.menuLinkActive:hover { background: #fdf5d5; color: #000; }
+
+/* Right chevron aligned perfectly on the right */
+.menuChevron {
+  position: absolute;
+  right: 17px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.45rem; /* bigger arrow */
+  color: white;
+  pointer-events: none; /* clicks go to the underlying Link */
+}
+/* Also darken chevron on hover for contrast on light hover bg */
+.menuItem:hover .menuChevron { color: #000; }
+
+.subMenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.subMenuItem {
+  margin: 2px 0;
+}
+.subMenuLink {
+  color: #b6b9bc;
+  display: block;
+  padding: 8px 28px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.7rem;
+  transition: background 0.2s, color 0.2s;
+}
+/* Submenu hover: pale yellow background, black text */
+.subMenuLink:hover { background: #fdf5d5; color: #000; }
+.subMenuLinkActive {
+  color: #222;
+  background: #fdf5d5;
+}
+/* Preserve active submenu style on hover */
+.subMenuLinkActive:hover { background: #fdf5d5; color: #222; }
+
+/* Backdrop shown when sidebar is open on mobile */
+.backdrop {
+  position: fixed;
+  inset: var(--header-h) 0 0 0; /* below header */
+  background: rgba(0,0,0,0.35);
+  z-index: 98;
+  display: none;
+}
+@media (max-width: 1024px) {
+  .backdropShow {
+    display: block;
+  }
+}

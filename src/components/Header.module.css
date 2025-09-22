@@ -18,20 +18,41 @@
 }
 .brand {
   color: #ffb300;
-  font-weight: 700;
-  font-size: 1.3rem;
-  letter-spacing: 1px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: .3px;
   font-family: 'Montserrat', sans-serif;
 }
 .logout {
   background: none;
   border: none;
   color: #e57373;
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
   transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
 }
 .logout:hover {
   color: #ff1744;
+}
+
+/* Mobile hamburger shown only below 1024px */
+.menuButton {
+  display: none;
+  margin-right: 8px;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.4);
+  color: #fff;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 16px;
+}
+@media (max-width: 1024px) {
+  .menuButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
 }

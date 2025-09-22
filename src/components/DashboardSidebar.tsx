@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import styles from './DashboardSidebar.module.css';
+import { IoChevronForward } from 'react-icons/io5';
 
 const menuItems = [
   { label: 'Wedding Management', path: '/dashboard/wedding-management' },
@@ -18,7 +20,7 @@ const menuItems = [
 // Ensure the very first character is uppercase regardless of source casing
 const capitalizeFirst = (s: string) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : '');
 
-export default function DashboardSidebar() {
+export default function DashboardSidebar({ open = false, onClose }: { open?: boolean; onClose?: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
   const [weddingSections, setWeddingSections] = useState<any[]>([]);
@@ -60,126 +62,71 @@ export default function DashboardSidebar() {
     return key !== 'vendormastersheet' && label !== 'vendor master sheet';
   });
 
+  const handleNavigate = (href: string) => {
+    router.push(href);
+    // Close the drawer on mobile when navigating
+    onClose?.();
+  };
+
   return (
-    <aside
-      style={{
-        width: 240,
-        background: '#222222',
-        color: '#fff',
-        height: '100vh',
-        padding: '24px 0',
-        position: 'fixed',
-        left: 0,
-        top: 72,
-        display: 'flex',
-        flexDirection: 'column',
-        zIndex: 99,
-      }}
-    >
-      <Link
-        className='my-2'
-        href="/dashboard"
-        style={{
-          fontWeight: 'bold',
-          fontSize: '1.2rem',
-          textAlign: 'left',
-          paddingLeft: 30,
-          letterSpacing: 0.5,
-          color: pathname === '/dashboard' ? '#ffb300' : '#fff',
-          textDecoration: 'none',
-          display: 'block',
-        }}
-      >
-        Dashboard
-      </Link>
-      <nav>
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          {visibleMenuItems.map((item) => (
-            <li key={item.path} style={{ margin: '8px 0', borderBottom: '1px solid white' }}>
-              <Link
-                href={item.path}
-                style={{
-                  color: safePathname.startsWith(item.path) ? '#ffb300' : '#fff',
-                  textDecoration: 'none',
-                  fontSize: '1rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '10px 32px',
-                  borderRadius: 4,
-                  fontWeight: safePathname.startsWith(item.path) ? 700 : 400,
-                  background: safePathname.startsWith(item.path) ? '#292929' : 'none',
-                  transition: 'background 0.2s, color 0.2s',
-                }}
-              >
-                {item.label}{' '}
-                <span style={{ fontWeight: 600 }}>&#8250;</span>
-              </Link>
-              {/* Wedding sections as sub-menu */}
-              {item.path === '/dashboard/wedding-management' && weddingId && safePathname.startsWith(`/dashboard/wedding-management/${weddingId}`) && (
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                  {/* Wedding Info always at the top */}
-                  <li key="info">
-                    <a
-                      style={{
-                        color: activeSection === 'info' ? '#222' : '#848a8e',
-                        background: activeSection === 'info' ? '#fdf5d5' : 'transparent',
-                        borderRadius: 4,
-                        display: 'block',
-                        padding: '8px 36px',
-                        fontWeight: activeSection === 'info' ? 700 : 500,
-                        cursor: 'pointer',
-                        margin: '2px 0',
-                      }}
-                      onClick={() => router.push(`/dashboard/wedding-management/${weddingId}/info`)}
-                    >
-                      Wedding Info
-                    </a>
-                  </li>
-                  {/* Vendor Master Sheet always second */}
-                  <li key="vendorMasterSheet">
-                    <a
-                      style={{
-                        color: activeSection === 'vendorMasterSheet' ? '#222' : '#848a8e',
-                        background: activeSection === 'vendorMasterSheet' ? '#fdf5d5' : 'transparent',
-                        borderRadius: 4,
-                        display: 'block',
-                        padding: '8px 36px',
-                        fontWeight: activeSection === 'vendorMasterSheet' ? 700 : 500,
-                        cursor: 'pointer',
-                        margin: '2px 0',
-                      }}
-                      onClick={() => router.push(`/dashboard/wedding-management/${weddingId}/vendorMasterSheet`)}
-                    >
-                      Vendor Master Sheet
-                    </a>
-                  </li>
-                  {/* Render other dynamic sections (any order) */}
-                  {otherSections.map((section: any) => (
-                    <li key={section.key}>
+    <>
+      {/* Backdrop for mobile */}
+      <div className={`${styles.backdrop} ${open ? styles.backdropShow : ''}`} onClick={onClose} />
+      <aside className={`${styles.sidebar} ${open ? styles.open : ''}`}>
+        <Link className={styles.titleLink} href="/dashboard">
+          Dashboard
+        </Link>
+        <nav>
+          <ul className={styles.menuRoot}>
+            {visibleMenuItems.map((item) => (
+              <li key={item.path} className={styles.menuItem}>
+                <Link
+                  href={item.path}
+                  className={`${styles.menuLink} ${safePathname.startsWith(item.path) ? styles.menuLinkActive : ''}`}
+                >
+                  {item.label}
+                  {/* Chevron is inside the link so it stays aligned with the main row */}
+                  <IoChevronForward className={styles.menuChevron} size={19} />
+                </Link>
+                {/* Wedding sections as sub-menu */}
+                {item.path === '/dashboard/wedding-management' && weddingId && safePathname.startsWith(`/dashboard/wedding-management/${weddingId}`) && (
+                  <ul className={styles.subMenu}>
+                    {/* Wedding Info always at the top */}
+                    <li key="info" className={styles.subMenuItem}>
                       <a
-                        style={{
-                          color: activeSection === section.key ? '#222' : '#848a8e',
-                          background: activeSection === section.key ? '#fdf5d5' : 'transparent',
-                          borderRadius: 4,
-                          display: 'block',
-                          padding: '8px 36px',
-                          fontWeight: activeSection === section.key ? 700 : 500,
-                          cursor: 'pointer',
-                          margin: '2px 0',
-                        }}
-                        onClick={() => router.push(`/dashboard/wedding-management/${weddingId}/${section.key}`)}
+                        className={`${styles.subMenuLink} ${activeSection === 'info' ? styles.subMenuLinkActive : ''}`}
+                        onClick={() => handleNavigate(`/dashboard/wedding-management/${weddingId}/info`)}
                       >
-                        {capitalizeFirst(String(section.label || ''))}
+                        Wedding Info
                       </a>
                     </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </aside>
+                    {/* Vendor Master Sheet always second */}
+                    <li key="vendorMasterSheet" className={styles.subMenuItem}>
+                      <a
+                        className={`${styles.subMenuLink} ${activeSection === 'vendorMasterSheet' ? styles.subMenuLinkActive : ''}`}
+                        onClick={() => handleNavigate(`/dashboard/wedding-management/${weddingId}/vendorMasterSheet`)}
+                      >
+                        Vendor Master Sheet
+                      </a>
+                    </li>
+                    {/* Render other dynamic sections (any order) */}
+                    {otherSections.map((section: any) => (
+                      <li key={section.key} className={styles.subMenuItem}>
+                        <a
+                          className={`${styles.subMenuLink} ${activeSection === section.key ? styles.subMenuLinkActive : ''}`}
+                          onClick={() => handleNavigate(`/dashboard/wedding-management/${weddingId}/${section.key}`)}
+                        >
+                          {capitalizeFirst(String(section.label || ''))}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+    </>
   );
 }
