@@ -57,7 +57,7 @@ export default function DashboardPage() {
 	}, [isMobile, drawerOpen]);
 
 	return (
-		<div style={{ minHeight: '100vh', background: '#f7f7f7' }}>
+		<div style={{ minHeight: '100vh', background: 'white' }}>
 			{/* Header (fixed within component) */}
 			<DashboardHeader onMenuClick={() => { if (isMobile) setDrawerOpen(true); }} />
 
@@ -84,7 +84,7 @@ export default function DashboardPage() {
 							<div style={{ fontSize: 20, fontWeight: 600, color: '#222' }}>6</div>
 							<div style={{ color: '#222', fontWeight: 500, fontSize: 15, marginTop: 4, display: 'flex', alignItems: 'center' }}>
 								<span>Vendors</span>
-								<IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '1rem'}} />
+								<IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '0.3rem'}} />
 							</div>
 						</div>
 					</div>
@@ -93,7 +93,7 @@ export default function DashboardPage() {
 							<div style={{ fontSize: 20, fontWeight: 600, color: '#222' }}>982</div>
 							<div style={{ color: '#222', fontWeight: 500, fontSize: 15, marginTop: 4, display: 'flex', alignItems: 'center' }}>
 								<span>Flight Bookings</span>
-								<IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '1rem'}} />
+								<IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '0.3rem'}} />
 							</div>
 						</div>
 					</div>
@@ -102,13 +102,13 @@ export default function DashboardPage() {
 							<div style={{ fontSize: 20, fontWeight: 600, color: '#222' }}>6</div>
 							<div style={{ color: '#222', fontWeight: 500, fontSize: 15, marginTop: 4, display: 'flex', alignItems: 'center' }}>
 								<span>Hotel Bookings</span>
-								<IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '1rem'}} />
+								<IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '0.3rem'}} />
 							</div>
 						</div>
 					</div>
 				</div>
 				{/* New Leads Section */}
-				<div className="bg-white p-3 p-md-4">
+				<div className="p-3 p-md-4">
 					<div className="d-flex align-items-center justify-content-between gap-2 flex-wrap mb-3">
 						<h4 className="m-0" style={{ fontWeight: 600, fontSize: 16 }}>New Leads</h4>
 						<div className="d-flex gap-2 flex-wrap">
@@ -127,12 +127,12 @@ export default function DashboardPage() {
 						<table className="table align-middle mb-0" style={{ fontSize: 14 }}>
 							<thead>
 								<tr>
-									<th style={{ background: '#EBE9E9', fontSize: '14px' }}>Name</th>
-									<th style={{ background: '#EBE9E9', fontSize: '14px' }}>Type</th>
-									<th style={{ background: '#EBE9E9', fontSize: '14px' }}>People</th>
-									<th style={{ background: '#EBE9E9', fontSize: '14px' }}>Date</th>
-									<th style={{ background: '#EBE9E9', fontSize: '14px' }}>Action</th>
-									<th style={{ background: '#EBE9E9', fontSize: '14px' }}></th>
+									<th style={{ background: '#EBE9E9', fontSize: '14px', width:'20%' }}>Name</th>
+									<th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}>Type</th>
+									<th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}>People</th>
+									<th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}>Date</th>
+									<th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}>Action</th>
+									<th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -143,8 +143,7 @@ export default function DashboardPage() {
 										<td className="py-3" style={{ fontSize: '12px' }}>4 People</td>
 										<td className="py-3" style={{ fontSize: '12px' }}>04 Sep 2025</td>
 										<td className="py-3" style={{ fontSize: '12px' }}>
-											<button className="btn btn-outline-primary btn-sm me-2" style={{ color: '#3698D9', borderColor: '#3698D9', fontSize: '13px' }}>View Details</button>
-											
+											<button className="btn btn-outline-primary btn-sm me-2 view-details-btn" style={{ color: '#3698D9', borderColor: '#3698D9', fontSize: '13px' }}>View Details</button>
 										</td>
 										<td>
 											<span style={{ color: '#e57373', cursor: 'pointer', verticalAlign: 'middle', marginLeft: 8 }}>
@@ -162,6 +161,7 @@ export default function DashboardPage() {
 				@media (max-width: 1024px) {
 					main { margin-left: 0; padding: 12px 12px 28px 12px; }
 				}
+				.view-details-btn:hover { color: #ffffff !important; border-color: #3698D9 !important; background-color: #3698D9 !important; }
 			`}</style>
 		</div>
 	);

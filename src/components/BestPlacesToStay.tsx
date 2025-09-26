@@ -2,6 +2,7 @@
 
 import { Container, Row, Col } from 'react-bootstrap';
 import Image from 'next/image';
+import { useExperience } from '@/context/ExperienceContext';
 
 const stays = [
     {
@@ -45,12 +46,16 @@ const stays = [
 
 
 export default function BestPlacesToStay() {
+    const { active } = useExperience();
+    const title = active === 'flights' ? 'Best Places To Stay' : active === 'hotels' ? 'Top Stays' : active === 'events' ? 'Top Venues' : 'Best Experiences';
+    const subtitle = active === 'events' ? 'Find perfect venues at best prices' : 'At Guaranteed Lowest Prices';
+
     return (
         <section className="py-5 bg-white">
             <Container>
                 <div className="text-center mb-4">
-                    <h1 className="fw-bold">Best Places To Stay</h1>
-                    <h3 className="text-muted">At Guaranteed Lowest Prices</h3>
+                    <h1 className="fw-bold">{title}</h1>
+                    <h3 className="text-muted">{subtitle}</h3>
                 </div>
 
                 <Row className="g-3">

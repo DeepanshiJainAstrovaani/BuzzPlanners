@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./globals.css";
+import { ExperienceProvider } from "@/context/ExperienceContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,7 +42,11 @@ export default function RootLayout({
         <link rel="icon" href="/buzz-small-logo.png" sizes="any" />
         <link rel="apple-touch-icon" href="/buzz-small-logo.png" />
       </head>
-      <body> {children} </body>
+      <body>
+        <ExperienceProvider>
+          {children}
+        </ExperienceProvider>
+      </body>
     </html>
   );
 }

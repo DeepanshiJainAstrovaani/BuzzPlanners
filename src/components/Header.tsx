@@ -11,9 +11,9 @@ export default function Header() {
     const router = useRouter();
     const isLoginPage = pathname === '/login';
     return (
-        <header className="border-bottom bg-white py-2">
+        <header className="border-bottom bg-white py-1 py-md-2">
             <Container>
-                <Row className="align-items-center justify-content-between">
+                <Row className="align-items-center justify-content-between g-2">
 
                     {/* Logo Only */}
                     <Col xs="auto">
@@ -21,38 +21,36 @@ export default function Header() {
                             <Image
                                 src="/buzzplannersLogo.png"
                                 alt="Buzz Planners"
-                                width={150}
-                                height={70}
+                                width={90}
+                                height={40}
                                 style={{ objectFit: 'contain' }}
                             />
                         </Link>
                     </Col>
 
                     {!isLoginPage && (
-                        <Col xs="auto" className="text-end">
-                            {/* Top line: Enquiry */}
+                        <Col xs="auto" className="ms-auto text-end">
+                            {/* Top line: Enquiry (visible on md+) */}
                             <div
-                                className="text-muted fs-7"
+                                className="text-muted d-none d-md-block"
                                 style={{
                                     fontWeight: 500,
                                     lineHeight: '100%',
+                                    fontSize: 12,
                                 }}
                             >
                                 Having enquiry?{' '}
-                                <span
-                                    className="text-success"
-                                    style={{
-                                        fontWeight: 500,
-                                        cursor: 'pointer',
-                                        color: '#14A15F',
-                                    }}
+                                <Link
+                                    href="/#contact"
+                                    className="text-success text-decoration-none"
+                                    style={{ fontWeight: 500, color: '#14A15F', cursor: 'pointer' }}
                                 >
                                     Contact us
-                                </span>
+                                </Link>
                             </div>
 
-                            {/* Bottom line: Vendor + Button */}
-                            <div className="d-flex align-items-center justify-content-end gap-3 mt-1">
+                            {/* Bottom line: Vendor + Contact (xs) + Button */}
+                            <div className="d-flex align-items-center justify-content-end gap-2 mt-0 mt-md-1 flex-row flex-wrap">
                                 <Link
                                     href="#"
                                     className="d-flex align-items-center gap-1 text-decoration-none"
@@ -60,24 +58,38 @@ export default function Header() {
                                         fontWeight: 500,
                                         color: '#222222',
                                         lineHeight: '100%',
+                                        fontSize: 12,
                                     }}
+                                    aria-label="Become a vendor"
                                 >
                                     <CircleUserRound size={18} />
-                                    Become a vendor
+                                    <span>Become a vendor</span>
+                                </Link>
+
+                                {/* Compact Contact us on small screens */}
+                                <Link
+                                    href="/#contact"
+                                    className="text-success text-decoration-none d-inline d-md-none"
+                                    style={{ fontSize: 12, fontWeight: 500 }}
+                                >
+                                    Contact us
                                 </Link>
 
                                 <Button
-                                    className="rounded-pill px-3 py-2"
+                                    size="sm"
+                                    className="rounded-pill px-2 py-1 px-md-3 py-md-2"
                                     style={{
                                         backgroundColor: '#C8E8D9',
                                         color: '#147C2B',
-                                        fontWeight: '600',
+                                        fontWeight: 600,
                                         lineHeight: '100%',
                                         border: 'none',
+                                        fontSize: 12,
                                     }}
                                     onClick={() => router.push('/login')}
                                 >
-                                    Login or Signup
+                                    <span className="d-inline d-sm-none">Login</span>
+                                    <span className="d-none d-sm-inline">Login or Signup</span>
                                 </Button>
                             </div>
                         </Col>

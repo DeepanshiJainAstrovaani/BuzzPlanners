@@ -5,7 +5,32 @@ import DashboardSidebar from '@/components/DashboardSidebar';
 // Removed unused Image import and added Ionicons to match main dashboard styling
 import { IoChevronForward, IoTrashOutline, IoFunnelOutline, IoEyeOutline } from 'react-icons/io5';
 import { useRouter, usePathname } from 'next/navigation';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
+
+// Static demo data (will be replaced by API data later)
+const STATIC_WEDDINGS = [
+  { _id: 'w1', weddingId: 'WD-1001', title: 'Ankit & Riya Palace Wedding', date: '2025-10-04', status: 'Planned' },
+  { _id: 'w2', weddingId: 'WD-1002', title: 'Karan & Meera Beach Ceremony', date: '2025-11-15', status: 'In Progress' },
+  { _id: 'w3', weddingId: 'WD-1003', title: 'Siddharth & Ayesha Royal Event', date: '2025-09-28', status: 'Completed' },
+  { _id: 'w4', weddingId: 'WD-1004', title: 'Rahul & Neha Mountain Wedding', date: '2025-12-09', status: 'On Hold' },
+  { _id: 'w5', weddingId: 'WD-1005', title: 'Vikram & Tara Destination Gala', date: '2026-01-21', status: 'Cancelled' },
+  { _id: 'w6', weddingId: 'WD-1006', title: 'Arjun & Priya Garden Wedding', date: '2025-10-18', status: 'Planned' },
+  { _id: 'w7', weddingId: 'WD-1007', title: 'Manav & Jaya Heritage Celebration', date: '2025-11-02', status: 'In Progress' },
+  // Added more sample rows with wider status coverage
+  { _id: 'w8', weddingId: 'WD-1008', title: 'Ishaan & Kavya City Banquet', date: '2025-12-22', status: 'Draft' },
+  { _id: 'w9', weddingId: 'WD-1009', title: 'Rohit & Sneha Lakeside Rituals', date: '2025-12-30', status: 'Planned' },
+  { _id: 'w10', weddingId: 'WD-1010', title: 'Dev & Anita Vineyard Soirée', date: '2026-01-05', status: 'Delayed' },
+  { _id: 'w11', weddingId: 'WD-1011', title: 'Sameer & Pooja Hilltop Mehndi', date: '2025-11-11', status: 'On Hold' },
+  { _id: 'w12', weddingId: 'WD-1012', title: 'Harsh & Nidhi Sunset Beach Vows', date: '2025-10-29', status: 'In Progress' },
+  { _id: 'w13', weddingId: 'WD-1013', title: 'Aarav & Muskaan Desert Festival', date: '2026-02-14', status: 'Planned' },
+  { _id: 'w14', weddingId: 'WD-1014', title: 'Kabir & Radhika Luxury Cruise', date: '2026-03-02', status: 'Draft' },
+  { _id: 'w15', weddingId: 'WD-1015', title: 'Nakul & Esha Heritage Fort Events', date: '2025-12-01', status: 'In Progress' },
+  { _id: 'w16', weddingId: 'WD-1016', title: 'Yash & Tania Garden Brunch', date: '2025-10-07', status: 'Completed' },
+  { _id: 'w17', weddingId: 'WD-1017', title: 'Parth & Simran Lantern Night', date: '2026-01-18', status: 'Cancelled' },
+  { _id: 'w18', weddingId: 'WD-1018', title: 'Rajat & Sanika Royal Procession', date: '2025-11-27', status: 'Review' },
+  { _id: 'w19', weddingId: 'WD-1019', title: 'Tejas & Aditi Temple Blessings', date: '2025-10-25', status: 'Archived' },
+  { _id: 'w20', weddingId: 'WD-1020', title: 'Abhay & Kriti Forest Retreat', date: '2026-02-01', status: 'Planned' },
+];
 
 export default function WeddingManagementPage() {
   const router = useRouter();
@@ -20,6 +45,10 @@ export default function WeddingManagementPage() {
   const [isPhone, setIsPhone] = useState(false);
   // Search text for client-side filtering
   const [searchText, setSearchText] = useState('');
+  // Status filter state
+  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [filterOpen, setFilterOpen] = useState(false);
+  const filterRef = useRef<HTMLDivElement | null>(null);
 
   // Track viewport for mobile-only drawer
   useEffect(() => {
@@ -57,16 +86,28 @@ export default function WeddingManagementPage() {
     return () => { document.body.style.overflow = ''; };
   }, [isMobile, drawerOpen]);
 
+  // Close filter dropdown on outside click
+  useEffect(() => {
+    function onDocClick(e: MouseEvent) {
+      if (!filterRef.current) return;
+      if (!filterRef.current.contains(e.target as Node)) setFilterOpen(false);
+    }
+    if (filterOpen) document.addEventListener('mousedown', onDocClick);
+    return () => document.removeEventListener('mousedown', onDocClick);
+  }, [filterOpen]);
+
   const fetchWeddings = async () => {
     setLoading(true);
     try {
       const res = await fetch('/api/weddings');
       const data = await res.json();
       console.log('[WeddingList] GET /api/weddings ->', Array.isArray(data) ? data.map((w: any) => ({ _id: w._id, weddingId: w.weddingId, title: w.title })) : data);
-      setWeddings(data);
+      // Merge/replace with static sample data for now
+      const merged = Array.isArray(data) && data.length > 0 ? [...data, ...STATIC_WEDDINGS] : [...STATIC_WEDDINGS];
+      setWeddings(merged);
     } catch (err) {
       console.error('[WeddingList] Failed to fetch weddings:', err);
-      setWeddings([]);
+      setWeddings([...STATIC_WEDDINGS]);
     } finally {
       setLoading(false);
     }
@@ -95,18 +136,29 @@ export default function WeddingManagementPage() {
     }
   };
 
-  // Memoized filtered list based on the search text
+  // Unique statuses derived from current weddings (dynamic)
+  const uniqueStatuses = useMemo(() => {
+    const set = new Set<string>();
+    weddings.forEach(w => { if (w?.status) set.add(w.status); });
+    return Array.from(set).sort();
+  }, [weddings]);
+
+  // Combined filter (status + search)
   const filteredWeddings = useMemo(() => {
-    if (!searchText.trim()) return weddings;
-    const tokens = searchText.toLowerCase().split(/\s+/).filter(Boolean);
-    return weddings.filter((w: any) => {
-      const hay = `${w?.weddingId ?? ''} ${w?.title ?? ''} ${w?.date ?? ''} ${w?.status ?? ''}`.toLowerCase();
-      return tokens.every(t => hay.includes(t));
-    });
-  }, [weddings, searchText]);
+    let list = weddings;
+    if (statusFilter) list = list.filter(w => w.status === statusFilter);
+    if (searchText.trim()) {
+      const tokens = searchText.toLowerCase().split(/\s+/).filter(Boolean);
+      list = list.filter((w: any) => {
+        const hay = `${w?.weddingId ?? ''} ${w?.title ?? ''} ${w?.date ?? ''} ${w?.status ?? ''}`.toLowerCase();
+        return tokens.every(t => hay.includes(t));
+      });
+    }
+    return list;
+  }, [weddings, searchText, statusFilter]);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f7f7f7' }}>
+    <div style={{ minHeight: '100vh', background: 'white' }}>
       {deleteModal.open && (
         <div style={modalOverlayStyle}>
           <div style={modalStyle}>
@@ -152,7 +204,6 @@ export default function WeddingManagementPage() {
         {/* Header */}
         <div className="d-flex align-items-center justify-content-between mb-3 gap-2 mt-2 flex-wrap">
           <h1 className="m-0" style={{ fontWeight: 600, fontSize: '1.2rem' }}>Wedding Management</h1>
-          
         </div>
 
         {/* Cards - match main dashboard sizing and arrow placement */}
@@ -162,7 +213,7 @@ export default function WeddingManagementPage() {
               <div style={{ fontSize: 20, fontWeight: 600, color: '#222' }}>106</div>
               <div style={{ color: '#222', fontWeight: 500, fontSize: 15, marginTop: 4, display: 'flex', alignItems: 'center' }}>
                 <span>Weddings</span>
-                <IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '1rem' }} />
+                <IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '0.3rem'}} />
               </div>
             </div>
           </div>
@@ -171,7 +222,7 @@ export default function WeddingManagementPage() {
               <div style={{ fontSize: 20, fontWeight: 600, color: '#222' }}>23</div>
               <div style={{ color: '#222', fontWeight: 500, fontSize: 15, marginTop: 4, display: 'flex', alignItems: 'center' }}>
                 <span>Upcoming</span>
-                <IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '1rem' }} />
+                <IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '0.3rem' }} />
               </div>
             </div>
           </div>
@@ -180,25 +231,50 @@ export default function WeddingManagementPage() {
               <div style={{ fontSize: 20, fontWeight: 600, color: '#222' }}>2.5 Lac</div>
               <div style={{ color: '#222', fontWeight: 500, fontSize: 15, marginTop: 4, display: 'flex', alignItems: 'center' }}>
                 <span>Guest</span>
-                <IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '1rem' }} />
+                <IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '0.3rem' }} />
               </div>
             </div>
           </div>
         </div>
 
         {/* Wedding List Section */}
-        <div className='bg-white p-3 p-md-4'>
+        <div className='p-3 p-md-4'>
           <div className="d-flex align-items-center justify-content-between mb-3 gap-2 flex-wrap">
             <h2 className="m-0" style={{ fontWeight: 600, fontSize: 16 }}>Wedding List</h2>
-            <div className="d-flex gap-2 flex-wrap">
-                <button className="btn btn-outline-dark btn-sm" style={{ fontSize: '13px',
-                fontWeight: 400,
-                padding: '1px 20px' }}>
-                <span style={{ fontSize: 18, verticalAlign: 'middle', marginRight: 6 }}>
+            <div className="d-flex gap-2 flex-wrap" ref={filterRef} style={{ position: 'relative' }}>
+              <button
+                type="button"
+                className="btn btn-outline-dark btn-sm"
+                style={{ fontSize: '13px', fontWeight: 400, padding: '1px 20px', display: 'flex', alignItems: 'center' }}
+                onClick={() => setFilterOpen(o => !o)}
+                aria-haspopup="listbox"
+                aria-expanded={filterOpen}
+              >
+                <span style={{ fontSize: 18, verticalAlign: 'middle', marginRight: 6, display: 'inline-flex' }}>
                   <IoFunnelOutline />
                 </span>
-                Filter
-                </button>
+                {statusFilter ? `Status: ${statusFilter}` : 'Filter'}
+              </button>
+              {filterOpen && (
+                <div className="filter-dropdown shadow" role="listbox" aria-label="Filter by status">
+                  <div
+                    className={`filter-option ${statusFilter === '' ? 'active' : ''}`}
+                    onClick={() => { setStatusFilter(''); setFilterOpen(false); }}
+                    role="option"
+                    aria-selected={statusFilter === ''}
+                  >All Statuses</div>
+                  {uniqueStatuses.map(st => (
+                    <div
+                      key={st}
+                      className={`filter-option ${statusFilter === st ? 'active' : ''}`}
+                      onClick={() => { setStatusFilter(st); setFilterOpen(false); }}
+                      role="option"
+                      aria-selected={statusFilter === st}
+                    >{st}</div>
+                  ))}
+                  {uniqueStatuses.length === 0 && <div className="filter-empty">No statuses</div>}
+                </div>
+              )}
               <button className="btn btn-success create-btn" onClick={() => router.push('/dashboard/wedding-management/create')} style={{
                 fontSize: '13px',
                 fontWeight: 400,
@@ -221,19 +297,19 @@ export default function WeddingManagementPage() {
             <table className="table align-middle mb-0" style={{ fontSize: 14 }}>
               <thead>
                 <tr>
-                  <th style={{ background: '#EBE9E9', fontSize: '14px' }}>Id</th>
-                  <th style={{ background: '#EBE9E9', fontSize: '14px' }}>Title</th>
-                  <th style={{ background: '#EBE9E9', fontSize: '14px' }}>Wedding Date</th>
-                  <th style={{ background: '#EBE9E9', fontSize: '14px' }}>Status</th>
-                  <th style={{ background: '#EBE9E9', fontSize: '14px' }}>Action</th>
-                  <th style={{ background: '#EBE9E9', fontSize: '14px' }}></th>
+                  <th style={{ background: '#EBE9E9', fontSize: '14px', width:'20%' }}>Id</th>
+                  <th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}>Title</th>
+                  <th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}>Wedding Date</th>
+                  <th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}>Status</th>
+                  <th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}>Action</th>
+                  <th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}></th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={5} className="text-center py-4">Loading...</td></tr>
+                  <tr><td colSpan={6} className="text-center py-4">Loading...</td></tr>
                 ) : filteredWeddings.length === 0 ? (
-                  <tr><td colSpan={5} className="text-center py-4">No matching weddings found.</td></tr>
+                  <tr><td colSpan={6} className="text-center py-4">No matching weddings found.</td></tr>
                 ) : (
                   filteredWeddings.map((wedding, i) => (
                     <tr key={wedding._id || i}>
@@ -282,6 +358,11 @@ export default function WeddingManagementPage() {
         </div>
       </main>
       <style jsx>{`
+        .filter-dropdown { position: absolute; top: 115%; left: 0; background: #fff; border: 1px solid #e2e2e2; border-radius: 10px; padding: 6px 0; min-width: 180px; z-index: 50; animation: fadeIn .12s ease; }
+        .filter-option { padding: 6px 14px; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; color: #333; transition: background .15s, color .15s; }
+        .filter-option:hover { background: #f1f9ff; color: #3698db; }
+        .filter-option.active { background: #3698db; color: #fff; font-weight: 500; font-size: 12px; }
+        .filter-empty { padding: 8px 14px; font-size: 12px; color: #888; }
         .action-cell { display: inline-flex; align-items: center; gap: 10px; }
         .icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; border: 1px solid transparent; border-radius: 6px; background: transparent; color: #e57373; cursor: pointer; transition: all .2s ease; }
         .icon-btn:hover { background: #fdecec; color: #d9534f; border-color: #f5c6c6; }
@@ -306,6 +387,7 @@ export default function WeddingManagementPage() {
         @media (max-width: 576px) {
           .action-cell { flex-direction: column; align-items: flex-start; gap: 6px; }
         }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px);} to { opacity: 1; transform: translateY(0);} }
       `}</style>
     </div>
   );

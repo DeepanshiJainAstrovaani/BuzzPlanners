@@ -406,7 +406,7 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
                   <input
                     value={String(newRow[cm.id] ?? '')}
                     onChange={(e) => setNewRow({ ...newRow, [cm.id]: e.target.value })}
-                    style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #ccc', fontSize: '10px' }}
+                    style={{ width: '100%', padding: '8px 8px', borderRadius: 6, border: '1px solid #ccc', fontSize: '10px' }}
                   />
                 </td>
               ))}
