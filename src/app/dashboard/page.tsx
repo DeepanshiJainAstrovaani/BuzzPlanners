@@ -71,7 +71,6 @@ export default function DashboardPage() {
 					marginLeft: isMobile ? 0 : 'var(--sidebar-w)',
 					marginTop: 'var(--header-h)',
 					flex: 1,
-					background: '#f7f7f7',
 					overflowX: 'hidden',
 					width: '-webkit-fill-available',
 				}}

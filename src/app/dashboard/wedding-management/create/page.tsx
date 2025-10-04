@@ -330,7 +330,7 @@ function CreateWeddingClient() {
   }, [editIndex, addMode]);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f7f7f7' }}>
+    <div style={{ minHeight: '100vh', background: 'white' }}>
       {showSuccess && (
         <div style={modalOverlayStyle}>
           <div style={modalStyle} className="modal-animate">

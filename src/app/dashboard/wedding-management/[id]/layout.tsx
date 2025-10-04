@@ -35,7 +35,7 @@ export default function WeddingDashboardLayout({ children }: { children: React.R
   }, [isMobile, drawerOpen]);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f7f7f7' }}>
+    <div style={{ minHeight: '100vh', background: 'white' }}>
       <DashboardHeader onMenuClick={() => { if (isMobile) setDrawerOpen(true); }} />
       <DashboardSidebar open={isMobile && drawerOpen} onClose={() => isMobile && setDrawerOpen(false)} />
       <main style={{ marginLeft: isMobile ? 0 : 'var(--sidebar-w)', marginTop: 'var(--header-h)', flex: 1, padding: '24px 16px 24px 16px' }} aria-hidden={isMobile && drawerOpen}>
