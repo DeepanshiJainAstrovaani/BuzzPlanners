@@ -195,7 +195,7 @@ export default function WeddingManagementPage() {
           marginLeft: isMobile ? 0 : 'var(--sidebar-w)',
           marginTop: 'var(--header-h)',
           flex: 1,
-          background: '#f7f7f7',
+          background: 'white',
           overflowX: 'hidden',
           width: '-webkit-fill-available',
         }}

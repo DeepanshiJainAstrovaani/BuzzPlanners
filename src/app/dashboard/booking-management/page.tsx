@@ -34,7 +34,7 @@ export default function BookingManagementPage() {
   }, [isMobile, drawerOpen]);
 
   return (
-    <div style={{ minHeight: '100vh', background: 'white' }}>
+    <div style={{ background: 'white' }}>
       <DashboardHeader onMenuClick={() => { if (isMobile) setDrawerOpen(true); }} />
       <DashboardSidebar open={isMobile && drawerOpen} onClose={() => isMobile && setDrawerOpen(false)} />
 
@@ -44,7 +44,6 @@ export default function BookingManagementPage() {
           marginTop: 'var(--header-h)',
           flex: 1,
           background: '#f7f7f7',
-          minHeight: 'calc(100vh - var(--header-h))',
           padding: '20px 20px 40px',
           width: '-webkit-fill-available',
           overflowX: 'hidden'

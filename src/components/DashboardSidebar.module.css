@@ -1,7 +1,7 @@
 .sidebar {
   background: #222222;
   color: #fff;
-  height: calc(100vh - var(--header-h));
+  height: 100%;
   padding: 5px 0;
   position: fixed;
   left: 0;
@@ -115,4 +115,73 @@
   .backdropShow {
     display: block;
   }
+}
+
+/* Remove or comment out all these conflicting rules from lines 100-172: */
+/*
+.menuLinkWithSubmenu:hover .menuChevron {
+  color: inherit !important;
+}
+.menuLinkWithSubmenu .menuChevron {
+  pointer-events: none;
+}
+.menuItem:has(.subMenu) .menuLink:hover .menuChevron {
+  color: var(--your-normal-chevron-color, currentColor);
+}
+.menuItem:has(.subMenu:hover) .menuLink .menuChevron {
+  color: white !important;
+}
+.menuLinkWithSubmenu .menuChevron {
+  color: white !important;
+}
+.subMenu:hover ~ .menuLink .menuChevron {
+  color: white !important;
+}
+.menuLinkActive.menuLinkWithSubmenu:hover .menuChevron,
+.menuLinkActive.menuLinkWithSubmenu .menuChevron {
+  color: white !important;
+}
+.preventParentHover {
+  position: relative;
+  z-index: 10;
+}
+.menuItem:has(.preventParentHover) .menuChevron {
+  color: white !important;
+}
+.preventParentHover:hover {
+  pointer-events: auto;
+}
+.preventParentHover:hover ~ * {
+  pointer-events: none;
+}
+*/
+
+/* Clean solution: Only prevent hover when specifically hovering over submenus */
+.menuItem .subMenu:hover ~ .menuLink {
+  background: #222222; /* Keep original background */
+  color: #fff; /* Keep original text color */
+}
+
+.menuItem .subMenu:hover ~ .menuLink .menuChevron {
+  color: white; /* Keep chevron white when hovering over submenus */
+}
+
+/* Allow normal hover behavior when not hovering over submenus */
+.menuItem .menuLink:hover {
+  background: #fdf5d5;
+  color: #000;
+}
+
+.menuItem .menuLink:hover .menuChevron {
+  color: #000;
+}
+
+/* Add this single rule to fix the chevron issue */
+.menuItem:has(.subMenu) .menuLink:hover .menuChevron {
+  color: white !important;
+}
+
+/* Override the general hover rule when submenus are present */
+.menuItem:has(.subMenu) .menuChevron {
+  color: white !important;
 }

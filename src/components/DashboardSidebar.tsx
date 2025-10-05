@@ -85,12 +85,11 @@ export default function DashboardSidebar({ open = false, onClose }: { open?: boo
                   className={`${styles.menuLink} ${safePathname.startsWith(item.path) ? styles.menuLinkActive : ''}`}
                 >
                   {item.label}
-                  {/* Chevron is inside the link so it stays aligned with the main row */}
                   <IoChevronForward className={styles.menuChevron} size={19} />
                 </Link>
                 {/* Wedding sections as sub-menu */}
                 {item.path === '/dashboard/wedding-management' && weddingId && safePathname.startsWith(`/dashboard/wedding-management/${weddingId}`) && (
-                  <ul className={styles.subMenu}>
+                  <ul className={styles.subMenu} onMouseEnter={(e) => e.stopPropagation()}>
                     {/* Wedding Info always at the top */}
                     <li key="info" className={styles.subMenuItem}>
                       <a

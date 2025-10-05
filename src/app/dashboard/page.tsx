@@ -57,7 +57,7 @@ export default function DashboardPage() {
 	}, [isMobile, drawerOpen]);
 
 	return (
-		<div style={{ minHeight: '100vh', background: 'white' }}>
+		<div style={{ background: 'white' }}>
 			{/* Header (fixed within component) */}
 			<DashboardHeader onMenuClick={() => { if (isMobile) setDrawerOpen(true); }} />
 
