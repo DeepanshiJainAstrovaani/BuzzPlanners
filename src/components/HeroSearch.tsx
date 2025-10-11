@@ -99,7 +99,7 @@ export default function HeroSearch() {
             {/* Tabs with Icons */}
             <div style={{ backgroundColor: '#14A15F' }}>
                 <Container className="px-2 px-md-5">
-                    <Nav className="gap-2 flex-nowrap overflow-auto py-3 py-md-3 px-1" style={{ scrollbarWidth: 'none' }}>
+                    <Nav className="gap-2 flex-nowrap overflow-auto py-md-3 px-1" style={{ scrollbarWidth: 'none' }}>
                         {tabs.map(({ key, label, Icon }) => (
                             <Nav.Item key={key}>
                                 <Button

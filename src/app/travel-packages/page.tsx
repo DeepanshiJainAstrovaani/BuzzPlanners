@@ -4,8 +4,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import 'bootstrap/dist/js/bootstrap.bundle';
 import { fetchTravelPackages } from '@/api/getTravelPackages';
 import TravelPackageCard from '@/components/TravelPackageCard';
+import MobileTravelPackageCard from '@/components/MobileTravelPackageCard';
 import TravelPackageSearchForm from '@/components/TravelPackageSearchForm';
 import TravelPackageFilterSidebar from '@/components/TravelPackageFilterSidebar';
 import Header from '@/components/Header';
@@ -18,6 +20,7 @@ const DEFAULT_DESTINATIONS = [
 export default function TravelPackageSearchPage() {
   const [packages, setPackages] = useState<any[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const [filters, setFilters] = useState({
     destinations: ['Kasauli'],
@@ -26,11 +29,21 @@ export default function TravelPackageSearchPage() {
   });
 
   useEffect(() => {
+    const m = window.matchMedia('(max-width: 767.98px)');
+    const update = () => setIsMobile(m.matches);
+    update();
+    m.addEventListener ? m.addEventListener('change', update) : m.addListener(update);
+    return () => {
+      m.removeEventListener ? m.removeEventListener('change', update) : m.removeListener(update);
+    };
+  }, []);
+
+  useEffect(() => {
     // Load default packages on mount
     const loadDefaultPackages = async () => {
       const today = new Date().toISOString().split('T')[0];
       const data: any = await fetchTravelPackages('Kasauli', today);
-      setPackages(data.packages);
+      setPackages(data.packages || []);
     };
     loadDefaultPackages();
   }, []);
@@ -39,7 +52,7 @@ export default function TravelPackageSearchPage() {
   const handleSearch = async ({ destination, date, accommodation, traveller }: any) => {
     setHasSearched(true);
     const data: any = await fetchTravelPackages(destination, date);
-    setPackages(data.packages);
+    setPackages(data.packages || []);
     setFilters((prev: any) => ({
       ...prev,
       destinations: [destination],
@@ -52,7 +65,6 @@ export default function TravelPackageSearchPage() {
     (filters.destinations.length === 0 || filters.destinations.includes(pkg.destination)) &&
     pkg.price >= filters.priceRange[0] &&
     pkg.price <= filters.priceRange[1]
-    // You can add accommodation and amenities filters here if needed
   );
 
   return (
@@ -67,22 +79,63 @@ export default function TravelPackageSearchPage() {
         </div>
 
         {/* --- Sidebar + Results --- */}
-        <div className="container">
-          <div className="d-flex gap-4 align-items-start" style={{ marginTop: 32 }}>
-            <TravelPackageFilterSidebar
-              filters={filters}
-              setFilters={setFilters}
-              destinations={DEFAULT_DESTINATIONS}
-            />
-            <div className="flex-grow-1 hide-scrollbar mb-4" style={{ height: '87rem', overflowY: 'scroll' }}>
-              <div className="mt-0">
-                {filteredPackages.length > 0 ? (
-                  filteredPackages.map((pkg, index) => (
-                    <TravelPackageCard key={index} pkg={pkg} />
-                  ))
-                ) : (
-                  <p>No packages found.</p>
-                )}
+        <div className="container" style={{ marginTop: 32 }}>
+          <div className="row">
+            {/* Mobile filter toggle */}
+            <div className="col-12 d-md-none mb-3">
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mobileFilters"
+                aria-expanded="false"
+                aria-controls="mobileFilters"
+              >
+                Filters
+              </button>
+              <div className="collapse mt-3" id="mobileFilters">
+                <TravelPackageFilterSidebar
+                  filters={filters}
+                  setFilters={setFilters}
+                  destinations={DEFAULT_DESTINATIONS}
+                />
+              </div>
+            </div>
+
+            {/* Desktop sidebar */}
+            <div className="d-none d-md-block col-md-3 mb-3">
+              <div style={{ position: 'sticky', top: 100 }}>
+                <TravelPackageFilterSidebar
+                  filters={filters}
+                  setFilters={setFilters}
+                  destinations={DEFAULT_DESTINATIONS}
+                />
+              </div>
+            </div>
+
+            {/* Results */}
+            <div className="col-12 col-md-9">
+              <div
+                className="flex-grow-1 hide-scrollbar mb-4"
+                style={{
+                  height: isMobile ? 'auto' : '50rem',
+                  overflowY: 'auto',
+                  paddingBottom: isMobile ? 24 : undefined
+                }}
+              >
+                <div className="mt-0">
+                  {filteredPackages.length > 0 ? (
+                    filteredPackages.map((pkg, index) => (
+                      isMobile ? (
+                        <MobileTravelPackageCard key={index} pkg={pkg} />
+                      ) : (
+                        <TravelPackageCard key={index} pkg={pkg} />
+                      )
+                    ))
+                  ) : (
+                    <p>No packages found.</p>
+                  )}
+                </div>
               </div>
             </div>
           </div>

@@ -1,92 +1,118 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React from 'react';
-import styles from './FlightFilterSidebar.module.css';
-import Slider from '@mui/material/Slider';
-import { styled } from '@mui/material/styles';
-
-const StyledSlider = styled(Slider)({ color: '#00A859', height: 4 });
 
 export default function TravelPackageFilterSidebar({ filters, setFilters, destinations }: any) {
-  const [priceRange, setPriceRange] = React.useState<number[]>(filters.priceRange);
+  // small helper to reuse
+  const sectionStyle: React.CSSProperties = { marginBottom: 20 };
 
-  const handlePriceChange = (_event: any, newValue: number | number[]) => {
-    const updated = newValue as number[];
-    setPriceRange(updated);
-    setFilters((prev: any) => ({
-      ...prev,
-      priceRange: updated
-    }));
-  };
   return (
-    <div className="bg-white p-4 border rounded-5 shadow col-3">
-      <h5 className="mb-3 fw-bold fs-4">FILTER</h5>
-      <hr />
-      {/* Destinations */}
-      <p className="fs-5 fw-medium mb-2">Popular Destination</p>
-      {destinations.map((dest: string) => (
-        <div key={dest} className="form-check">
-          <input
-            className={`form-check-input ${styles.form}`}
-            type="checkbox"
-            id={dest}
-            checked={filters.destinations.includes(dest)}
-            onChange={e => {
-              const checked = e.target.checked;
-              setFilters((prev: any) => ({
-                ...prev,
-                destinations: checked
-                  ? [...prev.destinations, dest]
-                  : prev.destinations.filter((d: string) => d !== dest)
-              }));
-            }}
-          />
-          <label className="form-check-label" htmlFor={dest}>
-            {dest}
-          </label>
+    <aside style={{ width: '100%' }}>
+      <div
+        style={{
+          background: '#fff',
+          borderRadius: 12,
+          padding: 18,
+          boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+          boxSizing: 'border-box',
+          overflow: 'hidden' // prevent the rounded pill bleed you saw
+        }}
+      >
+        <h4 style={{ margin: 0, fontSize: 20, letterSpacing: 0.2 }}>FILTER</h4>
+
+        <div style={{ height: 12 }} />
+
+        {/* Popular Destinations */}
+        <div style={sectionStyle}>
+          <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 8 }}>Popular Destination</div>
+          <div>
+            {destinations.map((d: string) => {
+              const checked = filters.destinations.includes(d);
+              return (
+                <label
+                  key={d}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    fontSize: 14,
+                    marginBottom: 8
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => {
+                      const next = checked
+                        ? filters.destinations.filter((x: string) => x !== d)
+                        : [...filters.destinations, d];
+                      setFilters((prev: any) => ({ ...prev, destinations: next }));
+                    }}
+                  />
+                  <span
+                    style={{
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis'
+                    }}
+                  >
+                    {d}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
         </div>
-      ))}
-      <hr />
-      {/* Price Range */}
-      <p className="fs-5 fw-medium mb-2">Price Range</p>
-      <div className="mt-4 px-2">
-        <StyledSlider
-          value={priceRange}
-          onChange={handlePriceChange}
-          min={3823}
-          max={16882}
-          step={100}
-          disableSwap
-        />
-        <div className="text-center mt-2 fw-semibold">
-          Rs. {priceRange[0]} – Rs. {priceRange[1]}
+
+        {/* Price range - keep compact */}
+        <div style={sectionStyle}>
+          <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 8 }}>Price Range</div>
+          <div style={{ fontSize: 13, color: '#555' }}>
+            ₹{filters.priceRange[0]} - ₹{filters.priceRange[1]}
+          </div>
+        </div>
+
+        {/* Accommodation compact */}
+        <div style={sectionStyle}>
+          <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 8 }}>Accommodation</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {['5 Star', '4 Star', '3 Star'].map(a => {
+              const checked = filters.accommodation.includes(a);
+              return (
+                <label
+                  key={a}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    fontSize: 14
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => {
+                      const next = checked
+                        ? filters.accommodation.filter((x: string) => x !== a)
+                        : [...filters.accommodation, a];
+                      setFilters((prev: any) => ({ ...prev, accommodation: next }));
+                    }}
+                  />
+                  <span
+                    style={{
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis'
+                    }}
+                  >
+                    {a}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
         </div>
       </div>
-      <hr />
-      {/* Accommodation */}
-      <p className="fs-5 fw-medium mb-2">Accommodation</p>
-      {['5 Star', '4 Star', 'First Class'].map(acc => (
-        <div key={acc} className="form-check">
-          <input
-            className={`form-check-input ${styles.form}`}
-            type="checkbox"
-            id={acc}
-            checked={filters.accommodation.includes(acc)}
-            onChange={e => {
-              const checked = e.target.checked;
-              setFilters((prev: any) => ({
-                ...prev,
-                accommodation: checked
-                  ? [...prev.accommodation, acc]
-                  : prev.accommodation.filter((a: string) => a !== acc)
-              }));
-            }}
-          />
-          <label className="form-check-label" htmlFor={acc}>
-            {acc}
-          </label>
-        </div>
-      ))}
-    </div>
+    </aside>
   );
 }

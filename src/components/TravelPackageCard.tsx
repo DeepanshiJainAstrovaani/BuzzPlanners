@@ -28,7 +28,7 @@ export default function TravelPackageCard({ pkg }: { pkg: any }) {
     >
       <div className="d-flex w-100 align-items-center">
         {/* Left: Large image and small thumbs */}
-        <div style={{ minWidth: '20rem', marginRight: 28, position: 'relative' }}>
+        <div style={{ minWidth: '19rem', position: 'relative' }}>
           {/* Main image */}
           <div style={{ position: 'relative' }}>
             <img
@@ -92,8 +92,8 @@ export default function TravelPackageCard({ pkg }: { pkg: any }) {
 
         {/* Middle: Details */}
         <div className="flex-grow-1" style={{ minWidth: 0 }}>
-          <div className="fw-bold fs-3">{pkg.title}</div>
-          <div className="fs-5 mb-2 text-muted">Delhi to Delhi</div>
+          <div className="fw-bold fs-5">{pkg.title}</div>
+          <div className="fs-6 mb-2 text-muted">Delhi to Delhi</div>
           <div className="d-flex align-items-center gap-3 mb-2">
             {pkg.flights && (
               <div>
@@ -189,7 +189,7 @@ export default function TravelPackageCard({ pkg }: { pkg: any }) {
           <span className="text-success">
               +6 more amenities
             </span>
-          <div className="fs-4 mt-3" style={{ color: '#FF5F5F' }}>
+          <div className="fs-6 mt-3" style={{ color: '#FF5F5F' }}>
             {pkg.seatsLeft === 'few' && 'Only few seats left'}
           </div>
         </div>

@@ -1,3 +1,212 @@
-.search-box-column{
-    width: 20% !important;
+/* FlightSearchForm.module.css
+   Desktop-first: keep original desktop/laptop design intact.
+   Mobile overrides only at max-width:600px (strict phone breakpoint).
+*/
+
+/* ========== Desktop / default (unchanged behaviour) ========== */
+.wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch; /* changed: ensure children (form + search) match height on desktop */
+  gap: 0; /* remove extra gap between form and search button so button sits flush */
+}
+
+.flightForm {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  flex-grow: 1;
+  flex-wrap: nowrap; /* ensure single row on desktop */
+  min-width: 0;
+}
+
+.colItem {
+  min-width: 0;
+  flex: 0 0 auto; /* desktop columns keep their inline width: '20%' from JSX */
+}
+
+/* calendar popup (desktop absolute) */
+.calendarPopup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 200;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  background: #fff;
+}
+
+/* Search button container stays right on desktop */
+.searchWrap {
+  display: flex;
+  align-items: stretch; /* make container stretch so button can fill height */
+  flex: 0 0 auto;
+  margin-left: 0 !important;
+}
+
+.searchButton {
+  transition: all 160ms ease;
+  white-space: nowrap;
+  padding: 0 1rem;
+  font-size: 1.3rem;
+  background: linear-gradient(90deg,#0e8a50,#14a15f);
+  color: #fff;
+  border: none;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  height: 100%; /* changed: match the form/search container height on desktop */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+/* small helpers (desktop) */
+.fieldBox { /* no-op for desktop */ }
+.dateDisplay { letter-spacing: 0.2px; }
+
+/* ensure every column has consistent inner horizontal padding on desktop */
+.flightForm > .colItem {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+/* ========== Mobile overrides (strict small-phone breakpoint) ========== */
+@media (max-width: 600px) {
+  /* stack the entire component vertically */
+  .wrapper {
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: stretch;
+  }
+
+  /* form becomes vertical stack */
+  .flightForm {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.6rem !important;
+    padding: 0.5rem !important;
+    flex-wrap: wrap !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* each logical column becomes a full-width "card" */
+  .colItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    border-right: none !important;
+  }
+
+  /* make field boxes look like cards (non-destructive on desktop) */
+  .fieldBox {
+    background: #fff;
+    border-radius: 10px;
+    padding: 12px !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    width: 100% !important;
+    min-width: 0 !important;
+    border: 1px solid #eee !important;
+  }
+
+  /* reduce typography to avoid overflow */
+  .fieldBox .fs-4,
+  .flightForm .fs-4,
+  .dateDisplay,
+  .displayBox {
+    font-size: 1.05rem !important;
+    line-height: 1.12 !important;
+  }
+  .fieldBox .text-muted.mb-1 { font-size: 0.9rem !important; margin-bottom: 6px !important; }
+  .fieldBox .text-muted { font-size: 0.85rem !important; }
+
+  /* calendar popup flows under the field (no horizontal overflow) */
+  .calendarPopup {
+    position: static !important;
+    width: 100% !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
+    margin-top: 8px !important;
+  }
+
+  /* SEARCH button becomes full-width and stacks under the form */
+  .searchWrap {
+    width: 100% !important;
+    order: 2 !important;
+    display: block !important;
+  }
+  .searchButton {
+    width: 100% !important;
+    padding: 14px 16px !important;
+    font-size: 1.05rem !important;
+    border-radius: 10px !important;
+    height: auto !important;
+    white-space: normal !important;
+    box-shadow: 0 8px 24px rgba(11, 104, 192, 0.08) !important;
+    background: linear-gradient(90deg, #0e8a50 0%, #0e8a50 100%) !important;
+    color: #fff !important;
+  }
+
+  /* ensure form itself appears before button in DOM order visually */
+  .flightForm { order: 1 !important; }
+
+  /* prevent any unexpected horizontal overflow */
+  .wrapper, .flightForm, .colItem, .fieldBox, .calendarPopup {
+    overflow: visible !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* tiny extra small tuning */
+@media (max-width: 420px) {
+  .fieldBox { padding: 10px !important; }
+  .fieldBox .fs-4 { font-size: 1rem !important; }
+  .searchButton { font-size: 1rem !important; padding: 12px !important; }
+}
+
+
+/* compact row style for TravelPackageSearchForm adjustments */
+.colItem {
+  /* keep existing rules, but ensure inner text can be truncated */
+  padding: 8px 12px;
+  box-sizing: border-box;
+}
+
+/* smaller date / main value on compact forms */
+.dateDisplay {
+  font-size: 1rem; /* reduced from larger desktop size */
+  letter-spacing: 0.2px;
+}
+
+/* helper to force single-line with ellipsis */
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+/* reduce search button vertical padding and keep it full height */
+.searchWrap {
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.searchButton {
+  background: #0b8b53;
+  color: white;
+  border: none;
+  padding: 10px 26px;
+  font-weight: 700;
+  border-radius: 8px;
+  height: 48px;
+}
+@media (max-width: 768px) {
+  .searchButton { height: 52px; padding: 12px 20px; }
 }
