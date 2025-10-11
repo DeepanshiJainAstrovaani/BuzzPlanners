@@ -1,0 +1,81 @@
+/* Mobile-only footer overrides (keeps original desktop unchanged) */
+@media (max-width: 768px) {
+  /* tighten outer spacing */
+  footer.bg-dark {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  footer.bg-dark .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* stack main columns vertically and center content */
+  footer.bg-dark .row.mb-4 {
+    flex-direction: column !important;
+    gap: 1rem;
+  }
+  footer.bg-dark .mb-3.d-flex.justify-content-center {
+    justify-content: center !important;
+  }
+  footer.bg-dark .col-md-4 {
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: center !important;
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+  }
+
+  /* Important links: show two columns on mobile */
+  footer.bg-dark .col-md-4 .row.fs-6 {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 0.5rem !important;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    width: 100%;
+    padding: 0;
+  }
+  footer.bg-dark .col-md-4 .row.fs-6 .col-xs-6 {
+    width: 50% !important;
+    padding: 0 !important;
+    text-align: center !important;
+    display: block !important;
+  }
+  footer.bg-dark .col-md-4 .row.fs-6 p {
+    margin: 6px 0 !important;
+  }
+
+  /* Bottom row: remove large inline paddings and center social & copyright */
+  footer.bg-dark .align-items-center.justify-content-between {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    flex-direction: column !important;
+    gap: 0.75rem;
+    align-items: center !important;
+  }
+  footer.bg-dark .text-md-start,
+  footer.bg-dark .text-md-end {
+    text-align: center !important;
+  }
+
+  /* reduce logo / social icon sizes so layout feels balanced */
+  footer.bg-dark img {
+    max-width: 140px !important;
+    height: auto !important;
+  }
+
+  /* slightly smaller text on mobile for better fit */
+  footer.bg-dark .fs-6 {
+    font-size: 0.95rem !important;
+  }
+  footer.bg-dark small.fs-6 {
+    display: block;
+  }
+
+  /* ensure spacing around social icons */
+  footer.bg-dark .me-3 {
+    margin-right: 0.5rem !important;
+  }
+}

@@ -46,12 +46,12 @@ export default function ReadTravelStories() {
     active === 'events' ? 'From our latest event blog' : 'From our latest blog';
 
   return (
-    <section className="py-5 bg-white text-center">
+    <section className="py-md-4 py-2 bg-white text-center px-2 px-md-5">
       <Container>
         <h4 className="fw-bold">{title}</h4>
         <p className="text-muted">{subtitle}</p>
 
-        <Row className="justify-content-center mb-4">
+        <Row className="justify-content-center mb-md-4 mb-2">
           {posts.map((blog, index) => (
             <Col key={index} xs={12} md={4} className="mb-3">
               <div className="text-start">

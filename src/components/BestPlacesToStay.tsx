@@ -50,7 +50,7 @@ export default function BestPlacesToStay() {
     const subtitle = active === 'events' ? 'Find perfect venues at best prices' : 'At Guaranteed Lowest Prices';
 
     return (
-        <section className="py-5 bg-white px-5">
+        <section className="py-5 bg-white px-2 px-md-5">
             <Container>
                 <div className="text-center mb-4">
                     <h4 className="fw-bold">{title}</h4>

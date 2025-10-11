@@ -1,0 +1,68 @@
+/* Mobile-only tweaks for HeroSearch (<=600px) */
+@media (max-width: 600px) {
+  section[style*="#2D3E2E"] .container {
+    padding-top: 0.7rem !important;
+    padding-bottom: 0.7rem !important;
+  }
+
+  /* Nav: single-line horizontal scroll with minimal vertical padding */
+  section[style*="#2D3E2E"] .nav {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    white-space: nowrap !important;
+    gap: 0.45rem !important;
+    padding-top: 0.08rem !important;
+    padding-bottom: 0.08rem !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Pills: slightly reduced padding but still comfortable */
+  section[style*="#2D3E2E"] .nav .btn {
+    padding: 0.32rem 0.8rem !important;
+    font-size: 0.98rem !important;
+    border-radius: 999px !important;
+    min-height: 36px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.45rem !important;
+    color: #000 !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+  }
+
+  /* Restore icons — cover common markup: svg, img, i (fa/bi), and custom .icon */
+  section[style*="#2D3E2E"] .nav .btn svg,
+  section[style*="#2D3E2E"] .nav .btn img,
+  section[style*="#2D3E2E"] .nav .btn i,
+  section[style*="#2D3E2E"] .nav .btn .icon,
+  section[style*="#2D3E2E"] .nav .btn .bi {
+    display: inline-block !important;
+    width: 16px !important;
+    height: 16px !important;
+    margin-right: 0.45rem !important;
+    vertical-align: middle !important;
+    opacity: 1 !important;
+    color: inherit !important;
+    line-height: 1 !important;
+  }
+
+  /* in-case an ::before is used for icon fonts, make sure it shows */
+  section[style*="#2D3E2E"] .nav .btn::before,
+  section[style*="#2D3E2E"] .nav .btn i::before {
+    display: inline-block !important;
+  }
+
+  /* scrollbar behaviour — keep it minimal */
+  section[style*="#2D3E2E"] .nav {
+    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  section[style*="#2D3E2E"] .nav::-webkit-scrollbar { height: 6px; }
+  section[style*="#2D3E2E"] .nav::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.06); border-radius: 6px; }
+
+  /* Slight tweak for very small devices */
+  @media (max-width: 420px) {
+    section[style*="#2D3E2E"] .nav .btn { padding: 0.28rem 0.7rem !important; font-size: 0.92rem !important; min-height: 34px !important; }
+  }
+}

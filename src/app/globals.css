@@ -1,3 +1,4 @@
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -210,4 +211,64 @@ img, picture, video, svg {
   }
 }
 
-/* ---------- End mobile-only overrides ---------- */
+/* ---------- Exclusive deals: mobile-only fixes ---------- */
+@media (max-width: 600px) {
+  /* hide big hero/banner image on small phones */
+  .hero-banner,
+  .hero-banner img,
+  .large-hero,
+  .exclusive-hero-img {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* make category list horizontal scrollable (touch friendly) */
+  .exclusive-categories,
+  .exclusive-categories .nav,
+  .exclusive-categories .nav-items {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 0.5rem;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.5rem 0.6rem;
+    scrollbar-width: thin;
+  }
+  .exclusive-categories > * {
+    flex: 0 0 auto;
+  }
+
+  /* style category items so they look like small pills and remain visible */
+  .exclusive-categories .category-item,
+  .exclusive-categories .nav .btn {
+    white-space: nowrap;
+    padding: 0.4rem 0.9rem !important;
+    border-radius: 999px !important;
+    background: rgba(255,255,255,0.06);
+    color: inherit;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  /* ensure deal images show and don't collapse */
+  .deal-card img,
+  .dealImage,
+  .exclusive-image {
+    display: block !important;
+    width: 100% !important;
+    height: 140px !important; /* adjust height to taste */
+    object-fit: cover !important;
+    border-radius: 10px;
+    background-color: #f3f3f3; /* placeholder bg if image missing */
+  }
+
+  /* card container tweaks so images are visible */
+  .deal-card,
+  .exclusive-card {
+    overflow: hidden;
+    min-height: 140px;
+  }
+}
+/* ---------- end mobile-only fixes ---------- */
