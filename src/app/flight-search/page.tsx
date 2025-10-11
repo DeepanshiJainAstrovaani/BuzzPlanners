@@ -4,8 +4,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import 'bootstrap/dist/js/bootstrap.bundle'; // <-- add this
 import { fetchFlightsFromAirport } from '@/api/getFlights';
 import FlightCard from '@/components/FlightCard';
+import MobileFlightCard from '@/components/MobileFlightCard';
 import FlightSearchForm from '@/components/FlightSearchForm';
 import FlightFilterSidebar from '@/components/FlightFilterSidebar';
 import Header from '@/components/Header';
@@ -15,6 +17,7 @@ export default function FlightSearchPage() {
   const [flights, setFlights] = useState<any[]>([]);
   const [availableAirlines, setAvailableAirlines] = useState<string[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const [filters, setFilters] = useState<{
     airlines: string[]; // user-selected airlines
@@ -50,6 +53,16 @@ export default function FlightSearchPage() {
     };
 
     loadDefaultFlights();
+  }, []);
+
+  useEffect(() => {
+    const m = window.matchMedia('(max-width: 767.98px)');
+    const update = () => setIsMobile(m.matches);
+    update();
+    m.addEventListener ? m.addEventListener('change', update) : m.addListener(update);
+    return () => {
+      m.removeEventListener ? m.removeEventListener('change', update) : m.removeListener(update);
+    };
   }, []);
 
   // 🟡 Handle search without resetting selections
@@ -91,22 +104,63 @@ export default function FlightSearchPage() {
         </div>
 
         {/* --- Sidebar + Results --- */}
-        <div className="container">
-          <div className="d-flex gap-4 align-items-start" style={{ marginTop: 32 }}>
-            <FlightFilterSidebar
-              filters={filters}
-              setFilters={setFilters}
-              airlines={availableAirlines}
-            />
-            <div className="flex-grow-1 hide-scrollbar mb-4" style={{ height: '87rem', overflowY: 'scroll' }}>
-              <div className="mt-0">
-                {filteredFlights.length > 0 ? (
-                  filteredFlights.map((flight, index) => (
-                    <FlightCard key={index} flight={flight} />
-                  ))
-                ) : (
-                  <p>No flights found.</p>
-                )}
+        <div className="container" style={{ marginTop: 32 }}>
+          <div className="row">
+            {/* Mobile filter toggle */}
+            <div className="col-12 d-md-none mb-3">
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mobileFilters"
+                aria-expanded="false"
+                aria-controls="mobileFilters"
+              >
+                Filters
+              </button>
+              <div className="collapse mt-3" id="mobileFilters">
+                <FlightFilterSidebar
+                  filters={filters}
+                  setFilters={setFilters}
+                  airlines={availableAirlines}
+                />
+              </div>
+            </div>
+
+            {/* Desktop sidebar */}
+            <div className="d-none d-md-block col-md-3 mb-3">
+              <div style={{ position: 'sticky', top: 100 }}>
+                <FlightFilterSidebar
+                  filters={filters}
+                  setFilters={setFilters}
+                  airlines={availableAirlines}
+                />
+              </div>
+            </div>
+
+            {/* Results */}
+            <div className="col-12 col-md-9">
+              <div
+                className="flex-grow-1 hide-scrollbar mb-4"
+                style={{
+                  height: isMobile ? 'auto' : '50rem',
+                  overflowY: 'auto',
+                  paddingBottom: isMobile ? 24 : undefined
+                }}
+              >
+                <div className="mt-0">
+                  {filteredFlights.length > 0 ? (
+                    filteredFlights.map((flight, index) => (
+                      isMobile ? (
+                        <MobileFlightCard key={index} flight={flight} />
+                      ) : (
+                        <FlightCard key={index} flight={flight} />
+                      )
+                    ))
+                  ) : (
+                    <p>No flights found.</p>
+                  )}
+                </div>
               </div>
             </div>
           </div>

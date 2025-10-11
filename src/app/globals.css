@@ -54,7 +54,6 @@ html, body {
 
 /* Make images fluid by default */
 img, picture, video, svg {
-  max-width: 100%;
   height: auto;
   display: block;
 }
