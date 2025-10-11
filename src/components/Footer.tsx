@@ -49,7 +49,7 @@ export default function Footer() {
         </Row>
 
         {/* Bottom - Copyright & Social */}
-        <Row className="align-items-center justify-content-between">
+        <Row className="align-items-center justify-content-between" style={{ paddingLeft: '6rem', paddingRight: '12rem' }}>
           <Col md={6} className="text-md-start text-center col-md-6">
             <small className='fs-6'>Buzz Planners Pvt Ltd © 2025 Rights Reserved</small>
           </Col>

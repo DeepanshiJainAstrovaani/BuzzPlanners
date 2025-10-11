@@ -87,7 +87,19 @@ export default function AirportSelect({ label, value, onChange }: CustomAirportD
                 onClick={() => setIsEditing(true)}
             >
                 <div className="fs-4 fw-bold">{value?.label}</div>
-                <div className="text-muted small">{value?.sublabel}</div>
+                <div
+                    className="text-muted"
+                    style={{
+                        fontSize: '0.8rem',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        maxWidth: '100%',
+                        display: 'block'
+                    }}
+                >
+                    {value?.sublabel}
+                </div>
             </div>
             {isEditing && (
                 <div

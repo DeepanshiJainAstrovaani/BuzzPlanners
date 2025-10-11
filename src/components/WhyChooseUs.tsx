@@ -28,8 +28,11 @@ export default function WhyChooseUs() {
   return (
     <section className="py-5" style={{ backgroundColor: '#f9fafb' }}>
       <Container>
-        <h2 className="text-center fw-bold mb-2">Why you should choose us?</h2>
-        <Row className="justify-content-center mt-4">
+        <div className="text-center mb-4">
+          <h4 className="fw-bold">Why you should choose us?</h4>
+        </div>
+        
+        <Row className="justify-content-center mt-4 px-5">
           {features.map((item, index) => (
             <Col md={4} className="mb-4" key={index}>
               <Card
@@ -49,15 +52,15 @@ export default function WhyChooseUs() {
                 </div>
                 <h5 className="fw-bold">{item.title}</h5>
                 <div
-                  className="mx-auto"
+                  className="mx-5"
                   style={{
                     maxWidth: '250px',
                     fontSize: '15px',
                     textAlign: 'center',
-                    lineHeight: '1.6',
+                    lineHeight: '1.7',
                   }}
                 >
-                  <p className='fs-5'>{item.description}</p>
+                  <p className='fs-7'>{item.description}</p>
                 </div>
               </Card>
             </Col>

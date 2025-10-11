@@ -45,61 +45,126 @@ export default function ExclusiveDeals() {
   const deals = getDealsFor(active);
 
   return (
-    <section className="bg-light">
-      <Container>
-        {/* Full-width Headline */}
-        <Row className="mb-4">
-          <Col>
-            <h2 className="fw-bold text-center">Exclusive Deals</h2>
-          </Col>
-        </Row>
+    <>
+      <section className="bg-light px-5">
+        <Container>
+          {/* Full-width Headline */}
+          <Row className="mb-4 mt-5">
+            <Col>
+              <h2 className="fw-bold text-center">Exclusive Deals</h2>
+            </Col>
+          </Row>
 
-        {/* Main Two Column Layout */}
-        <Row className="align-items-start">
-          {/* Left Image Column */}
-          <Col md={4} className="text-center mb-4 mb-md-0">
-            <Image
-              src={travellerImg}
-              alt="Traveller"
-              style={{ width: '40rem', height: 'auto' }}
-            />
-          </Col>
+          {/* Main Two Column Layout */}
+          <Row className="align-items-start">
+            {/* Left Image Column */}
+            <Col md={4} className="text-center mb-4 mb-md-0">
+              <Image
+                src={travellerImg}
+                alt="Traveller"
+                style={{ width: '40rem', height: 'auto' }}
+              />
+            </Col>
 
-          {/* Right Column with filters, carousel and CTA */}
-          <Col md={8}>
-            {/* Filter Tabs tied to global experience */}
-            <div className="d-flex flex-wrap gap-2 mb-4">
-              {tabOptions.map((tab) => (
-                <Button
-                  key={tab}
-                  variant={active === tab ? 'success' : 'light'}
-                  className="rounded-pill px-4 py-1 fw-medium text-capitalize"
-                  onClick={() => setActive(tab)}
-                >
-                  {tab}
+            {/* Right Column with filters, carousel and CTA */}
+            <Col md={8}>
+              {/* Filter Tabs tied to global experience */}
+              <div className="d-flex flex-wrap gap-2 mb-4">
+                {tabOptions.map((tab) => (
+                    <Button
+                    key={tab}
+                    variant={active === tab ? 'success' : 'light'}
+                    className={`rounded-pill px-4 py-1 fw-medium text-capitalize ${active === tab ? 'custom-active-btn' : 'text-muted'}`}
+                    onClick={() => setActive(tab)}
+                    >
+                    {tab}
+                    </Button>
+                ))}
+              </div>
+
+              {/* Offer Cards */}
+              <Row className="mb-4 g-4">
+                <Col xs={6}>
+                  <div className="deal-image-container">
+                    <Image 
+                      src={deals[0].src} 
+                      alt={deals[0].alt} 
+                      className="img-fluid rounded-4 deal-image" 
+                      width={500} 
+                      height={300}
+                      style={{ 
+                        borderRadius: '12px',
+                        width: '100%',
+                        height: '200px',
+                        objectFit: 'cover'
+                      }}
+                    />
+                  </div>
+                </Col>
+                <Col xs={6}>
+                  <div className="deal-image-container">
+                    <Image 
+                      src={deals[1].src} 
+                      alt={deals[1].alt} 
+                      className="img-fluid rounded-4 deal-image" 
+                      width={500} 
+                      height={300}
+                      style={{ 
+                        borderRadius: '12px',
+                        width: '100%',
+                        height: '200px',
+                        objectFit: 'cover'
+                      }}
+                    />
+                  </div>
+                </Col>
+              </Row>
+
+              {/* CTA Button */}
+              <div>
+                <Button variant="success" className="px-5 py-2 fw-bold rounded-pill" style={{ backgroundColor: 'rgb(20, 161, 95)', borderColor: 'rgb(20, 161, 95)' }}>
+                  See offers
                 </Button>
-              ))}
-            </div>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
 
-            {/* Offer Cards */}
-            <Row className="mb-4 g-4">
-              <Col xs={6}>
-                <Image src={deals[0].src} alt={deals[0].alt} className="img-fluid rounded-4" style={{ borderRadius: '12px' }} width={500} height={300}/>
-              </Col>
-              <Col xs={6}>
-                <Image src={deals[1].src} alt={deals[1].alt} className="img-fluid rounded-4" style={{ borderRadius: '12px' }} width={500} height={300}/>
-              </Col>
-            </Row>
+      <style jsx>{`
+        :global(.custom-active-btn) {
+          background-color: #c2e9d7 !important;
+          color: rgb(20, 124, 43) !important;
+          border-color: #c2e9d7 !important;
+        }
 
-            {/* CTA Button */}
-            <div>
-              <Button variant="success" className="px-5 py-2 fw-bold rounded-pill">
-                See offers
-              </Button>
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </section>
+        :global(.custom-active-btn:hover) {
+          background-color: #8bc7a9 !important;
+          color: rgb(20, 124, 43) !important;
+          border-color: #8bc7a9 !important;
+        }
+
+        :global(.custom-active-btn:focus) {
+          background-color: #c2e9d7 !important;
+          color: rgb(20, 124, 43) !important;
+          border-color: #c2e9d7 !important;
+          box-shadow: 0 0 0 0.2rem rgba(156, 219, 190, 0.25) !important;
+        }
+
+        .deal-image-container {
+          width: 100%;
+          height: 200px;
+          overflow: hidden;
+          border-radius: 12px;
+        }
+
+        :global(.deal-image) {
+          width: 100% !important;
+          height: 200px !important;
+          object-fit: cover !important;
+          border-radius: 12px !important;
+        }
+      `}</style>
+    </>
   );
 }

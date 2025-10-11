@@ -43,14 +43,14 @@ export default function HeroSearch() {
     function renderSearchCard() {
         if (active === 'flights') {
             return (
-                <div className="bg-white p-2 p-md-3 shadow-sm rounded" style={{ borderRadius: '12px' }}>
+                <div>
                     <FlightSearchForm onSearch={handleFlightSearch} />
                 </div>
             );
         }
         if (active === 'hotels' || active === 'holiday' || active === 'trips') {
             return (
-                <div className="bg-white p-2 p-md-3 shadow-sm rounded" style={{ borderRadius: '12px' }}>
+                <div>
                     <TravelPackageSearchForm onSearch={handleTravelSearch} defaultDest="KAS" />
                 </div>
             );
@@ -89,16 +89,17 @@ export default function HeroSearch() {
         <section style={{ backgroundColor: '#2D3E2E' }}>
             {/* Tabs with Icons */}
             <div style={{ backgroundColor: '#14A15F' }}>
-                <Container className="px-2 px-md-3">
+                <Container className="px-2 px-md-5">
                     <Nav className="gap-2 flex-nowrap overflow-auto py-2 py-md-3 px-1" style={{ scrollbarWidth: 'none' }}>
                         {tabs.map(({ key, label, Icon }) => (
                             <Nav.Item key={key}>
                                 <Button
                                     size="sm"
                                     variant="light"
-                                    className={`rounded-pill d-flex align-items-center gap-2 px-3 py-1 ${active === key ? 'opacity-100' : 'opacity-75'}`}
+                                    className={`rounded-pill d-flex align-items-center gap-2 px-3 py-1 ${active === key ? 'opacity-75' : 'opacity-100'}`}
                                     onClick={() => setActive(key)}
                                     aria-pressed={active === key}
+                                    style={{ fontWeight: 500, fontSize: 12, color: active === key ? '#147C2B' : 'black' }}
                                 >
                                     <Icon size={16} /> {label}
                                 </Button>
@@ -108,7 +109,7 @@ export default function HeroSearch() {
                 </Container>
             </div>
 
-            <Container className="py-4 py-md-5">
+            <Container className="px-2 px-md-5" style={{ paddingTop: '7rem', paddingBottom: '7rem' }}>
                 {/* Top Row */}
                 {active === 'flights' ? (
                     <Row className="justify-content-between align-items-center mb-3 g-2">
@@ -127,7 +128,7 @@ export default function HeroSearch() {
                             </div>
                         </Col>
                         <Col xs="12" md="auto" className="order-1 order-md-2 text-center text-md-end">
-                            <div className="text-light fw-semibold small fs-6 fs-md-5">
+                            <div className="text-light fw-semibold" style={{ fontSize: '1.5rem' }}>
                                 Guaranteed Lowest Prices
                             </div>
                         </Col>

@@ -48,8 +48,8 @@ export default function ReadTravelStories() {
   return (
     <section className="py-5 bg-white text-center">
       <Container>
-        <h3 className="fw-bold mb-2">{title}</h3>
-        <p className="mb-4">{subtitle}</p>
+        <h4 className="fw-bold">{title}</h4>
+        <p className="text-muted">{subtitle}</p>
 
         <Row className="justify-content-center mb-4">
           {posts.map((blog, index) => (
