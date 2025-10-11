@@ -2,6 +2,7 @@
 
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Nav } from 'react-bootstrap';
 import { CalendarDays, Plane, Building2, TreePalm, Car } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -12,6 +13,14 @@ import { useExperience } from '@/context/ExperienceContext';
 export default function HeroSearch() {
     const router = useRouter();
     const { active, setActive } = useExperience();
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const check = () => setIsMobile(typeof window !== 'undefined' && window.innerWidth <= 576);
+        check();
+        window.addEventListener('resize', check);
+        return () => window.removeEventListener('resize', check);
+    }, []);
 
     type TabKey = 'flights' | 'events' | 'hotels' | 'holiday' | 'trips';
 
@@ -90,7 +99,7 @@ export default function HeroSearch() {
             {/* Tabs with Icons */}
             <div style={{ backgroundColor: '#14A15F' }}>
                 <Container className="px-2 px-md-5">
-                    <Nav className="gap-2 flex-nowrap overflow-auto py-2 py-md-3 px-1" style={{ scrollbarWidth: 'none' }}>
+                    <Nav className="gap-2 flex-nowrap overflow-auto py-3 py-md-3 px-1" style={{ scrollbarWidth: 'none' }}>
                         {tabs.map(({ key, label, Icon }) => (
                             <Nav.Item key={key}>
                                 <Button
@@ -112,12 +121,8 @@ export default function HeroSearch() {
             <Container
                 className="px-2 px-md-5"
                 style={{
-                    paddingTop: '7rem',
-                    paddingBottom: '7rem',
-                    // Responsive padding for mobile
-                    ...(typeof window !== 'undefined' && window.innerWidth <= 576
-                        ? { paddingTop: '2rem', paddingBottom: '2rem' }
-                        : {}),
+                    paddingTop: isMobile ? '2rem' : '7rem',
+                    paddingBottom: isMobile ? '2rem' : '7rem',
                 }}
             >
                 {/* Top Row */}

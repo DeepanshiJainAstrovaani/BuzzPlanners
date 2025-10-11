@@ -52,7 +52,7 @@ export default function WhyChooseUs() {
                 </div>
                 <h5 className="fw-bold">{item.title}</h5>
                 <div
-                  className="mx-5"
+                  className="mx-md-5 mx-1"
                   style={{
                     maxWidth: '250px',
                     fontSize: '15px',
