@@ -109,7 +109,17 @@ export default function HeroSearch() {
                 </Container>
             </div>
 
-            <Container className="px-2 px-md-5" style={{ paddingTop: '7rem', paddingBottom: '7rem' }}>
+            <Container
+                className="px-2 px-md-5"
+                style={{
+                    paddingTop: '7rem',
+                    paddingBottom: '7rem',
+                    // Responsive padding for mobile
+                    ...(typeof window !== 'undefined' && window.innerWidth <= 576
+                        ? { paddingTop: '2rem', paddingBottom: '2rem' }
+                        : {}),
+                }}
+            >
                 {/* Top Row */}
                 {active === 'flights' ? (
                     <Row className="justify-content-between align-items-center mb-3 g-2">
