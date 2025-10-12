@@ -54,7 +54,6 @@ export default function WhyChooseUs() {
                 <div
                   className="mx-md-5 mx-1"
                   style={{
-                    maxWidth: '250px',
                     fontSize: '15px',
                     textAlign: 'center',
                     lineHeight: '1.7',
