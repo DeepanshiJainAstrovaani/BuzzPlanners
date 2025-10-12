@@ -11,7 +11,7 @@ export default function Header() {
     const router = useRouter();
     const isLoginPage = pathname === '/login';
     return (
-        <header className="border-bottom bg-white py-2 py-md-3 px-3 px-md-5">
+        <header className="border-bottom bg-white py-2 py-md-2 px-3 px-md-5">
             <Container fluid className="container">
                 <Row className="align-items-center justify-content-between g-2">
                     {/* Logo */}
@@ -50,7 +50,7 @@ export default function Header() {
                             </div>
 
                             {/* Bottom line: Vendor + Contact (xs) + Button */}
-                            <div className="header-actions d-flex align-items-center justify-content-end gap-2 mt-1">
+                            <div className="header-actions d-flex align-items-center justify-content-end gap-2 mt-2">
                                 <div className="header-actions-top d-flex align-items-center gap-1">
                                     <Link
                                         href="#"

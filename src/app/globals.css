@@ -138,6 +138,11 @@ img, picture, video, svg {
   font-family: 'Poppins', sans-serif !important;
 }
 
+.px-md-5 {
+    padding-left: 7rem !important;
+    padding-right: 7rem !important;
+  }
+
 /* ---------- Mobile-only overrides (safe, scoped to small screens) ---------- */
 @media (max-width: 768px) {
   /* Reduce large utility paddings used by px-5 on components */
@@ -147,7 +152,7 @@ img, picture, video, svg {
     padding-right: 10px !important;
   }
 
-  .py-sm-2 {
+  .py-sm-5 {
     padding-top: 10px !important;
     padding-bottom: 10px !important;
   }

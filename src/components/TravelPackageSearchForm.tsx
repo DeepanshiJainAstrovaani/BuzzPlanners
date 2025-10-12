@@ -158,7 +158,7 @@ export default function TravelPackageSearchForm({ onSearch, defaultDest }: { onS
        >
         {/* DESTINATION */}
         <div className={`px-2 border-end ${styles.colItem} ${styles.fieldBox}`} style={{ width: '18%' }}>
-          <div className="text-muted mb-1" style={{ fontSize: '0.88rem' }}>DESTINATION</div>
+          <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>DESTINATION</div>
           
             {/* SearchableSelect may render its own selected info — keep the control but show truncated label next to it.
                 If SearchableSelect renders its own text, it should inherit the whitespace rule from container. */}
@@ -172,7 +172,7 @@ export default function TravelPackageSearchForm({ onSearch, defaultDest }: { onS
 
         {/* PICK FROM */}
         <div className={`px-2 border-end ${styles.colItem} ${styles.fieldBox}`} style={{ width: '18%'}}>
-          <div className="text-muted mb-1" style={{ fontSize: '0.88rem' }}>PICK FROM</div>
+          <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>PICK FROM</div>
             <SearchableSelect
               label="Pick From"
               value={pickFrom}
@@ -182,7 +182,7 @@ export default function TravelPackageSearchForm({ onSearch, defaultDest }: { onS
         </div>
         {/* DEPARTURE DATE */}
         <div className={`px-2 border-end ${styles.colItem} ${styles.fieldBox}`} style={{ position: 'relative', width: '15%' }}>
-          <div className="text-muted mb-1" style={{ fontSize: '0.88rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>DEPARTURE DATE</div>
+          <div className="text-muted mb-1" style={{ fontSize: '0.8rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>DEPARTURE DATE</div>
           <div className={`${styles.dateDisplay} fw-semibold truncate`} style={{ fontSize: '1rem', cursor: 'pointer' }} onClick={() => setCalendarOpen('departure')}>
             {formatDate(departureDate)}
           </div>
@@ -196,7 +196,7 @@ export default function TravelPackageSearchForm({ onSearch, defaultDest }: { onS
 
         {/* RETURN DATE */}
         <div className={`px-2 border-end ${styles.colItem} ${styles.fieldBox}`} style={{ position: 'relative', width: '15%'}}>
-          <div className="text-muted mb-1" style={{ fontSize: '0.88rem' }}>RETURN DATE</div>
+          <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>RETURN DATE</div>
           <div className={`${styles.dateDisplay} fw-semibold truncate`} style={{ fontSize: '1rem', cursor: 'pointer' }} onClick={() => setCalendarOpen('return')}>
             {formatDate(returnDate)}
           </div>
@@ -210,14 +210,14 @@ export default function TravelPackageSearchForm({ onSearch, defaultDest }: { onS
 
         {/* ACCOMMODATION */}
         <div className={`px-2 border-end ${styles.colItem} ${styles.fieldBox}`} style={{ width: '16%' }}>
-          <div className="text-muted mb-1" style={{ fontSize: '0.88rem' }}>ACCOMMODATION</div>
+          <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>ACCOMMODATION</div>
           <div className="fw-semibold truncate" style={{ fontSize: '1rem' }}>5 star</div>
           <div className="text-muted small truncate" style={{ marginTop: 6 }}>Hotel Room</div>
         </div>
 
         {/* TRAVELLER */}
         <div className={`px-2 ${styles.colItem} ${styles.fieldBox}`} style={{ width: '16%'}}>
-          <div className="text-muted mb-1" style={{ fontSize: '0.88rem' }}>TRAVELLER</div>
+          <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>TRAVELLER</div>
           <div className="fw-semibold truncate" style={{ fontSize: '1rem' }}>1 Traveller</div>
           <div className="text-muted small truncate" style={{ marginTop: 6 }}>Economy</div>
         </div>

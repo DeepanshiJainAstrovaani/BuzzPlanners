@@ -84,7 +84,7 @@ export default function AirportSelect({ label, value, onChange }: CustomAirportD
                 className={styles.displayBox}
                 onClick={() => setIsEditing(true)}
             >
-                <div className="fs-4 fw-bold">{value?.label}</div>
+                <div className="fw-bold" style={{ fontSize: '1.2rem' }}>{value?.label}</div>
                 <div
                     className="text-muted"
                     style={{

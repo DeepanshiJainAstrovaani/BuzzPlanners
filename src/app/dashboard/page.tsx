@@ -72,7 +72,7 @@ export default function DashboardPage() {
 							<div style={{ fontSize: 20, fontWeight: 600, color: '#222' }}>6</div>
 							<div style={{ color: '#222', fontWeight: 500, fontSize: 15, marginTop: 4, display: 'flex', alignItems: 'center' }}>
 								<span>Vendors</span>
-								<IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '0.3rem'}} />
+								<IoChevronForward size={19} style={{ marginLeft: '0.3rem'}} />
 							</div>
 						</div>
 					</div>

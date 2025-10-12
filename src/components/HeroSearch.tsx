@@ -62,31 +62,85 @@ export default function HeroSearch() {
                 </div>
             );
         }
-        // Events placeholder for now
+        // Events search form - styled like flight search
         return (
-            <div className="bg-white p-3 p-md-4 shadow-sm rounded" style={{ borderRadius: '12px' }}>
-                <div className="d-flex flex-wrap gap-3">
-                    <div className="flex-grow-1" style={{ minWidth: 220 }}>
-                        <div className="text-muted small mb-1">Event Type</div>
-                        <input className="form-control" placeholder="Conference, Wedding, Concert" />
+            <div className="w-100" style={{ display: 'flex', gap: 0, alignItems: 'stretch' }}>
+                <form
+                    className="bg-white p-4 rounded-start-4 shadow d-flex align-items-center gap-3"
+                    style={{ 
+                        flexGrow: 1, 
+                        border: '1px solid #ddd', 
+                        borderRight: 'none',
+                        borderTopRightRadius: 0,
+                        borderBottomRightRadius: 0
+                    }}
+                    onSubmit={(e) => e.preventDefault()}
+                >
+                    {/* EVENT TYPE */}
+                    <div className="px-3 border-end" style={{ width: '30%', minWidth: '200px' }}>
+                        <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>EVENT TYPE</div>
+                        <input 
+                            className="form-control border-0 p-0 fw-bold" 
+                            placeholder="Conference, Wedding, Concert"
+                            style={{ fontSize: '1.2rem', boxShadow: 'none' }}
+                        />
                     </div>
-                    <div className="flex-grow-1" style={{ minWidth: 220 }}>
-                        <div className="text-muted small mb-1">City</div>
-                        <input className="form-control" placeholder="City" />
+
+                    {/* CITY */}
+                    <div className="px-3 border-end" style={{ width: '25%', minWidth: '150px' }}>
+                        <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>CITY</div>
+                        <input 
+                            className="form-control border-0 p-0 fw-bold" 
+                            placeholder="Enter city"
+                            style={{ fontSize: '1.2rem', boxShadow: 'none' }}
+                        />
                     </div>
-                    <div className="flex-grow-1" style={{ minWidth: 220 }}>
-                        <div className="text-muted small mb-1">Date</div>
-                        <input type="date" className="form-control" />
+
+                    {/* DATE */}
+                    <div className="px-3 border-end" style={{ width: '25%', minWidth: '150px' }}>
+                        <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>EVENT DATE</div>
+                        <input 
+                            type="date" 
+                            className="form-control border-0 p-0 fw-bold" 
+                            style={{ fontSize: '1.2rem', boxShadow: 'none' }}
+                        />
                     </div>
-                    <div className="d-flex align-items-end" style={{ minWidth: 160 }}>
-                        <Button
-                            className="w-100 py-2 py-md-3 rounded"
-                            style={{ backgroundColor: '#14A15F', color: '#fff', fontWeight: 700, border: 'none' }}
-                            onClick={() => { /* TODO: implement events route */ }}
+
+                    {/* CATEGORY */}
+                    <div className="px-3" style={{ width: '20%', minWidth: '120px' }}>
+                        <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>CATEGORY</div>
+                        <select 
+                            className="form-control border-0 p-0 fw-bold" 
+                            style={{ fontSize: '1.2rem', boxShadow: 'none' }}
                         >
-                            SEARCH
-                        </Button>
+                            <option>All Events</option>
+                            <option>Conference</option>
+                            <option>Wedding</option>
+                            <option>Concert</option>
+                            <option>Exhibition</option>
+                        </select>
                     </div>
+                </form>
+
+                {/* SEARCH BUTTON */}
+                <div style={{ alignSelf: 'stretch', display: 'flex', alignItems: 'center' }}>
+                    <Button
+                        className="fw-bold text-white"
+                        style={{ 
+                            backgroundColor: '#14A15F', 
+                            border: 'none',
+                            borderTopLeftRadius: 0, 
+                            borderBottomLeftRadius: 0,
+                            borderTopRightRadius: 12,
+                            borderBottomRightRadius: 12,
+                            height: '100%',
+                            padding: '0 30px',
+                            fontSize: '1rem'
+                        }}
+                        onClick={() => { /* TODO: implement events route */ }}
+                    >
+                        SEARCH
+                    </Button>
                 </div>
             </div>
         );
@@ -97,18 +151,18 @@ export default function HeroSearch() {
             {/* Tabs with Icons */}
             <div style={{ backgroundColor: '#14A15F' }}>
                 <div className="px-2 px-md-5 py-sm-2">
-                    <Nav className="gap-2 flex-nowrap overflow-auto py-md-3 px-1" style={{ scrollbarWidth: 'none' }}>
+                    <Nav className="gap-2 flex-nowrap overflow-auto py-md-1 px-1" style={{ scrollbarWidth: 'none' }}>
                         {tabs.map(({ key, label, Icon }) => (
                             <Nav.Item key={key}>
                                 <Button
                                     size="sm"
                                     variant="light"
-                                    className={`rounded-pill d-flex align-items-center gap-2 px-3 py-1 ${active === key ? 'opacity-75' : 'opacity-100'}`}
+                                    className={`rounded-pill d-flex align-items-center gap-2 px-3 py-2 ${active === key ? 'opacity-75' : 'opacity-100'}`}
                                     onClick={() => setActive(key)}
                                     aria-pressed={active === key}
-                                    style={{ fontWeight: 500, fontSize: 12, color: active === key ? '#147C2B' : 'black' }}
+                                    style={{ fontWeight: 500, fontSize: 14, color: active === key ? '#147C2B' : 'black' }}
                                 >
-                                    <Icon size={16} /> {label}
+                                    <Icon size={20} /> {label}
                                 </Button>
                             </Nav.Item>
                         ))}
@@ -141,7 +195,7 @@ export default function HeroSearch() {
                             </div>
                         </Col>
                         <Col xs="12" md="auto" className="order-1 order-md-2 text-center text-md-end">
-                            <div className="text-light fw-semibold" style={{ fontSize: '1.5rem' }}>
+                            <div className="text-light fw-semibold" style={{ fontSize: '1.8rem' }}>
                                 Guaranteed Lowest Prices
                             </div>
                         </Col>
@@ -149,7 +203,7 @@ export default function HeroSearch() {
                 ) : (
                     <Row className="mb-3">
                         <Col className="text-center text-md-start">
-                            <div className="text-light fw-semibold small fs-6 fs-md-5">
+                            <div className="text-light fw-semibold small fs-3 fs-md-5">
                                 Explore {active.charAt(0).toUpperCase() + active.slice(1)} with the best deals
                             </div>
                         </Col>

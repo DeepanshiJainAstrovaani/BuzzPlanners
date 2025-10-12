@@ -23,30 +23,6 @@ function getString(v: any): string {
     return '';
 }
 
-function getImageUrl(v: any): string {
-    if (!v) return '';
-    if (typeof v === 'string') return v;
-    if (typeof v === 'object') {
-        const candidates = [
-            'url', 'src', 'href', 'image', 'logo', 'logoUrl', 'imageUrl', 'path', 'file', 'thumb', 'thumbnail'
-        ];
-        for (const k of candidates) {
-            const val = v[k];
-            if (typeof val === 'string' && val.length > 0) return val;
-            if (typeof val === 'object') {
-                if (typeof val.url === 'string') return val.url;
-                if (typeof val.src === 'string') return val.src;
-            }
-        }
-        if (typeof v.toString === 'function') {
-            const s = String(v);
-            if (s.startsWith('http')) return s;
-        }
-        if (Array.isArray(v) && v.length > 0) return getImageUrl(v[0]);
-    }
-    return '';
-}
-
 export default function MobileFlightCard({ flight }: { flight: any }) {
   // Use same field extraction as desktop FlightCard
   const airline = flight?.airline?.name || 'Unknown Airline';

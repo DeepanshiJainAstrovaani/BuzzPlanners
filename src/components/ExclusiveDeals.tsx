@@ -67,7 +67,7 @@ export default function ExclusiveDeals() {
 
   return (
     <>
-      <section className="bg-light px-2 px-md-5">
+      <section className="px-2 px-md-5">
         <Container>
           <Row className="mb-4 mt-5">
             <Col>
@@ -76,23 +76,20 @@ export default function ExclusiveDeals() {
           </Row>
 
           <Row className="align-items-stretch">
-            {/* Left Image Column: render only on non-mobile */}
-            {!isMobile && (
-              <Col md={4} className="p-0 mb-4 mb-md-0 traveller-col">
-                <div className="traveller-wrap">
-                  <Image
-                    src={travellerImg}
-                    alt="Traveller"
-                    fill
-                    className="exclusive-hero-img"
-                    sizes="(min-width: 992px) 33vw, 100vw"
-                    style={{ objectFit: 'cover' }}
-                  />
-                </div>
-              </Col>
-            )}
+            {/* Left Image Column: show on desktop */}
+            <Col md={4} className="mb-4 mb-md-0 traveller-col d-none d-md-block">
+              <div className="traveller-wrap">
+                <Image
+                  src={travellerImg}
+                  alt="Traveller"
+                  className="exclusive-hero-img"
+                  fill
+                  priority
+                />
+              </div>
+            </Col>
 
-            <Col md={isMobile ? 12 : 8}>
+            <Col xs={12} md={8} className="deals-content-col">
               {/* Tabs: single-line horizontally scrollable */}
               <div className="exclusive-tabs mb-4">
                 {tabOptions.map((tab) => (
@@ -137,27 +134,26 @@ export default function ExclusiveDeals() {
       </section>
 
       <style jsx>{`
-        /* make traveller image fill the left column on desktop and avoid left-side cropping */
-        .traveller-col { padding: 0; overflow: visible; }
+        /* make traveller image fill the left column on desktop */
+        .traveller-col { 
+          padding: 0;
+          padding-right: 15px;
+        }
         .traveller-wrap {
-          position: relative;
           width: 100%;
           height: 100%;
-          min-height: 340px; /* increase so image has room - adjust to match right column */
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: visible;
+          min-height: 320px;
+          border-radius: 12px;
+          overflow: hidden;
+          position: relative;
         }
-        /* Next/Image with renders an absolutely positioned img — override with :global */
+        /* Style the traveller image */
         :global(.exclusive-hero-img) {
-          object-fit: cover !important;
-          object-position: left center !important; /* align visible crop to left so image isn't cut */
           width: 100% !important;
           height: 100% !important;
-          border-radius: 12px;
-          top: 0;
-          left: 0;
+          object-fit: cover !important;
+          object-position: center left !important;
+          border-radius: 12px !important;
         }
 
         .exclusive-tabs {
@@ -176,10 +172,18 @@ export default function ExclusiveDeals() {
 
         .exclusive-category { flex: 0 0 auto; white-space: nowrap; }
 
-        .exclusive-hero-img { display: block; margin: 0 auto; max-width: 420px; height: auto; }
+        .deals-content-col {
+          display: flex;
+          flex-direction: column;
+          min-height: 320px;
+        }
+
         @media (max-width: 600px) {
-          /* hero removed via conditional render; keep safety */
-          .exclusive-hero-img { display: none; }
+          /* hero removed via conditional render for mobile */
+          .traveller-col { display: none; }
+          .deals-content-col {
+            min-height: auto;
+          }
         }
 
         .deals-slider-mobile img { width: 100%; height: 200px; object-fit: cover; object-position: center; border-radius: 12px; display: block; }

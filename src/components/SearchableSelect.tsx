@@ -60,8 +60,8 @@ export default function SearchableSelect({ label, value, onChange, optionsList }
         className={styles.displayBox}
         onClick={() => setIsEditing(true)}
       >
-        <div className="fw-bold" style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '1rem', }}>{value?.label || ''}</div>
-        <div className="text-muted small" style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{value?.sublabel || ''}</div>
+        <div className="fw-bold" style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '1.2rem', }}>{value?.label || ''}</div>
+        <div className="text-muted" style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '0.8rem' }}>{value?.sublabel || ''}</div>
       </div>
 
       {isEditing && (

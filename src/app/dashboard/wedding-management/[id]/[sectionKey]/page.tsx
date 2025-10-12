@@ -1,6 +1,18 @@
 export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';
 
+export async function generateStaticParams() {
+  const ids = ['1', '2', '3'];
+  const sectionKeys = ['info', 'vendors', 'timeline', 'budget'];
+  
+  return ids.flatMap(id => 
+    sectionKeys.map(sectionKey => ({
+      id,
+      sectionKey
+    }))
+  );
+}
+
 import SectionTableEditor from '@/components/SectionTableEditor';
 import WeddingInfoCard from '@/components/WeddingInfoCard';
 import WeddingInfoStats from '@/components/WeddingInfoStats';

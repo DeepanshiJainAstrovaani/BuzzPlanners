@@ -70,21 +70,21 @@ export default function FlightSearchForm({ onSearch }: { onSearch: Function }) {
         style={{ flexGrow: 1, border: '1px solid #ddd', borderRight: 'none' }}
       >
         {/* FROM */}
-        <div className={`px-3 border-end ${styles.colItem} ${styles.fieldBox}`} style={{ width: '20%' }}>
-          <div className="text-muted mb-1" style={{ fontSize: '1rem' }}>FROM</div>
+        <div className={`px-3 border-end ${styles.colItem} ${styles.fieldBox}`} style={{ width: '19%' }}>
+          <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>FROM</div>
           <AirportSelect label="From" value={from} onChange={setFrom} />
         </div>
 
         {/* TO */}
-        <div className={`px-3 border-end ${styles.colItem} ${styles.fieldBox}`} style={{ width: '20%' }}>
-          <div className="text-muted mb-1" style={{ fontSize: '1rem' }}>TO</div>
+        <div className={`px-3 border-end ${styles.colItem} ${styles.fieldBox}`} style={{ width: '19%' }}>
+          <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>TO</div>
           <AirportSelect label="To" value={to} onChange={setTo} />
         </div>
 
         {/* DEPARTURE DATE */}
-        <div className={`px-3 border-end ${styles.colItem} ${styles.fieldBox}`} style={{ position: 'relative', width: '20%' }}>
-          <div className="text-muted mb-1" style={{ fontSize: '1rem' }}>DEPARTURE DATE</div>
-          <div className={`${styles.dateDisplay} fs-4 fw-bold`} style={{ cursor: 'pointer' }} onClick={() => setCalendarOpen('departure')}>
+        <div className={`px-3 border-end ${styles.colItem} ${styles.fieldBox}`} style={{ position: 'relative', width: '19%' }}>
+          <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>DEPARTURE DATE</div>
+          <div className={`${styles.dateDisplay} fw-bold`} style={{ cursor: 'pointer', fontSize: '1.2rem' }} onClick={() => setCalendarOpen('departure')}>
             {formatDate(departureDate)}
           </div>
           <div className="text-muted" style={{ fontSize: '0.8rem' }}>{formatWeekday(departureDate)}</div>
@@ -96,9 +96,9 @@ export default function FlightSearchForm({ onSearch }: { onSearch: Function }) {
         </div>
 
         {/* RETURN DATE */}
-        <div className={`px-3 border-end ${styles.colItem} ${styles.fieldBox}`} style={{ position: 'relative', width: '20%' }}>
-          <div className="text-muted mb-1" style={{ fontSize: '1rem' }}>RETURN DATE</div>
-          <div className={`${styles.dateDisplay} fs-4 fw-bold displayBox`} style={{ cursor: 'pointer' }} onClick={() => setCalendarOpen('return')}>
+        <div className={`px-3 border-end ${styles.colItem} ${styles.fieldBox}`} style={{ position: 'relative', width: '19%' }}>
+          <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>RETURN DATE</div>
+          <div className={`${styles.dateDisplay} fw-bold displayBox`} style={{ cursor: 'pointer', fontSize: '1.2rem' }} onClick={() => setCalendarOpen('return')}>
             {formatDate(returnDate)}
           </div>
           <div className="text-muted" style={{ fontSize: '0.8rem' }}>{formatWeekday(returnDate)}</div>
@@ -110,9 +110,9 @@ export default function FlightSearchForm({ onSearch }: { onSearch: Function }) {
         </div>
 
         {/* TRAVELLER */}
-        <div className={`px-3 ${styles.colItem} ${styles.fieldBox}`} style={{ width: '20%' }}>
-          <div className="text-muted mb-1" style={{ fontSize: '1rem' }}>TRAVELLER</div>
-          <div className="fs-4 fw-bold">1 Traveller</div>
+        <div className={`px-3 ${styles.colItem} ${styles.fieldBox}`} style={{ width: '19%', minWidth: '200px' }}>
+          <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>TRAVELLER</div>
+          <div className="fw-bold" style={{ fontSize: '1.2rem' }}>1 Traveller</div>
           <div className="text-muted" style={{ fontSize: '0.8rem' }}>Economy</div>
         </div>
       </form>

@@ -38,10 +38,10 @@ export default function HappyCustomers() {
   const currentImage = gallery[slideIndex % gallery.length] || gallery[0];
 
   return (
-    <section className="py-md-5 px-md-5 py-2 px-2" style={{ backgroundColor: '#f9f9f9' }}>
+    <section className="py-md-5 px-md-5 py-2 px-2">
       <Container>
         <div className="text-center mb-4">
-          <h4 className="fw-bold">See what our happy customers say</h4>
+          <h3 className="fw-bold">See what our happy customers say</h3>
         </div>
 
         {/* Blue Card */}
@@ -67,29 +67,31 @@ export default function HappyCustomers() {
                 </div>
               ) : (
                 <>
+                <div style={{ width: 300, height: 200, overflow: 'hidden', borderRadius: 10 }}>
                   <Image
                     src={gallery[0]}
                     alt="Main trip"
-                    width={310}
-                    height={200}
+                    width={300}
+                    height={100}
                     style={{ borderRadius: '12px', objectFit: 'cover' }}
                   />
+                  </div>
                   <div className="d-flex gap-2 mt-3">
-                    <div style={{ width: 150, height: 110, overflow: 'hidden', borderRadius: 10 }}>
+                    <div style={{ width: 150, height: 88, overflow: 'hidden', borderRadius: 10 }}>
                       <Image
                         src={gallery[0]}
                         alt="Small 1"
                         width={150}
-                        height={110}
+                        height={88}
                         style={{ borderRadius: '10px', objectFit: 'cover' }}
                       />
                     </div>
-                    <div style={{ width: 150, height: 110, overflow: 'hidden', borderRadius: 10 }}>
+                    <div style={{ width: 150, height: 88, overflow: 'hidden', borderRadius: 10 }}>
                       <Image
                         src={gallery[1] || gallery[0]}
                         alt="Small 2"
                         width={150}
-                        height={110}
+                        height={88}
                         style={{ borderRadius: '10px', objectFit: 'cover' }}
                       />
                     </div>
@@ -100,13 +102,13 @@ export default function HappyCustomers() {
 
             {/* Right - Testimonial Info */}
             <Col md={8}>
-              <h5 className="fw-bold mb-2" style={{ fontSize: '1.5rem' }}>
+              <h5 className="fw-bold mb-2" style={{ fontSize: '1.3rem' }}>
                 Vijay Mahana and family in Thailand
               </h5>
               <p className="text-success mb-3" style={{ fontSize: '1rem', fontWeight: '500' }}>
                 Thailand Trip , 20 Jun 2025
               </p>
-              <p className="text-dark mb-3" style={{ lineHeight: '1.6', fontSize: '0.95rem' }}>
+              <p className="text-dark mb-3" style={{ lineHeight: '1.6', fontSize: '1.2rem' }}>
                 Our family trip to Thailand was absolutely amazing, all thanks to Buzz Planners! The 3 days, 2 nights customized
                 package was perfectly planned, smooth, and hassle-free. Every detail was taken care of with personal attention. We're
                 fully satisfied and truly grateful. Thank you so much, Buzz Planners!
@@ -115,7 +117,7 @@ export default function HappyCustomers() {
               {/* Stars */}
               <div className="d-flex align-items-center gap-1 mb-2">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} style={{ color: '#FEC107', fontSize: '1.4rem' }}>
+                  <span key={i} style={{ color: '#FEC107', fontSize: '2.4rem' }}>
                     ★
                   </span>
                 ))}
