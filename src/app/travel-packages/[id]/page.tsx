@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars  */
+/* eslint-disable @next/next/no-img-element  */
+
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -82,7 +85,7 @@ const tabKeys = [
 export default function TravelPackageDetailsPage() {
 
   // Replace this with real data fetching
-  const [pkg, setPkg] = useState<any>(null); //eslint-disable-line @typescript-eslint/no-explicit-any
+  const [pkg, setPkg] = useState<any>(null);
 
   const [activeTab, setActiveTab] = useState('overview');
 

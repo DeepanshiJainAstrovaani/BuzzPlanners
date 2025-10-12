@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars  */
+
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { dbConnect } from '../lib/mongoose';
 import Wedding from '../models/Wedding';

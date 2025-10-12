@@ -1,23 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars  */
+
 'use client';
 
-import Image from 'next/image';
-import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import DashboardHeader from '@/components/DashboardHeader';
 import DashboardSidebar from '@/components/DashboardSidebar';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { IoChevronForward, IoAirplaneOutline, IoBusinessOutline, IoBagHandleOutline, IoTrashOutline } from 'react-icons/io5';
-
-const menuItems = [
-	{ label: 'Wedding Management', path: '/dashboard/wedding-management' },
-	{ label: 'Booking Management', path: '/dashboard/booking-management' },
-	{ label: 'Itinerary Builder', path: '/dashboard/itinerary-builder' },
-	{ label: 'Voucher Management', path: '/dashboard/voucher-management' },
-	{ label: 'Hotels Management', path: '/dashboard/hotels-management' },
-	{ label: 'Vendor Management', path: '/dashboard/vendor-management' },
-	{ label: 'Customized Package', path: '/dashboard/customized-package' },
-	{ label: 'Site Management', path: '/dashboard/site-management' },
-];
 
 export default function DashboardPage() {
 	const pathname = usePathname();

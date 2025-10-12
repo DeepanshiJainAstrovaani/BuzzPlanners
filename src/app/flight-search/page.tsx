@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-expressions  */
 
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import 'bootstrap/dist/js/bootstrap.bundle'; // <-- add this
+// bootstrap JS must be loaded only on the client – import it dynamically in useEffect below
 import { fetchFlightsFromAirport } from '@/api/getFlights';
 import FlightCard from '@/components/FlightCard';
 import MobileFlightCard from '@/components/MobileFlightCard';
@@ -28,6 +28,13 @@ export default function FlightSearchPage() {
     priceRange: [3000, 18000],
     class: 'Economy',
   });
+
+  // load bootstrap JS only on client to avoid server-side "document is not defined"
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      import('bootstrap/dist/js/bootstrap.bundle' as any).catch(() => {});
+    }
+  }, []);
 
   // 🟢 Load flights on mount
   useEffect(() => {

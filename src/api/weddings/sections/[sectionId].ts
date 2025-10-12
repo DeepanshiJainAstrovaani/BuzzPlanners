@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { dbConnect } from '../../lib/mongoose';
 import Wedding from '../../models/Wedding';
-import mongoose from 'mongoose';
 
 // GET, PUT, DELETE /api/weddings/[id]/sections/[sectionId]
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

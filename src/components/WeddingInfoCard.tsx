@@ -8,7 +8,6 @@ export default function WeddingInfoCard({ wedding }: { wedding: any }) {
   // Debug log to verify presence of weddingId in UI layer
   if (typeof window !== 'undefined') {
     // Avoid noisy logs by only logging minimal info
-    // eslint-disable-next-line no-console
     console.log('[WeddingInfoCard] wedding:', { _id: wedding?._id, weddingId: wedding?.weddingId, title: wedding?.title });
   }
   return (

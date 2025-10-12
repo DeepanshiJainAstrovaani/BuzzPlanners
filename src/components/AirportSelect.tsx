@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './AirportSelect.module.css'; // use CSS module for styling
 import Image from 'next/image';

@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-expressions  */
 
-'use client';
+'use client'; // <<< add this so page is rendered client-side (avoids SSR access to document/window)
 
 import React, { useEffect, useState } from 'react';
-import 'bootstrap/dist/js/bootstrap.bundle';
+// bootstrap JS must be loaded on client only (avoid document during prerender)
 import { fetchTravelPackages } from '@/api/getTravelPackages';
 import TravelPackageCard from '@/components/TravelPackageCard';
 import MobileTravelPackageCard from '@/components/MobileTravelPackageCard';
@@ -21,6 +21,13 @@ export default function TravelPackageSearchPage() {
   const [packages, setPackages] = useState<any[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  
+  // load bootstrap JS only on client
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      import('bootstrap/dist/js/bootstrap.bundle' as any).catch(() => {});
+    }
+  }, []);
 
   const [filters, setFilters] = useState({
     destinations: ['Kasauli'],

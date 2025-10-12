@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-function-type */
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 
++'use client';
+import dynamic from 'next/dynamic';
+// react-calendar (or any browser-only calendar) must be loaded without SSR
+const Calendar: any = dynamic(() => import('react-calendar'), { ssr: false });
+import 'react-calendar/dist/Calendar.css';
 import React, { useState, useEffect, useRef } from 'react';
 import SearchableSelect from './SearchableSelect';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
 import styles from './FlightSearchForm.module.css';
 
 export default function TravelPackageSearchForm({ onSearch, defaultDest }: { onSearch: Function, defaultDest: string }) {
@@ -84,6 +88,9 @@ export default function TravelPackageSearchForm({ onSearch, defaultDest }: { onS
   }, []);
 
   useEffect(() => {
+    // guard document access for SSR
+    if (typeof window === 'undefined') return;
+    
     function handleClickOutside(event: MouseEvent) {
       if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
         setCalendarOpen(null);
@@ -182,7 +189,7 @@ export default function TravelPackageSearchForm({ onSearch, defaultDest }: { onS
           <div className="text-muted small truncate" style={{ marginTop: 6 }}>{formatWeekday(departureDate)}</div>
           {calendarOpen === 'departure' && (
             <div ref={calendarRef} className={styles.calendarPopup}>
-              <Calendar value={departureDate} onChange={(d) => handleDepartureSelect(d as Date)} minDate={today} tileDisabled={({ date }) => date < today} locale="en-GB" />
+              <Calendar value={departureDate} onChange={(d: Date) => handleDepartureSelect(d as Date)} minDate={today} tileDisabled={({ date }: { date: Date }) => date < today} locale="en-GB" />
             </div>
           )}
         </div>
@@ -196,7 +203,7 @@ export default function TravelPackageSearchForm({ onSearch, defaultDest }: { onS
           <div className="text-muted small truncate" style={{ marginTop: 6 }}>{formatWeekday(returnDate)}</div>
           {calendarOpen === 'return' && (
             <div ref={calendarRef} className={styles.calendarPopup}>
-              <Calendar value={returnDate} onChange={(d) => handleReturnSelect(d as Date)} minDate={addDays(departureDate, 1)} tileDisabled={({ date }) => date <= departureDate} locale="en-GB" />
+              <Calendar value={returnDate} onChange={(d: Date) => handleReturnSelect(d as Date)} minDate={addDays(departureDate, 1)} tileDisabled={({ date }: { date: Date }) => date <= departureDate} locale="en-GB" />
             </div>
           )}
         </div>

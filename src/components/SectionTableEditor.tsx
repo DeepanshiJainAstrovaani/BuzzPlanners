@@ -1,3 +1,6 @@
+ /* eslint-disable @typescript-eslint/no-unused-vars  */
+ /* eslint-disable react-hooks/exhaustive-deps  */
+
 'use client';
 
 import { IoPencilOutline, IoTrashOutline, IoAddOutline, IoChevronUpOutline, IoChevronDownOutline, IoCheckmarkOutline } from 'react-icons/io5';

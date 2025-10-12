@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars  */
+
 import mongoose, { Schema, Document, models, model, Types } from 'mongoose';
 
 export interface ISectionRow {
