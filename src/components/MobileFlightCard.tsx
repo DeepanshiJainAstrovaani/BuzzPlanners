@@ -48,52 +48,28 @@ function getImageUrl(v: any): string {
 }
 
 export default function MobileFlightCard({ flight }: { flight: any }) {
-  const airline = getString(flight?.airline?.name) || getString(flight?.airline) || getString(flight?.marketingAirline) || 'Unknown Airline';
-  const logoUrl =
-    getImageUrl(flight?.airline?.logo) ||
-    getImageUrl(flight?.airline?.image) ||
-    getImageUrl(flight?.image) ||
-    getImageUrl(flight?.logo) ||
-    '';
+  // Use same field extraction as desktop FlightCard
+  const airline = flight?.airline?.name || 'Unknown Airline';
+  const flightNumber = flight?.number || '';
+  const aircraftModel = flight?.aircraft?.model || 'Aircraft';
+  
+  // Use same logo URL pattern as desktop version
+  const logoUrl = `https://content.airhex.com/content/logos/airlines_${flight?.airline?.iata}_200_70_r.png`;
 
-  const departTime =
-    getString(flight?.departure?.scheduledTime) ||
-    getString(flight?.departure?.time) ||
-    getString(flight?.departureTime) ||
-    getString(flight?.dep_time) ||
-    getString(flight?.dep) ||
-    '00:00';
+  // Extract times using same logic as desktop FlightCard
+  const departTime = flight?.departure?.scheduledTime?.local?.split(' ')[1]?.slice(0, 5) || '00:00';
+  const arriveTime = flight?.arrival?.scheduledTime?.local?.split(' ')[1]?.slice(0, 5) || '00:00';
 
-  const arriveTime =
-    getString(flight?.arrival?.scheduledTime) ||
-    getString(flight?.arrival?.time) ||
-    getString(flight?.arrivalTime) ||
-    getString(flight?.arr_time) ||
-    getString(flight?.arr) ||
-    '00:00';
+  // Extract cities using same logic as desktop FlightCard
+  const departCity = flight?.departure?.airport?.name?.split(' ')[0] || '';
+  const arriveCity = flight?.arrival?.airport?.name?.split(' ')[0] || '';
 
-  const departCity =
-    getString(flight?.departure?.airport) ||
-    getString(flight?.origin) ||
-    getString(flight?.departure?.name) ||
-    getString(flight?.from) ||
-    '';
+  // Use same duration as desktop (can be calculated from datetime if needed)
+  const duration = '03h 15m';
+  const isNonstop = true;
 
-  const arriveCity =
-    getString(flight?.arrival?.airport) ||
-    getString(flight?.destination) ||
-    getString(flight?.arrival?.name) ||
-    getString(flight?.to) ||
-    '';
-
-  const duration =
-    getString(flight?.duration) ||
-    getString(flight?.flight_time) ||
-    getString(flight?.elapsedTime) ||
-    getString(flight?.travelTime) ||
-    '—';
-
-  const price = typeof flight?.price !== 'undefined' ? `₹${flight.price}` : '—';
+  // Format price same as desktop
+  const price = typeof flight?.price !== 'undefined' ? `₹${flight.price.toLocaleString('en-IN')}` : '—';
 
   let promo = '';
   if (typeof flight?.promoText === 'string') promo = flight.promoText;
@@ -102,71 +78,93 @@ export default function MobileFlightCard({ flight }: { flight: any }) {
   else if (Array.isArray(flight?.offers) && flight.offers.length > 0) promo = getString(flight.offers[0]);
 
   return (
-    <div className="bg-white rounded-3 shadow-sm mb-3" style={{ overflow: 'hidden' }}>
-      <div style={{ padding: 12 }}>
+    <div className="bg-white rounded-3 shadow-sm mb-3" style={{ overflow: 'hidden', position: 'relative' }}>
+      {/* Aircraft badge - same as desktop */}
+      <div
+        style={{
+          backgroundColor: '#F6EFCE',
+          color: '#866308',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          fontSize: 11,
+          fontWeight: 500,
+          padding: '4px 8px',
+          borderRadius: '0 0 8px 0',
+          zIndex: 1
+        }}
+      >
+        {aircraftModel}
+      </div>
+
+      <div style={{ padding: 12, paddingTop: 28 }}>
         {/* airline + logo */}
-        <div className="d-flex align-items-center mb-2">
-          <div style={{ width: 40, height: 40, flexShrink: 0 }} className="me-2 d-flex align-items-center justify-content-center">
-            {logoUrl ? (
-              <img
-                src={logoUrl}
-                alt={airline}
-                style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: 6 }}
-                loading="lazy"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = 'none';
-                }}
-              />
-            ) : (
-              <div className="bg-light rounded-circle w-100 h-100 d-flex align-items-center justify-content-center text-muted small">✈</div>
-            )}
+        <div className="d-flex align-items-center mb-3">
+          <div style={{ width: 50, height: 35, flexShrink: 0 }} className="me-3 d-flex align-items-center justify-content-center">
+            <img
+              src={logoUrl}
+              alt={`${airline} Logo`}
+              style={{ maxWidth: '100%', height: 'auto', objectFit: 'contain' }}
+              loading="lazy"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '/fallback-airline-logo.png';
+              }}
+            />
           </div>
-          <div className="fw-semibold" style={{ fontSize: 14 }}>{airline}</div>
+          <div>
+            <div className="fw-bold" style={{ fontSize: 14 }}>{airline}</div>
+            <div className="text-muted" style={{ fontSize: 12 }}>{flightNumber}</div>
+          </div>
         </div>
 
-        {/* main times row */}
-        <div className="d-flex align-items-center">
-          <div style={{ width: '100%', minWidth: 0 }}>
-            <div className="d-flex justify-content-between align-items-center">
-              <div>
-                <div className="fw-bold" style={{ fontSize: 20 }}>{departTime}</div>
-                <div className="text-muted small text-truncate" style={{ maxWidth: 120 }}>{departCity}</div>
-              </div>
+        {/* compact single row with times, duration, price, and button */}
+        <div className="d-flex align-items-center justify-content-between" style={{ marginBottom: 8 }}>
+          {/* Left: Departure time */}
+          <div style={{ textAlign: 'left', minWidth: 60 }}>
+            <div className="fw-bold" style={{ fontSize: 18, lineHeight: 1 }}>{departTime}</div>
+            <div className="text-muted" style={{ fontSize: 11, lineHeight: 1 }}>{departCity}</div>
+          </div>
 
-              <div style={{ flex: 1 }} className="text-center">
-                <div style={{ fontSize: 12 }} className="text-muted">{duration}</div>
-                <div style={{ height: 6 }} />
-                <div style={{ width: 40, height: 4, background: '#0aa66b', margin: '6px auto', borderRadius: 2 }} />
-                <div style={{ height: 6 }} />
-                <div className="text-muted small">Non stop</div>
-              </div>
+          {/* Center: Duration with line */}
+          <div style={{ flex: 1, textAlign: 'center', margin: '0 8px' }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: '#666', marginBottom: 2 }}>{duration}</div>
+            <div style={{ width: 30, height: 2, background: '#0aa66b', margin: '0 auto 2px', borderRadius: 1 }} />
+            <div className="text-muted" style={{ fontSize: 10 }}>{isNonstop ? 'Nonstop' : '1 Stop'}</div>
+          </div>
 
-              <div style={{ width: 100, textAlign: 'right', flexShrink: 0 }}>
-                <div className="fw-bold" style={{ fontSize: 18 }}>{arriveTime}</div>
-                <div className="text-muted small text-truncate" style={{ maxWidth: 100 }}>{arriveCity}</div>
-              </div>
+          {/* Right: Arrival time */}
+          <div style={{ textAlign: 'right', minWidth: 60 }}>
+            <div className="fw-bold" style={{ fontSize: 18, lineHeight: 1 }}>{arriveTime}</div>
+            <div className="text-muted" style={{ fontSize: 11, lineHeight: 1 }}>{arriveCity}</div>
+          </div>
+        </div>
+
+        {/* price & CTA row - single line with better spacing */}
+        <div className="d-flex align-items-center justify-content-between" style={{ marginTop: 12 }}>
+          <div>
+            <div className="fw-bold" style={{ fontSize: 20, color: '#dc3545', lineHeight: 1 }}>{price}</div>
+            <div className="text-muted" style={{ fontSize: 12 }}>per adult</div>
+          </div>
+          
+          <button className="btn btn-success" style={{ 
+            borderRadius: 20, 
+            fontWeight: 700,
+            padding: '10px 24px',
+            fontSize: 14
+          }}>
+            BOOK
+          </button>
+        </div>
+
+        {/* promo row (if exists) - moved below */}
+        {promo && (
+          <div style={{ marginTop: 8 }}>
+            <div style={{ background: '#fff3e0', borderRadius: 6, padding: '6px 8px', fontSize: 12, color: '#6b4a1a' }}>
+              <span style={{ display: 'inline-block', width: 6, height: 6, background: '#ff6b6b', borderRadius: 6, marginRight: 6 }}></span>
+              <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{promo}</span>
             </div>
           </div>
-        </div>
-
-        {/* price & CTA row */}
-        <div className="d-flex align-items-center mt-3">
-          <div className="flex-grow-1">
-            {promo ? (
-              <div style={{ background: '#fff3e0', borderRadius: 6, padding: '8px 10px', fontSize: 13, color: '#6b4a1a' }}>
-                <span style={{ display: 'inline-block', width: 8, height: 8, background: '#ff6b6b', borderRadius: 8, marginRight: 8 }}></span>
-                <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{promo}</span>
-              </div>
-            ) : null}
-          </div>
-
-          <div style={{ width: 110, textAlign: 'right', marginLeft: 12, flexShrink: 0 }}>
-            <div className="fw-bold text-dark" style={{ fontSize: 18 }}>{price}</div>
-            <div className="text-muted small">per adult</div>
-            <div style={{ height: 6 }} />
-            <button className="btn btn-success btn-sm w-100" style={{ borderRadius: 20, fontWeight: 600 }}>BOOK</button>
-          </div>
-        </div>
+        )}
 
         {/* dashed separator */}
         <div style={{ borderTop: '1px dashed #e6e6e6', marginTop: 12, marginBottom: 8 }} />

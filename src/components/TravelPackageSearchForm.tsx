@@ -136,7 +136,7 @@ export default function TravelPackageSearchForm({ onSearch, defaultDest }: { onS
     <div
       className={`${styles.wrapper} w-100`}
       style={{
-        paddingBottom: isMobile ? 96 : undefined,
+        paddingBottom: isMobile ? 2 : undefined,
         display: 'flex',      // ensure form + button are inline
         gap: 0,               // remove extra space between them
         alignItems: 'stretch' // keep same heights
