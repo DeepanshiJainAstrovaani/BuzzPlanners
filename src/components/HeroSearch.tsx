@@ -96,7 +96,7 @@ export default function HeroSearch() {
         <section style={{ backgroundColor: '#2D3E2E' }}>
             {/* Tabs with Icons */}
             <div style={{ backgroundColor: '#14A15F' }}>
-                <Container className="px-2 px-md-5">
+                <div className="px-2 px-md-5 py-sm-2">
                     <Nav className="gap-2 flex-nowrap overflow-auto py-md-3 px-1" style={{ scrollbarWidth: 'none' }}>
                         {tabs.map(({ key, label, Icon }) => (
                             <Nav.Item key={key}>
@@ -113,7 +113,7 @@ export default function HeroSearch() {
                             </Nav.Item>
                         ))}
                     </Nav>
-                </Container>
+                </div>
             </div>
 
             <Container

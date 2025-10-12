@@ -147,6 +147,11 @@ img, picture, video, svg {
     padding-right: 10px !important;
   }
 
+  .py-sm-2 {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+
   /* Make hero title smaller on mobile */
   .text-light.fw-semibold {
     font-size: 1.4rem !important;
