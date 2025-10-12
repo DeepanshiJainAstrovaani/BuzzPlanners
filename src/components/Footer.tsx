@@ -62,7 +62,7 @@ export default function Footer() {
         ) : (
           /* Mobile layout */
           <Row className="mb-4 text-center d-flex justify-content-center">
-            <Col xs={12} className="mb-3">
+            <Col xs={12} className="mb-3 d-flex justify-content-center align-items-center">
               <Image
                 src="/buzzplannersLogo.png"
                 alt="Buzz Planners Logo"
