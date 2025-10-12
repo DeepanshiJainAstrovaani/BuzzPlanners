@@ -5,11 +5,11 @@ import Image from 'next/image';
 import { useExperience } from '@/context/ExperienceContext';
 
 const flights = [
-  { name: 'Thailand', image: '/images/thailand.png' },
-  { name: 'Goa', image: '/images/goa.png' },
-  { name: 'Dubai', image: '/images/dubai.png' },
-  { name: 'Bali', image: '/images/bali.png' },
-  { name: 'Nepal', image: '/images/nepal.png' },
+  { name: 'Thailand', image: '/images/Thailand.png' },
+  { name: 'Goa', image: '/images/Goa.png' },
+  { name: 'Dubai', image: '/images/Dubai.png' },
+  { name: 'Bali', image: '/images/Bali.png' },
+  { name: 'Nepal', image: '/images/Nepal.png' },
 ];
 
 const hotels = [
@@ -24,8 +24,8 @@ const events = [
   { name: 'Dubai Expo', image: '/images/blog-dubai.jpg' },
   { name: 'Thailand Fest', image: '/images/blog-thailand.jpg' },
   { name: 'Baku Summit', image: '/images/blog-baku.jpg' },
-  { name: 'Bali Carnival', image: '/images/bali.png' },
-  { name: 'Goa Carnival', image: '/images/goa.png' },
+  { name: 'Bali Carnival', image: '/images/Bali.png' },
+  { name: 'Goa Carnival', image: '/images/Goa.png' },
 ];
 
 export default function TrendingDestinations() {
