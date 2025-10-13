@@ -1,8 +1,23 @@
+'use client';
+
 import Image from 'next/image';
 import styles from './Header.module.css';
 import { IoPowerOutline } from 'react-icons/io5';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardHeader({ onMenuClick }: { onMenuClick?: () => void }) {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    // Clear authentication data from both storages
+    localStorage.removeItem('adminLoggedIn');
+    localStorage.removeItem('adminLoginTime');
+    sessionStorage.removeItem('adminLoggedIn');
+    sessionStorage.removeItem('adminLoginTime');
+    
+    // Redirect to admin login
+    router.push('/admin-login');
+  };
   return (
     <header style={{
           width: '100%',
@@ -24,7 +39,7 @@ export default function DashboardHeader({ onMenuClick }: { onMenuClick?: () => v
         </button>
         <Image src="/buzzplannersLogo.png" alt="Buzz Planners" width={76} height={38} />
       </div>
-      <button className={styles.logout}>
+      <button className={styles.logout} onClick={handleLogout}>
         <IoPowerOutline size={18} style={{ marginRight: 6, verticalAlign: 'middle' }} />
         Logout
       </button>

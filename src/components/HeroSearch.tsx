@@ -7,11 +7,14 @@ import { useRouter } from 'next/navigation';
 import FlightSearchForm from './FlightSearchForm';
 import TravelPackageSearchForm from './TravelPackageSearchForm';
 import { useExperience } from '@/context/ExperienceContext';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function HeroSearch() {
     const router = useRouter();
     const { active, setActive } = useExperience();
     const [isMobile, setIsMobile] = useState(false);
+    const [eventDate, setEventDate] = useState(new Date());
 
     useEffect(() => {
         const check = () => setIsMobile(typeof window !== 'undefined' && window.innerWidth <= 576);
@@ -80,9 +83,9 @@ export default function HeroSearch() {
                     <div className="px-3 border-end" style={{ width: '30%', minWidth: '200px' }}>
                         <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>EVENT TYPE</div>
                         <input 
-                            className="form-control border-0 p-0 fw-bold" 
+                            className="form-control border-0 p-0 fw-bold events-input" 
                             placeholder="Conference, Wedding, Concert"
-                            style={{ fontSize: '1.2rem', boxShadow: 'none' }}
+                            style={{ fontSize: '1.2rem', boxShadow: 'none', color: '#000' }}
                         />
                     </div>
 
@@ -90,19 +93,22 @@ export default function HeroSearch() {
                     <div className="px-3 border-end" style={{ width: '25%', minWidth: '150px' }}>
                         <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>CITY</div>
                         <input 
-                            className="form-control border-0 p-0 fw-bold" 
+                            className="form-control border-0 p-0 fw-bold events-input" 
                             placeholder="Enter city"
-                            style={{ fontSize: '1.2rem', boxShadow: 'none' }}
+                            style={{ fontSize: '1.2rem', boxShadow: 'none', color: '#000' }}
                         />
                     </div>
 
                     {/* DATE */}
                     <div className="px-3 border-end" style={{ width: '25%', minWidth: '150px' }}>
                         <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>EVENT DATE</div>
-                        <input 
-                            type="date" 
-                            className="form-control border-0 p-0 fw-bold" 
-                            style={{ fontSize: '1.2rem', boxShadow: 'none' }}
+                        <DatePicker
+                            selected={eventDate}
+                            onChange={(date: Date | null) => setEventDate(date || new Date())}
+                            dateFormat="dd MMMM yyyy"
+                            minDate={new Date()}
+                            className="form-control border-0 p-0 fw-bold events-datepicker"
+                            placeholderText="Select date"
                         />
                     </div>
 
@@ -147,6 +153,7 @@ export default function HeroSearch() {
     }
 
     return (
+        <>
         <section style={{ backgroundColor: '#2D3E2E' }}>
             {/* Tabs with Icons */}
             <div style={{ backgroundColor: '#14A15F' }}>
@@ -214,5 +221,115 @@ export default function HeroSearch() {
                 {renderSearchCard()}
             </Container>
         </section>
+        
+        <style jsx>{`
+            :global(.events-input::placeholder) {
+                color: #000 !important;
+                opacity: 0.8 !important;
+            }
+            
+            :global(.events-input::-webkit-input-placeholder) {
+                color: #000 !important;
+                opacity: 0.8 !important;
+            }
+            
+            :global(.events-input::-moz-placeholder) {
+                color: #000 !important;
+                opacity: 0.8 !important;
+            }
+            
+            :global(.events-input:-ms-input-placeholder) {
+                color: #000 !important;
+                opacity: 0.8 !important;
+            }
+
+            /* DatePicker Styling */
+            :global(.events-datepicker) {
+                font-size: 1.2rem !important;
+                color: #000 !important;
+                background: transparent !important;
+                cursor: pointer !important;
+                outline: none !important;
+                box-shadow: none !important;
+            }
+
+            :global(.events-datepicker:focus) {
+                outline: none !important;
+                box-shadow: none !important;
+                border-color: transparent !important;
+            }
+
+            :global(.events-datepicker::placeholder) {
+                color: #000 !important;
+                opacity: 0.8 !important;
+            }
+
+            /* React DatePicker popup styling */
+            :global(.react-datepicker) {
+                border: 1px solid #ddd !important;
+                border-radius: 8px !important;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+                font-family: inherit !important;
+            }
+
+            :global(.react-datepicker__header) {
+                background-color: #14A15F !important;
+                border-bottom: 1px solid #14A15F !important;
+                border-radius: 8px 8px 0 0 !important;
+            }
+
+            :global(.react-datepicker__current-month),
+            :global(.react-datepicker__day-name) {
+                color: white !important;
+                font-weight: 600 !important;
+            }
+
+            :global(.react-datepicker__day) {
+                color: #333 !important;
+                border-radius: 4px !important;
+            }
+
+            :global(.react-datepicker__day:hover) {
+                background-color: #e8f5e8 !important;
+                color: #14A15F !important;
+            }
+
+            :global(.react-datepicker__day--selected) {
+                background-color: #14A15F !important;
+                color: white !important;
+            }
+
+            :global(.react-datepicker__day--today) {
+                background-color: #f0f8f0 !important;
+                color: #14A15F !important;
+                font-weight: 600 !important;
+            }
+
+            :global(.react-datepicker__navigation) {
+                top: 8% !important;
+                transform: translateY(-50%) !important;
+                margin-top: 0 !important;
+                width: 0 !important;
+                height: 0 !important;
+                border: none !important;
+            }
+
+            :global(.react-datepicker__navigation--previous) {
+                left: 12px !important;
+                border-right: 8px solid white !important;
+                border-top: 6px solid transparent !important;
+                border-bottom: 6px solid transparent !important;
+                border-left: none !important;
+            }
+
+            :global(.react-datepicker__navigation--next) {
+                right: 12px !important;
+                border-left: 8px solid white !important;
+                border-top: 6px solid transparent !important;
+                border-bottom: 6px solid transparent !important;
+                border-right: none !important;
+            }
+        `}</style>
+        </>
     );
 }

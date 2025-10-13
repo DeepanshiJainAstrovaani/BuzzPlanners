@@ -5,6 +5,15 @@
 
 export const dynamic = 'force-dynamic';
 
+// Generate static params for static export
+export async function generateStaticParams() {
+  return [
+    { id: '1' },
+    { id: '2' },
+    { id: '3' },
+  ];
+}
+
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { IoPencilOutline, IoTrashOutline, IoAddOutline } from 'react-icons/io5';

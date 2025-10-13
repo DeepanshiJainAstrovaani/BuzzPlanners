@@ -2,15 +2,15 @@
 
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import DashboardHeader from '@/components/DashboardHeader';
 import DashboardSidebar from '@/components/DashboardSidebar';
 import { useState, useEffect } from 'react';
 import { IoChevronForward, IoAirplaneOutline, IoBusinessOutline, IoBagHandleOutline, IoTrashOutline } from 'react-icons/io5';
+import { AuthWrapper } from '@/hooks/useAdminAuth';
 
 export default function DashboardPage() {
 	const pathname = usePathname();
-	const router = useRouter();
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const [isMobile, setIsMobile] = useState(false);
 
@@ -46,6 +46,7 @@ export default function DashboardPage() {
 	}, [isMobile, drawerOpen]);
 
 	return (
+		<AuthWrapper>
 		<div style={{ background: 'white' }}>
 			{/* Header (fixed within component) */}
 			<DashboardHeader onMenuClick={() => { if (isMobile) setDrawerOpen(true); }} />
@@ -152,5 +153,6 @@ export default function DashboardPage() {
 				.view-details-btn:hover { color: #ffffff !important; border-color: #3698D9 !important; background-color: #3698D9 !important; }
 			`}</style>
 		</div>
+		</AuthWrapper>
 	);
 }

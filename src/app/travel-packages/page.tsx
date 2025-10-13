@@ -79,7 +79,7 @@ export default function TravelPackageSearchPage() {
       <Header />
       <div style={{ background: "#f5f6f8", minHeight: "100vh" }}>
         {/* --- Search Bar --- */}
-        <div className="searchbar-sticky-wrapper py-4 px-5" style={{ background: "#2D3E2E" }}>
+        <div className="searchbar-sticky-wrapper py-4 px-5 px-md-5" style={{ background: "#2D3E2E" }}>
           <div className="container">
             <TravelPackageSearchForm onSearch={handleSearch} defaultDest={filters.destinations[0]} />
           </div>
@@ -87,7 +87,7 @@ export default function TravelPackageSearchPage() {
 
         {/* --- Sidebar + Results --- */}
         <div className="container" style={{ marginTop: 32 }}>
-          <div className="row">
+          <div className="row px-md-5">
             {/* Mobile filter toggle */}
             <div className="col-12 d-md-none mb-3">
               <button
