@@ -339,11 +339,30 @@ export default function SectionTableEditor({ weddingMongoId, sectionKey }: { wed
       {/* Actions */}
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 30, flexWrap: 'wrap' }}>
         <div style={{ flex: 1, minWidth: 240, position: 'relative' }}>
+          <svg
+            style={{
+              position: 'absolute',
+              left: '10px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              width: '14px',
+              height: '14px',
+              color: '#666',
+              pointerEvents: 'none',
+              zIndex: 1
+            }}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+          </svg>
           <input
-            placeholder="🔎︎  Search any item"
+            placeholder="Search any item"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            style={{ width: '100%', padding: '5px 10px', borderRadius: 8, border: '1px solid #ccc', fontSize: '13px' }}
+            style={{ width: '100%', padding: '5px 10px 5px 32px', borderRadius: 8, border: '1px solid #ccc', fontSize: '13px' }}
           />
         </div>
       </div>

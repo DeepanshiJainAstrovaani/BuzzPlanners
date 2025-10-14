@@ -16,21 +16,29 @@ export default function OTPVerify() {
   return (
     <div style={{ minHeight: '100vh', background: '#f5f6f8' }}>
             <Header />
-          <div className="container d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
-            <div className="row w-100 bg-white shadow my-5" style={{ maxWidth: 1200 }}>
+          <div className="container-fluid px-3 px-md-5 d-flex flex-column justify-content-center align-items-center" style={{ minHeight: 'calc(100vh - 120px)', paddingTop: '2rem', paddingBottom: '2rem' }}>
+            <div className="row w-100 bg-white shadow rounded-3 overflow-hidden" style={{ maxWidth: 'min(1200px, 95vw)', margin: '0 auto' }}>
               {/* Left image section */}
               <div className="col-md-6 d-none d-md-flex flex-column justify-content-center align-items-center"
-                style={{ background: '#C5F3CFEE'}}>
-                <img src="/images/traveller.png" width={900} height={600} style={{ objectFit: 'contain', marginLeft:'60%' }} alt="Traveler" />
+                style={{ background: '#C5F3CFEE', minHeight: '500px' }}>
+                <img src="/images/traveller.png" 
+                     style={{ 
+                       width: '100%', 
+                       height: 'auto', 
+                       maxWidth: '400px', 
+                       objectFit: 'contain',
+                       transform: 'translateX(20%)'
+                     }} 
+                     alt="Traveler" />
               </div>
               {/* Right main section */}
-              <div className="col-md-6 p-5 d-flex flex-column justify-content-center">
-            <h3 className="fw-bold mb-3">Verify Your Mobile Number</h3>
-            <div className="mb-3" style={{ color: '#494949', fontSize: 16 }}>
+              <div className="col-12 col-md-6 p-3 p-sm-4 p-md-5 d-flex flex-column justify-content-center" style={{ minHeight: '400px' }}>
+            <h3 className="fw-bold mb-3 text-center text-md-start" style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)' }}>Verify Your Mobile Number</h3>
+            <div className="mb-4 text-center text-md-start" style={{ color: '#494949', fontSize: 'clamp(14px, 3vw, 16px)', lineHeight: 1.5 }}>
               OTP has been sent to your mobile <b>+91 {mobile}</b>
             </div>
             <form>
-              <div className="d-flex gap-2 mb-3 justify-content-between">
+              <div className="d-flex gap-2 mb-4 justify-content-center justify-content-md-start" style={{ flexWrap: 'wrap' }}>
                 {[...Array(6)].map((_, i) =>
                   <input
                     key={i}
@@ -38,7 +46,16 @@ export default function OTPVerify() {
                     inputMode="numeric"
                     maxLength={1}
                     className="form-control text-center fw-bold"
-                    style={{ width: 44, height: 44, fontSize: 20 }}
+                    style={{ 
+                      width: 'clamp(38px, 8vw, 44px)', 
+                      height: 'clamp(38px, 8vw, 44px)', 
+                      fontSize: 'clamp(16px, 4vw, 20px)',
+                      border: '2px solid #e9ecef',
+                      borderRadius: '8px',
+                      transition: 'border-color 0.2s'
+                    }}
+                    onFocus={(e) => e.target.style.borderColor = '#22c55e'}
+                    onBlur={(e) => e.target.style.borderColor = '#e9ecef'}
                     value={otp[i] || ''}
                     onChange={e => {
                       const v = e.target.value.replace(/\D/, '');
@@ -64,7 +81,7 @@ export default function OTPVerify() {
             </form>
             <div className="d-flex align-items-center my-3" style={{ color: '#bbb' }}>
               <div className="flex-grow-1" style={{ height: 1, background: '#eee' }}></div>
-              <div className="mx-2 fs-5 fw-medium">Didn&apos;t receive the code? <span style={{ color: "#0ea473", fontWeight: 500, cursor: "pointer" }}>Send again</span></div>
+              <div className="mx-2 fs-6 fw-medium">Didn&apos;t receive the code? <span style={{ color: "#0ea473", fontWeight: 500, cursor: "pointer" }}>Send again</span></div>
               <div className="flex-grow-1" style={{ height: 1, background: '#eee' }}></div>
             </div>
             

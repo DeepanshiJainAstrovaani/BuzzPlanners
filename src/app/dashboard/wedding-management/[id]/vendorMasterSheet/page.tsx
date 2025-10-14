@@ -3,17 +3,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars  */
 /* eslint-disable react-hooks/exhaustive-deps  */
 
-export const dynamic = 'force-dynamic';
-
-// Generate static params for static export
-export async function generateStaticParams() {
-  return [
-    { id: '1' },
-    { id: '2' },
-    { id: '3' },
-  ];
-}
-
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { IoPencilOutline, IoTrashOutline, IoAddOutline } from 'react-icons/io5';
@@ -328,13 +317,22 @@ export default function VendorMasterSheetPage() {
       <h1 style={{ fontWeight: 600, fontSize: '20px', margin: '30px 0 20px 0' }}>Vendor Master Sheet</h1>
 
       {/* Search only (autosave enabled) */}
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 30, flexWrap: 'wrap' }}>
-        <div style={{ flex: 1, minWidth: 240, position: 'relative' }}>
+      <div className="search-container">
+        <div className="search-input-wrapper">
+          <svg
+            className="search-icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+          </svg>
           <input
-            placeholder="🔎︎  Search any item"
+            placeholder="Search any item"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            style={{ width: '100%', padding: 'var(--input-pad, 5px 14px)', borderRadius: 8, border: '1px solid #ccc', fontSize: '13px' }}
+            className="search-input"
           />
         </div>
       </div>
@@ -344,9 +342,9 @@ export default function VendorMasterSheetPage() {
         <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0 }}>
           <thead>
             <tr style={{ background: '#EBE9E9', color: '#222' }}>
-              <th className='px-2 py-1' style={{ textAlign: 'left', fontSize: '12px', fontWeight: 600 }}>S.No</th>
+              <th className='px-2 py-1' style={{ textAlign: 'left', fontSize: '13px', fontWeight: 600 }}>S.No</th>
               {displayColumns.map((cm) => (
-                <th className='px-2 py-1' key={cm.id} style={{ textAlign: 'left', fontSize: '12px', fontWeight: 600 }}>{cm.name}</th>
+                <th className='px-2 py-1' key={cm.id} style={{ textAlign: 'left', fontSize: '13px', fontWeight: 600 }}>{cm.name}</th>
               ))}
               <th className='px-2 py-1' style={{ textAlign: 'left' }}>
                 <button
@@ -362,9 +360,9 @@ export default function VendorMasterSheetPage() {
           <tbody>
             {filteredRows.map((row, idx) => (
               <tr key={idx} style={{ background: idx % 2 ? '#eaf7fb' : '#fff' }}>
-                <td style={{ padding: '2px 10px', fontWeight: 600, fontSize: '10px' }}>{idx + 1}</td>
+                <td style={{ padding: '2px 10px', fontWeight: 600, fontSize: '13px' }}>{idx + 1}</td>
                 {displayColumns.map((cm) => (
-                  <td key={cm.id} style={{ padding: '2px 10px', fontSize: '10px' }}>
+                  <td key={cm.id} style={{ padding: '2px 10px', fontSize: '13px' }}>
                     {editingIndex === idx ? (
                       <input
                         value={String(rowsByColId[idx]?.[cm.id] ?? '')}
@@ -455,6 +453,78 @@ export default function VendorMasterSheetPage() {
           </div>
         </div>
       )}
+
+      {/* Mobile-responsive styles */}
+      <style jsx>{`
+        .search-container {
+          display: flex;
+          gap: 12px;
+          align-items: center;
+          margin-bottom: 20px;
+          flex-wrap: wrap;
+        }
+
+        .search-input-wrapper {
+          flex: 1;
+          min-width: 240px;
+          position: relative;
+        }
+
+        .search-icon {
+          position: absolute;
+          left: 14px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 14px;
+          height: 14px;
+          color: #666;
+          pointer-events: none;
+          z-index: 1;
+        }
+
+        .search-input {
+          width: 100%;
+          padding: 8px 14px 8px 36px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          font-size: 14px;
+          outline: none;
+          transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+          border-color: #0CA04E;
+          box-shadow: 0 0 0 2px rgba(12, 160, 78, 0.1);
+        }
+
+        /* Mobile specific styles */
+        @media (max-width: 768px) {
+          .search-container {
+            margin-bottom: 16px;
+          }
+
+          .search-input-wrapper {
+            min-width: 100%;
+          }
+          
+          .search-input {
+            font-size: 16px;
+            padding: 5px 14px 5px 40px;
+          }
+
+          .search-icon {
+            width: 16px;
+            height: 16px;
+            left: 12px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .search-input {
+            font-size: 16px;
+          }
+        }
+      `}</style>
     </div>
   );
 }

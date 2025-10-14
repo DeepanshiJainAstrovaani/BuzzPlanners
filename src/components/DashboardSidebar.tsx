@@ -36,11 +36,29 @@ export default function DashboardSidebar({ open = false, onClose }: { open?: boo
   useEffect(() => {
     // Detect if on a wedding dashboard route
     const match = safePathname.match(/\/dashboard\/wedding-management\/(\w+)/);
+    let weddingIdToUse: string | null = null;
+    
     if (match) {
-      const id = match[1];
-      setWeddingId(id);
+      const pathSegment = match[1];
+      
+      // If we're on the create page with edit parameters, extract ID from URL params
+      if (pathSegment === 'create' && typeof window !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        const editMode = urlParams.get('edit');
+        const idParam = urlParams.get('id');
+        if (editMode === '1' && idParam) {
+          weddingIdToUse = idParam;
+        }
+      } else {
+        // Regular wedding dashboard route
+        weddingIdToUse = pathSegment;
+      }
+    }
+    
+    if (weddingIdToUse) {
+      setWeddingId(weddingIdToUse);
       // Fetch wedding sections
-      fetch(`/api/weddings/${id}`)
+      fetch(`/api/weddings/${weddingIdToUse}`)
         .then(res => res.ok ? res.json() : null)
         .then(data => {
           if (data && data.sections) setWeddingSections(data.sections);
@@ -88,7 +106,7 @@ export default function DashboardSidebar({ open = false, onClose }: { open?: boo
                   <IoChevronForward className={styles.menuChevron} size={19} />
                 </Link>
                 {/* Wedding sections as sub-menu */}
-                {item.path === '/dashboard/wedding-management' && weddingId && safePathname.startsWith(`/dashboard/wedding-management/${weddingId}`) && (
+                {item.path === '/dashboard/wedding-management' && weddingId && (safePathname.startsWith(`/dashboard/wedding-management/${weddingId}`) || (safePathname === '/dashboard/wedding-management/create' && typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('edit') === '1')) && (
                   <ul className={styles.subMenu} onMouseEnter={(e) => e.stopPropagation()}>
                     {/* Wedding Info always at the top */}
                     <li key="info" className={styles.subMenuItem}>

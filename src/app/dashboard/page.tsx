@@ -73,7 +73,7 @@ export default function DashboardPage() {
 							<div style={{ fontSize: 20, fontWeight: 600, color: '#222' }}>6</div>
 							<div style={{ color: '#222', fontWeight: 500, fontSize: 15, marginTop: 4, display: 'flex', alignItems: 'center' }}>
 								<span>Vendors</span>
-								<IoChevronForward size={19} style={{ marginLeft: '0.3rem'}} />
+								<IoChevronForward size={19} />
 							</div>
 						</div>
 					</div>
@@ -82,7 +82,7 @@ export default function DashboardPage() {
 							<div style={{ fontSize: 20, fontWeight: 600, color: '#222' }}>982</div>
 							<div style={{ color: '#222', fontWeight: 500, fontSize: 15, marginTop: 4, display: 'flex', alignItems: 'center' }}>
 								<span>Flight Bookings</span>
-								<IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '0.3rem'}} />
+								<IoChevronForward size={19} />
 							</div>
 						</div>
 					</div>
@@ -91,7 +91,7 @@ export default function DashboardPage() {
 							<div style={{ fontSize: 20, fontWeight: 600, color: '#222' }}>6</div>
 							<div style={{ color: '#222', fontWeight: 500, fontSize: 15, marginTop: 4, display: 'flex', alignItems: 'center' }}>
 								<span>Hotel Bookings</span>
-								<IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '0.3rem'}} />
+								<IoChevronForward size={19} />
 							</div>
 						</div>
 					</div>
@@ -99,7 +99,7 @@ export default function DashboardPage() {
 				{/* New Leads Section */}
 				<div className="p-3 p-md-4">
 					<div className="d-flex align-items-center justify-content-between gap-2 flex-wrap mb-3">
-						<h4 className="m-0" style={{ fontWeight: 600, fontSize: 16 }}>New Leads</h4>
+						<h4 className="m-0" style={{ fontWeight: 600, fontSize: 20 }}>New Leads</h4>
 						<div className="d-flex gap-2 flex-wrap">
 							<button className="btn btn-light d-inline-flex align-items-center gap-2 px-3 py-2 rounded-5" style={{ background: '#F5F5F5' }}>
 								<IoAirplaneOutline size={18} /> <span className="small">Flights</span>
@@ -116,26 +116,26 @@ export default function DashboardPage() {
 						<table className="table align-middle mb-0" style={{ fontSize: 14 }}>
 							<thead>
 								<tr>
-									<th style={{ background: '#EBE9E9', fontSize: '14px', width:'20%' }}>Name</th>
-									<th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}>Type</th>
-									<th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}>People</th>
-									<th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}>Date</th>
-									<th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}>Action</th>
-									<th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}></th>
+									<th style={{ background: '#EBE9E9', fontSize: '15px', width:'20%' }}>Name</th>
+									<th style={{ background: '#EBE9E9', fontSize: '15px', width:'15%' }}>Type</th>
+									<th style={{ background: '#EBE9E9', fontSize: '15px', width:'15%' }}>People</th>
+									<th style={{ background: '#EBE9E9', fontSize: '15px', width:'15%' }}>Date</th>
+									<th style={{ background: '#EBE9E9', fontSize: '15px', width:'15%' }}>Action</th>
+									<th style={{ background: '#EBE9E9', fontSize: '15px', width:'15%' }}></th>
 								</tr>
 							</thead>
 							<tbody>
 								{[1, 2, 3, 4].map((_, i) => (
 									<tr key={i}>
-										<td className="py-3" style={{ fontSize: '12px' }}>Rajesh Shah</td>
-										<td className="py-3" style={{ fontSize: '12px' }}>Hotel</td>
-										<td className="py-3" style={{ fontSize: '12px' }}>4 People</td>
-										<td className="py-3" style={{ fontSize: '12px' }}>04 Sep 2025</td>
-										<td className="py-3" style={{ fontSize: '12px' }}>
-											<button className="btn btn-outline-primary btn-sm me-2 view-details-btn" style={{ color: '#3698D9', borderColor: '#3698D9', fontSize: '13px' }}>View Details</button>
+										<td className="py-3" style={{ fontSize: '14px' }}>Rajesh Shah</td>
+										<td className="py-3" style={{ fontSize: '14px' }}>Hotel</td>
+										<td className="py-3" style={{ fontSize: '14px' }}>4 People</td>
+										<td className="py-3" style={{ fontSize: '14px' }}>04 Sep 2025</td>
+										<td className="py-3" style={{ fontSize: '14px' }}>
+											<button className="btn btn-outline-primary btn-sm me-2 view-details-btn px-3" style={{ color: '#3698D9', borderColor: '#3698D9', fontSize: '13px' }}>View Details</button>
 										</td>
 										<td>
-											<span style={{ color: '#e57373', cursor: 'pointer', verticalAlign: 'middle', marginLeft: 8 }}>
+											<span style={{ color: '#e57373', cursor: 'pointer', verticalAlign: 'middle', marginLeft: 8, display: 'flex', alignItems: 'center' }}>
 												<IoTrashOutline size={20} />
 											</span>
 										</td>

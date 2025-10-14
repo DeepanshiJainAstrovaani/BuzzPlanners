@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element  */
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function MobileTravelPackageCard({ pkg }: { pkg: any }) {
   // Use same fields as desktop TravelPackageCard
@@ -10,6 +11,7 @@ export default function MobileTravelPackageCard({ pkg }: { pkg: any }) {
   
   // Use same image paths as desktop version
   const mainImage = '/images/stay1.png';
+  const router = useRouter();
   
   return (
     <div style={{ padding: 8 }}>
@@ -189,6 +191,11 @@ export default function MobileTravelPackageCard({ pkg }: { pkg: any }) {
               fontWeight: 700,
               minWidth: 70
             }}
+            onClick={() => {
+                console.log('button clicked');
+                console.log('Navigating to package:', pkg.id);
+                router.push(`/travel-packages/${pkg.id}`);
+                }}
           >
             BOOK
           </button>

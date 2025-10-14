@@ -3,8 +3,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars  */
 /* eslint-disable react-hooks/exhaustive-deps  */
 
-export const dynamic = 'force-dynamic';
-
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { IoPencilOutline, IoTrashOutline, IoAddOutline } from 'react-icons/io5';
@@ -319,31 +317,40 @@ export default function VendorMasterSheetPage() {
       <h1 style={{ fontWeight: 600, fontSize: '20px', margin: '30px 0 20px 0' }}>Vendor Master Sheet</h1>
 
       {/* Search only (autosave enabled) */}
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 30, flexWrap: 'wrap' }}>
-        <div style={{ flex: 1, minWidth: 240, position: 'relative' }}>
+      <div className="search-container">
+        <div className="search-input-wrapper">
+          <svg
+            className="search-icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+          </svg>
           <input
-            placeholder="🔎︎  Search any item"
+            placeholder="Search any item"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            style={{ width: '100%', padding: 'var(--input-pad, 5px 14px)', borderRadius: 8, border: '1px solid #ccc', fontSize: '13px' }}
+            className="search-input"
           />
         </div>
       </div>
 
       {/* Table */}
-      <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0 }}>
+      <div className="table-container">
+        <table className="vendor-table">
           <thead>
-            <tr style={{ background: '#EBE9E9', color: '#222' }}>
-              <th className='px-2 py-1' style={{ textAlign: 'left', fontSize: '12px', fontWeight: 600 }}>S.No</th>
+            <tr className="table-header">
+              <th className="table-header-cell serial-col">S.No</th>
               {displayColumns.map((cm) => (
-                <th className='px-2 py-1' key={cm.id} style={{ textAlign: 'left', fontSize: '12px', fontWeight: 600 }}>{cm.name}</th>
+                <th className="table-header-cell" key={cm.id}>{cm.name}</th>
               ))}
-              <th className='px-2 py-1' style={{ textAlign: 'left' }}>
+              <th className="table-header-cell actions-col">
                 <button
                   onClick={openHeaderEdit}
                   title="Edit columns"
-                  style={{ background: 'white', border: 'none', color: '#222', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', padding: '4px', borderRadius: 10 }}
+                  className="edit-header-btn"
                 >
                   <GrEdit size={13} />
                 </button>
@@ -352,10 +359,10 @@ export default function VendorMasterSheetPage() {
           </thead>
           <tbody>
             {filteredRows.map((row, idx) => (
-              <tr key={idx} style={{ background: idx % 2 ? '#eaf7fb' : '#fff' }}>
-                <td style={{ padding: '2px 10px', fontWeight: 600, fontSize: '10px' }}>{idx + 1}</td>
+              <tr key={idx} className={`table-row ${idx % 2 ? 'row-alternate' : 'row-primary'}`}>
+                <td className="table-cell serial-cell">{idx + 1}</td>
                 {displayColumns.map((cm) => (
-                  <td key={cm.id} style={{ padding: '2px 10px', fontSize: '10px' }}>
+                  <td key={cm.id} className="table-cell">
                     {editingIndex === idx ? (
                       <input
                         value={String(rowsByColId[idx]?.[cm.id] ?? '')}
@@ -366,37 +373,58 @@ export default function VendorMasterSheetPage() {
                           setRowsByColId(next);
                           schedulePersist(columnsMeta, next);
                         }}
-                        style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #ccc', fontSize: 'var(--input-fs, 15px)' }}
+                        className="cell-input"
                       />
                     ) : (
-                      <span>{String(row[cm.id] ?? '')}</span>
+                      <span className="cell-text">{String(row[cm.id] ?? '')}</span>
                     )}
                   </td>
                 ))}
-                <td style={{ padding: 'var(--cell-pad, 12px 12px)', whiteSpace: 'nowrap' }}>
-                  <button title={editingIndex === idx ? 'Finish editing' : 'Edit row'} onClick={() => setEditingIndex(editingIndex === idx ? null : idx)} style={{ background: '#fff', color: '#288DD0', marginRight: 6, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, border: 'none' }}>
-                    <GrEdit size={16} />
-                  </button>
-                  <button title="Delete row" onClick={() => { const next = rowsByColId.filter((_, i) => i !== idx); setRowsByColId(next); schedulePersist(columnsMeta, next); }} style={{ background: 'transparent', color: '#e57373', border: 'none', borderRadius: 6, padding: 'var(--icon-btn-pad, 6px 12px)', fontWeight: 700, fontSize: 'var(--btn-sm-fs, 14px)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                    <IoTrashOutline size={16} />
-                  </button>
+                <td className="table-cell actions-cell">
+                  <div className="action-buttons">
+                    <button 
+                      title={editingIndex === idx ? 'Finish editing' : 'Edit row'} 
+                      onClick={() => setEditingIndex(editingIndex === idx ? null : idx)} 
+                      className="action-btn edit-btn"
+                    >
+                      <GrEdit size={16} />
+                    </button>
+                    <button 
+                      title="Delete row" 
+                      onClick={() => { const next = rowsByColId.filter((_, i) => i !== idx); setRowsByColId(next); schedulePersist(columnsMeta, next); }} 
+                      className="action-btn delete-btn"
+                    >
+                      <IoTrashOutline size={16} />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
             {/* Add row */}
-            <tr>
-              <td style={{ padding: 'var(--cell-pad, 12px 12px)', color: '#888' }}>#</td>
+            <tr className="add-row">
+              <td className="table-cell serial-cell add-row-serial">#</td>
               {displayColumns.map((cm) => (
-                <td key={cm.id} style={{ padding: 'var(--cell-pad, 12px 12px)' }}>
+                <td key={cm.id} className="table-cell">
                   <input
                     value={String(newRow[cm.id] ?? '')}
                     onChange={(e) => setNewRow({ ...newRow, [cm.id]: e.target.value })}
-                    style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #ccc', fontSize: '10px' }}
+                    className="add-row-input"
                   />
                 </td>
               ))}
-              <td style={{ padding: 'var(--cell-pad, 12px 12px)' }}>
-                <button onClick={() => { const shaped = ensureRowShapeByIds(newRow, columnsMeta); const next = [...rowsByColId, shaped]; setRowsByColId(next); setNewRow({}); schedulePersist(columnsMeta, next); }} style={{ background: '#2196f3', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 8px', fontWeight: 700, fontSize: '10px', cursor: 'pointer' }}>Add</button>
+              <td className="table-cell actions-cell">
+                <button 
+                  onClick={() => { 
+                    const shaped = ensureRowShapeByIds(newRow, columnsMeta); 
+                    const next = [...rowsByColId, shaped]; 
+                    setRowsByColId(next); 
+                    setNewRow({}); 
+                    schedulePersist(columnsMeta, next); 
+                  }} 
+                  className="add-btn"
+                >
+                  Add
+                </button>
               </td>
             </tr>
           </tbody>
@@ -446,6 +474,336 @@ export default function VendorMasterSheetPage() {
           </div>
         </div>
       )}
+
+      {/* Mobile-responsive styles */}
+      <style jsx>{`
+        .search-container {
+          display: flex;
+          gap: 12px;
+          align-items: center;
+          margin-bottom: 20px;
+          flex-wrap: wrap;
+        }
+
+        .search-input-wrapper {
+          flex: 1;
+          min-width: 240px;
+          position: relative;
+        }
+
+        .search-icon {
+          position: absolute;
+          left: 14px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 14px;
+          height: 14px;
+          color: #666;
+          pointer-events: none;
+          z-index: 1;
+        }
+
+        .search-input {
+          width: 100%;
+          padding: 8px 14px 8px 36px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          font-size: 14px;
+          outline: none;
+          transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+          border-color: #0CA04E;
+          box-shadow: 0 0 0 2px rgba(12, 160, 78, 0.1);
+        }
+
+        .table-container {
+          overflow-x: auto;
+          border-radius: 8px;
+          border: 1px solid #e5e5e5;
+          background: white;
+        }
+
+        .vendor-table {
+          width: 100%;
+          border-collapse: separate;
+          border-spacing: 0;
+          min-width: 600px;
+        }
+
+        .table-header {
+          background: #EBE9E9;
+          color: #222;
+        }
+
+        .table-header-cell {
+          padding: 12px 8px;
+          text-align: left;
+          font-size: 12px;
+          font-weight: 600;
+          border-bottom: 1px solid #ddd;
+          white-space: nowrap;
+        }
+
+        .serial-col {
+          width: 50px;
+          min-width: 50px;
+        }
+
+        .actions-col {
+          width: 80px;
+          min-width: 80px;
+          text-align: center;
+        }
+
+        .edit-header-btn {
+          background: white;
+          border: none;
+          color: #222;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          padding: 6px;
+          border-radius: 6px;
+          transition: background-color 0.2s;
+        }
+
+        .edit-header-btn:hover {
+          background: #f5f5f5;
+        }
+
+        .table-row {
+          transition: background-color 0.2s;
+        }
+
+        .row-primary {
+          background: #fff;
+        }
+
+        .row-alternate {
+          background: #f8fafc;
+        }
+
+        .table-row:hover {
+          background: #eaf7fb !important;
+        }
+
+        .table-cell {
+          padding: 8px;
+          font-size: 11px;
+          border-bottom: 1px solid #f0f0f0;
+          vertical-align: middle;
+        }
+
+        .serial-cell {
+          font-weight: 600;
+          text-align: center;
+          color: #666;
+        }
+
+        .cell-text {
+          display: block;
+          line-height: 1.4;
+          word-break: break-word;
+        }
+
+        .cell-input {
+          width: 100%;
+          padding: 6px 8px;
+          border-radius: 4px;
+          border: 1px solid #ccc;
+          font-size: 11px;
+          outline: none;
+        }
+
+        .cell-input:focus {
+          border-color: #0CA04E;
+          box-shadow: 0 0 0 2px rgba(12, 160, 78, 0.1);
+        }
+
+        .actions-cell {
+          white-space: nowrap;
+          text-align: center;
+        }
+
+        .action-buttons {
+          display: flex;
+          gap: 4px;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .action-btn {
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 6px;
+          border-radius: 4px;
+          transition: all 0.2s;
+        }
+
+        .edit-btn {
+          color: #288DD0;
+        }
+
+        .edit-btn:hover {
+          background: #e3f2fd;
+        }
+
+        .delete-btn {
+          color: #e57373;
+        }
+
+        .delete-btn:hover {
+          background: #ffebee;
+        }
+
+        .add-row {
+          background: #fafafa;
+        }
+
+        .add-row-serial {
+          color: #888;
+          font-style: italic;
+        }
+
+        .add-row-input {
+          width: 100%;
+          padding: 6px 8px;
+          border-radius: 4px;
+          border: 1px solid #ddd;
+          font-size: 11px;
+          outline: none;
+        }
+
+        .add-row-input:focus {
+          border-color: #0CA04E;
+          box-shadow: 0 0 0 2px rgba(12, 160, 78, 0.1);
+        }
+
+        .add-btn {
+          background: #0CA04E;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          padding: 6px 12px;
+          font-weight: 600;
+          font-size: 11px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+        }
+
+        .add-btn:hover {
+          background: #0a8f44;
+        }
+
+        /* Mobile specific styles */
+        @media (max-width: 768px) {
+          .search-container {
+            margin-bottom: 16px;
+          }
+
+          .search-input-wrapper {
+            min-width: 100%;
+          }
+          
+          .search-input {
+            font-size: 16px;
+            padding: 12px 14px 12px 40px;
+          }
+
+          .search-icon {
+            width: 16px;
+            height: 16px;
+            left: 12px;
+          }
+
+          .table-container {
+            margin: 0 -8px;
+            border-radius: 0;
+            border-left: none;
+            border-right: none;
+          }
+
+          .vendor-table {
+            min-width: 100%;
+          }
+
+          .table-header-cell {
+            padding: 8px 4px;
+            font-size: 10px;
+          }
+
+          .table-cell {
+            padding: 6px 4px;
+            font-size: 10px;
+          }
+
+          .serial-col {
+            width: 30px;
+            min-width: 30px;
+          }
+
+          .actions-col {
+            width: 60px;
+            min-width: 60px;
+          }
+
+          .action-buttons {
+            flex-direction: column;
+            gap: 2px;
+          }
+
+          .action-btn {
+            padding: 4px;
+          }
+
+          .cell-input, .add-row-input {
+            font-size: 14px;
+            padding: 8px 6px;
+          }
+
+          .add-btn {
+            font-size: 10px;
+            padding: 4px 8px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .search-input {
+            font-size: 16px;
+          }
+          
+          .table-header-cell {
+            padding: 6px 2px;
+            font-size: 9px;
+          }
+
+          .table-cell {
+            padding: 4px 2px;
+            font-size: 9px;
+          }
+
+          .serial-col {
+            width: 25px;
+            min-width: 25px;
+          }
+
+          .actions-col {
+            width: 50px;
+            min-width: 50px;
+          }
+
+          .cell-text {
+            font-size: 9px;
+            line-height: 1.3;
+          }
+        }
+      `}</style>
     </div>
   );
 }

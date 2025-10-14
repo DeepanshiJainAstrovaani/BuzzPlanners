@@ -15,22 +15,6 @@ const STATIC_WEDDINGS = [
 	{ _id: 'w3', weddingId: 'WD-1003', title: 'Siddharth & Ayesha Royal Event', date: '2025-09-28', status: 'Completed' },
 	{ _id: 'w4', weddingId: 'WD-1004', title: 'Rahul & Neha Mountain Wedding', date: '2025-12-09', status: 'On Hold' },
 	{ _id: 'w5', weddingId: 'WD-1005', title: 'Vikram & Tara Destination Gala', date: '2026-01-21', status: 'Cancelled' },
-	{ _id: 'w6', weddingId: 'WD-1006', title: 'Arjun & Priya Garden Wedding', date: '2025-10-18', status: 'Planned' },
-	{ _id: 'w7', weddingId: 'WD-1007', title: 'Manav & Jaya Heritage Celebration', date: '2025-11-02', status: 'In Progress' },
-	// Added more sample rows with wider status coverage
-	{ _id: 'w8', weddingId: 'WD-1008', title: 'Ishaan & Kavya City Banquet', date: '2025-12-22', status: 'Draft' },
-	{ _id: 'w9', weddingId: 'WD-1009', title: 'Rohit & Sneha Lakeside Rituals', date: '2025-12-30', status: 'Planned' },
-	{ _id: 'w10', weddingId: 'WD-1010', title: 'Dev & Anita Vineyard Soirée', date: '2026-01-05', status: 'Delayed' },
-	{ _id: 'w11', weddingId: 'WD-1011', title: 'Sameer & Pooja Hilltop Mehndi', date: '2025-11-11', status: 'On Hold' },
-	{ _id: 'w12', weddingId: 'WD-1012', title: 'Harsh & Nidhi Sunset Beach Vows', date: '2025-10-29', status: 'In Progress' },
-	{ _id: 'w13', weddingId: 'WD-1013', title: 'Aarav & Muskaan Desert Festival', date: '2026-02-14', status: 'Planned' },
-	{ _id: 'w14', weddingId: 'WD-1014', title: 'Kabir & Radhika Luxury Cruise', date: '2026-03-02', status: 'Draft' },
-	{ _id: 'w15', weddingId: 'WD-1015', title: 'Nakul & Esha Heritage Fort Events', date: '2025-12-01', status: 'In Progress' },
-	{ _id: 'w16', weddingId: 'WD-1016', title: 'Yash & Tania Garden Brunch', date: '2025-10-07', status: 'Completed' },
-	{ _id: 'w17', weddingId: 'WD-1017', title: 'Parth & Simran Lantern Night', date: '2026-01-18', status: 'Cancelled' },
-	{ _id: 'w18', weddingId: 'WD-1018', title: 'Rajat & Sanika Royal Procession', date: '2025-11-27', status: 'Review' },
-	{ _id: 'w19', weddingId: 'WD-1019', title: 'Tejas & Aditi Temple Blessings', date: '2025-10-25', status: 'Archived' },
-	{ _id: 'w20', weddingId: 'WD-1020', title: 'Abhay & Kriti Forest Retreat', date: '2026-02-01', status: 'Planned' },
 ];
 
 export default function WeddingManagementPage() {
@@ -215,7 +199,7 @@ export default function WeddingManagementPage() {
 								<div style={{ fontSize: 20, fontWeight: 600, color: '#222' }}>106</div>
 								<div style={{ color: '#222', fontWeight: 500, fontSize: 15, marginTop: 4, display: 'flex', alignItems: 'center' }}>
 									<span>Weddings</span>
-									<IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '0.3rem'}} />
+									<IoChevronForward size={19} />
 								</div>
 							</div>
 						</div>
@@ -224,7 +208,7 @@ export default function WeddingManagementPage() {
 								<div style={{ fontSize: 20, fontWeight: 600, color: '#222' }}>23</div>
 								<div style={{ color: '#222', fontWeight: 500, fontSize: 15, marginTop: 4, display: 'flex', alignItems: 'center' }}>
 									<span>Upcoming</span>
-									<IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '0.3rem' }} />
+									<IoChevronForward size={19}/>
 								</div>
 							</div>
 						</div>
@@ -233,7 +217,7 @@ export default function WeddingManagementPage() {
 								<div style={{ fontSize: 20, fontWeight: 600, color: '#222' }}>2.5 Lac</div>
 								<div style={{ color: '#222', fontWeight: 500, fontSize: 15, marginTop: 4, display: 'flex', alignItems: 'center' }}>
 									<span>Guest</span>
-									<IoChevronForward size={19} style={{ color: '#3698D9', marginLeft: '0.3rem' }} />
+									<IoChevronForward size={19}/>
 								</div>
 							</div>
 						</div>
@@ -242,7 +226,7 @@ export default function WeddingManagementPage() {
 					{/* Wedding List Section */}
 					<div className='p-3 p-md-4'>
 						<div className="d-flex align-items-center justify-content-between mb-3 gap-2 flex-wrap">
-							<h2 className="m-0" style={{ fontWeight: 600, fontSize: 16 }}>Wedding List</h2>
+							<h2 className="m-0" style={{ fontWeight: 600, fontSize: 20 }}>Wedding List</h2>
 							<div className="d-flex gap-2 flex-wrap" ref={filterRef} style={{ position: 'relative' }}>
 								<button
 									type="button"
@@ -280,16 +264,35 @@ export default function WeddingManagementPage() {
 								<button className="btn btn-success create-btn" onClick={() => router.push('/dashboard/wedding-management/create')} style={{
 									fontSize: '13px',
 									fontWeight: 400,
-									padding: '1px 20px',
+									padding: '4px 20px',
 								}}>Create</button>
 							</div>
 						</div>
-						<div className="mb-3">
+						<div className="mb-3" style={{ position: 'relative' }}>
+							<svg
+								style={{
+									position: 'absolute',
+									left: '12px',
+									top: '50%',
+									transform: 'translateY(-50%)',
+									width: '16px',
+									height: '16px',
+									color: '#666',
+									pointerEvents: 'none',
+									zIndex: 1
+								}}
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+							</svg>
 							<input
 								type="text"
-								placeholder="🔎︎   Search any Wedding"
+								placeholder="Search any Wedding"
 								className="form-control"
-								style={{ fontSize: 12, padding: '10px 12px' }}
+								style={{ fontSize: 14, padding: '10px 12px 10px 36px' }}
 								value={searchText}
 								onChange={(e) => setSearchText(e.target.value)}
 								aria-label="Search weddings"
@@ -299,12 +302,12 @@ export default function WeddingManagementPage() {
 							<table className="table align-middle mb-0" style={{ fontSize: 14 }}>
 								<thead>
 									<tr>
-										<th style={{ background: '#EBE9E9', fontSize: '14px', width:'20%' }}>Id</th>
-										<th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}>Title</th>
-										<th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}>Wedding Date</th>
-										<th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}>Status</th>
-										<th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}>Action</th>
-										<th style={{ background: '#EBE9E9', fontSize: '14px', width:'15%' }}></th>
+										<th style={{ background: '#EBE9E9', fontSize: '15px', width:'10%' }}>Id</th>
+										<th style={{ background: '#EBE9E9', fontSize: '15px', width:'25%' }}>Title</th>
+										<th style={{ background: '#EBE9E9', fontSize: '15px', width:'15%' }}>Wedding Date</th>
+										<th style={{ background: '#EBE9E9', fontSize: '15px', width:'15%' }}>Status</th>
+										<th style={{ background: '#EBE9E9', fontSize: '15px', width:'15%' }}>Action</th>
+										<th style={{ background: '#EBE9E9', fontSize: '15px', width:'15%' }}></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -315,10 +318,10 @@ export default function WeddingManagementPage() {
 									) : (
 										filteredWeddings.map((wedding, i) => (
 											<tr key={wedding._id || i}>
-												<td className="py-3" style={{ color: '#2196f3', fontWeight: 500, cursor: 'pointer', fontSize: '12px' }}>{wedding.weddingId}</td>
-												<td className="py-3" style={{ fontSize: '12px' }}>{wedding.title}</td>
-												<td className="py-3" style={{ fontSize: '12px' }}>{wedding.date}</td>
-												<td className="py-3" style={{ fontSize: '12px' }}>{wedding.status}</td>
+												<td className="py-3" style={{ color: '#2196f3', fontWeight: 500, cursor: 'pointer', fontSize: '14px' }}>{wedding.weddingId}</td>
+												<td className="py-3" style={{ fontSize: '14px' }}>{wedding.title}</td>
+												<td className="py-3" style={{ fontSize: '14px' }}>{wedding.date}</td>
+												<td className="py-3" style={{ fontSize: '14px' }}>{wedding.status}</td>
 												<td className="py-3">
 													<div className="action-cell">
 														{isPhone ? (
@@ -383,6 +386,151 @@ export default function WeddingManagementPage() {
 					.view-btn:focus-visible { outline: 2px solid rgba(54,152,217,.5); outline-offset: 2px; }
 					/* Keep form control border unchanged on focus */
 					.form-control:focus { border: var(--bs-border-width) solid var(--bs-border-color) !important; box-shadow: none; }
+					
+					/* Search input mobile responsiveness */
+					@media (max-width: 768px) {
+						.mb-3 input.form-control {
+							padding: 12px 14px 12px 42px !important;
+							font-size: 16px !important;
+						}
+						.mb-3 svg {
+							left: 14px !important;
+							width: 18px !important;
+							height: 18px !important;
+						}
+					}
+					
+					@media (max-width: 480px) {
+						.mb-3 input.form-control {
+							padding: 10px 15px 10px 44px !important;
+							font-size: 16px !important;
+						}
+						.mb-3 svg {
+							left: 15px !important;
+							width: 18px !important;
+							height: 18px !important;
+						}
+					}
+					
+					/* Mobile table styling - improved spacing and readability */
+					@media (max-width: 768px) {
+						.table {
+							margin-bottom: 0 !important;
+							min-width: 700px !important; /* Allow horizontal scroll for better layout */
+						}
+						
+						.table th, .table td {
+							padding: 10px 8px !important;
+							font-size: 13px !important;
+							text-align: left !important;
+							white-space: nowrap !important; /* Prevent text wrapping */
+							border-bottom: 1px solid #f0f0f0 !important;
+						}
+						
+						.table th {
+							background: #EBE9E9 !important;
+							font-weight: 600 !important;
+							color: #333 !important;
+						}
+						
+						.table th:nth-child(1), .table td:nth-child(1) { /* ID */
+							width: 80px !important;
+							min-width: 80px !important;
+						}
+						
+						.table th:nth-child(2), .table td:nth-child(2) { /* Title */
+							width: 250px !important;
+							min-width: 200px !important;
+							white-space: normal !important; /* Allow title to wrap if needed */
+							line-height: 1.3 !important;
+						}
+						
+						.table th:nth-child(3), .table td:nth-child(3) { /* Wedding Date */
+							width: 110px !important;
+							min-width: 110px !important;
+						}
+						
+						.table th:nth-child(4), .table td:nth-child(4) { /* Status */
+							width: 100px !important;
+							min-width: 90px !important;
+						}
+						
+						.table th:nth-child(5), .table td:nth-child(5) { /* Action */
+							width: 80px !important;
+							min-width: 80px !important;
+							text-align: center !important;
+						}
+						
+						.table th:nth-child(6), .table td:nth-child(6) { /* Delete */
+							width: 50px !important;
+							min-width: 50px !important;
+							text-align: center !important;
+						}
+						
+						/* Better button styling for mobile */
+						.view-btn {
+							padding: 6px 12px !important;
+							font-size: 12px !important;
+							white-space: nowrap !important;
+						}
+						
+						.icon-btn {
+							width: 36px !important;
+							height: 36px !important;
+						}
+					}
+					
+					@media (max-width: 480px) {
+						.table {
+							min-width: 650px !important; /* Slightly smaller but still scrollable */
+						}
+						
+						.table th, .table td {
+							padding: 8px 6px !important;
+							font-size: 12px !important;
+						}
+						
+						.table th:nth-child(1), .table td:nth-child(1) { /* ID */
+							width: 70px !important;
+							min-width: 70px !important;
+						}
+						
+						.table th:nth-child(2), .table td:nth-child(2) { /* Title */
+							width: 200px !important;
+							min-width: 180px !important;
+						}
+						
+						.table th:nth-child(3), .table td:nth-child(3) { /* Wedding Date */
+							width: 100px !important;
+							min-width: 100px !important;
+						}
+						
+						.table th:nth-child(4), .table td:nth-child(4) { /* Status */
+							width: 90px !important;
+							min-width: 80px !important;
+						}
+						
+						.table th:nth-child(5), .table td:nth-child(5) { /* Action */
+							width: 70px !important;
+							min-width: 70px !important;
+						}
+						
+						.table th:nth-child(6), .table td:nth-child(6) { /* Delete */
+							width: 50px !important;
+							min-width: 50px !important;
+						}
+						
+						.view-btn {
+							padding: 4px 8px !important;
+							font-size: 11px !important;
+						}
+						
+						.icon-btn {
+							width: 32px !important;
+							height: 32px !important;
+						}
+					}
+
 					@media (max-width: 1024px) {
 					  main { margin-left: 0; padding: 12px 12px 28px 12px; }
 					}
