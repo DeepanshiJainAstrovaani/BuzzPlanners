@@ -65,7 +65,102 @@ export default function HeroSearch() {
                 </div>
             );
         }
-        // Events search form - styled like flight search
+        // Events search form - responsive layout
+        if (isMobile) {
+            // Mobile vertical layout
+            return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {/* Form Container */}
+                    <div className="bg-white shadow" style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid #ddd' }}>
+                        <form onSubmit={(e) => e.preventDefault()}>
+                            {/* EVENT TYPE */}
+                            <div style={{ padding: '16px', borderBottom: '1px solid #e9ecef' }}>
+                                <div className="text-muted mb-2" style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>EVENT TYPE</div>
+                                <input 
+                                    className="border-0 p-0 fw-bold events-input" 
+                                    placeholder="Conference, Wedding"
+                                    style={{ fontSize: '16px', boxShadow: 'none', color: '#000', background: 'transparent', padding:'0 !important' }}
+                                />
+                            </div>
+
+                            {/* CITY */}
+                            <div style={{ padding: '16px', borderBottom: '1px solid #e9ecef' }}>
+                                <div className="text-muted mb-2" style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>CITY</div>
+                                <input 
+                                    className="border-0 p-0 fw-bold events-input" 
+                                    placeholder="Enter city"
+                                    style={{ fontSize: '16px', boxShadow: 'none', color: '#000', background: 'transparent', padding:'0px !important' }}
+                                />
+                            </div>
+
+                            {/* DATE */}
+                            <div style={{ padding: '16px', borderBottom: '1px solid #e9ecef' }}>
+                                <div className="text-muted mb-2" style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>EVENT DATE</div>
+                                <DatePicker
+                                    selected={eventDate}
+                                    onChange={(date: Date | null) => setEventDate(date || new Date())}
+                                    dateFormat="dd MMMM yyyy"
+                                    minDate={new Date()}
+                                    className="border-0 p-0 fw-bold events-datepicker"
+                                    placeholderText="Select date"
+                                />
+                            </div>
+
+                            {/* CATEGORY */}
+                            <div style={{ padding: '16px' }}>
+                                <div className="text-muted mb-2" style={{ fontSize: '12px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>CATEGORY</div>
+                                <select 
+                                    className="events-select border-0 fw-bold" 
+                                    style={{ 
+                                        fontSize: '16px', 
+                                        boxShadow: 'none', 
+                                        background: 'transparent', 
+                                        color: '#000', 
+                                        padding: '0',
+                                        width: '100%',
+                                        appearance: 'none',
+                                        WebkitAppearance: 'none',
+                                        MozAppearance: 'none',
+                                        outline: 'none'
+                                    }}
+                                >
+                                    <option>All Events</option>
+                                    <option>Conference</option>
+                                    <option>Wedding</option>
+                                    <option>Concert</option>
+                                    <option>Exhibition</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
+                    {/* Search Button - Outside Form */}
+                    <div style={{ 
+                        backgroundColor: '#14A15F', 
+                        borderRadius: '12px', 
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <Button
+                            className="fw-bold text-white w-100"
+                            style={{ 
+                                backgroundColor: 'transparent', 
+                                border: 'none',
+                                height: '50px',
+                                fontSize: '16px',
+                                boxShadow: 'none'
+                            }}
+                            onClick={() => { /* TODO: implement events route */ }}
+                        >
+                            SEARCH
+                        </Button>
+                    </div>
+                </div>
+            );
+        }
+
+        // Desktop horizontal layout
         return (
             <div className="w-100" style={{ display: 'flex', gap: 0, alignItems: 'stretch' }}>
                 <form
@@ -84,7 +179,7 @@ export default function HeroSearch() {
                         <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>EVENT TYPE</div>
                         <input 
                             className="form-control border-0 p-0 fw-bold events-input" 
-                            placeholder="Conference, Wedding, Concert"
+                            placeholder="Conference, Wedding"
                             style={{ fontSize: '1.2rem', boxShadow: 'none', color: '#000' }}
                         />
                     </div>
@@ -157,7 +252,7 @@ export default function HeroSearch() {
         <section style={{ backgroundColor: '#2D3E2E' }}>
             {/* Tabs with Icons */}
             <div style={{ backgroundColor: '#14A15F' }}>
-                <div className="px-2 px-md-5 py-sm-2">
+                <div className="px-2 px-md-5 py-2">
                     <Nav className="gap-2 flex-nowrap overflow-auto py-md-1 px-1" style={{ scrollbarWidth: 'none' }}>
                         {tabs.map(({ key, label, Icon }) => (
                             <Nav.Item key={key}>
@@ -328,6 +423,25 @@ export default function HeroSearch() {
                 border-top: 6px solid transparent !important;
                 border-bottom: 6px solid transparent !important;
                 border-right: none !important;
+            }
+
+            /* Mobile Events Form Styles */
+            @media (max-width: 576px) {
+                :global(.events-datepicker) {
+                    font-size: 16px !important;
+                    background: transparent !important;
+                }
+                
+                :global(.events-input) {
+                    font-size: 16px !important;
+                    background: transparent !important;
+                }
+                
+                :global(.events-input:focus) {
+                    background: transparent !important;
+                    outline: none !important;
+                    box-shadow: none !important;
+                }
             }
         `}</style>
         </>

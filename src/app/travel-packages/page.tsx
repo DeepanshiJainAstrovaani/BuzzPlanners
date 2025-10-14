@@ -31,7 +31,7 @@ export default function TravelPackageSearchPage() {
 
   const [filters, setFilters] = useState({
     destinations: ['Kasauli'],
-    priceRange: [3823, 16882],
+    priceRange: [3000, 50000],
     accommodation: ['5 Star', '4 Star'],
   });
 
@@ -68,11 +68,9 @@ export default function TravelPackageSearchPage() {
   };
 
   // Filter packages
-  const filteredPackages = packages.filter(pkg =>
-    (filters.destinations.length === 0 || filters.destinations.includes(pkg.destination)) &&
-    pkg.price >= filters.priceRange[0] &&
-    pkg.price <= filters.priceRange[1]
-  );
+  const filteredPackages = packages; // Temporarily disable filtering to see all packages
+  
+  console.log(`Total packages: ${packages.length}, Filtered: ${filteredPackages.length}`);
 
   return (
     <div>
@@ -86,8 +84,9 @@ export default function TravelPackageSearchPage() {
         </div>
 
         {/* --- Sidebar + Results --- */}
-        <div className="container" style={{ marginTop: 32 }}>
-          <div className="row px-md-5">
+        <div className='container'>
+        <div className="px-md-5" style={{ marginTop: 'clamp(16px, 4vw, 24px)' }}>
+          <div className="row p-0" style={{ padding: '0 clamp(8px, 2vw, 16px)' }}>
             {/* Mobile filter toggle */}
             <div className="col-12 d-md-none mb-3">
               <button
@@ -111,7 +110,7 @@ export default function TravelPackageSearchPage() {
 
             {/* Desktop sidebar */}
             <div className="d-none d-md-block col-md-3 mb-3">
-              <div style={{ position: 'sticky', top: 100 }}>
+              <div style={{ position: 'sticky', top: 'clamp(80px, 10vw, 100px)' }}>
                 <TravelPackageFilterSidebar
                   filters={filters}
                   setFilters={setFilters}
@@ -125,12 +124,16 @@ export default function TravelPackageSearchPage() {
               <div
                 className="flex-grow-1 hide-scrollbar mb-4"
                 style={{
-                  height: isMobile ? 'auto' : '50rem',
+                  height: isMobile ? 'auto' : 'clamp(40rem, 60vh, 50rem)',
                   overflowY: 'auto',
-                  paddingBottom: isMobile ? 24 : undefined
+                  paddingBottom: isMobile ? 'clamp(16px, 4vw, 24px)' : undefined
                 }}
               >
                 <div className="mt-0">
+                  {(() => {
+                    console.log(`Rendering ${filteredPackages.length} packages, isMobile: ${isMobile}`);
+                    return null;
+                  })()}
                   {filteredPackages.length > 0 ? (
                     filteredPackages.map((pkg, index) => (
                       isMobile ? (
@@ -146,6 +149,7 @@ export default function TravelPackageSearchPage() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
       <Footer />

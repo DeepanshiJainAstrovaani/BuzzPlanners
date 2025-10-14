@@ -18,8 +18,8 @@ export default function TravelPackageCard({ pkg }: { pkg: any }) {
     <div
       className="card mb-3 border-0 shadow-sm"
       style={{
-        borderRadius: '1rem',
-        padding: '24px 24px 24px 24px',
+        borderRadius: 'clamp(8px, 2vw, 16px)',
+        padding: 'clamp(12px, 3vw, 20px)',
         display: 'flex',
         alignItems: 'center',
         background: '#fff'
@@ -27,16 +27,16 @@ export default function TravelPackageCard({ pkg }: { pkg: any }) {
     >
       <div className="d-flex w-100 align-items-center">
         {/* Left: Large image and small thumbs */}
-        <div style={{ minWidth: '19rem', position: 'relative' }}>
+        <div style={{ position: 'relative' }}>
           {/* Main image */}
           <div style={{ position: 'relative' }}>
             <img
               src={mainImage}
               alt="Main"
               style={{
-                width: 260,
-                height: 140,               // fixed height
-                borderRadius: '1rem',
+                width: 'clamp(180px, 22vw, 202px)',
+                height: 'clamp(100px, 12vw, 120px)',
+                borderRadius: 'clamp(8px, 2vw, 12px)',
                 objectFit: 'cover',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.04)',
                 background: '#eee'
@@ -51,26 +51,27 @@ export default function TravelPackageCard({ pkg }: { pkg: any }) {
                 position: 'absolute',
                 left: 0,
                 fontWeight: 500,
-                fontSize: '1rem',
-                padding: '6px 14px',
-                borderRadius: '1rem 0rem 1rem 0rem',
+                fontSize: 'clamp(12px, 2.5vw, 14px)',
+                padding: 'clamp(4px, 1vw, 6px) clamp(8px, 2vw, 12px)',
+                borderRadius: 'clamp(8px, 2vw, 12px) 0 clamp(8px, 2vw, 12px) 0',
                 boxShadow: '0 0 4px rgba(0,0,0,0.04)',
                 overflow: 'hidden',
+                top: 0
               }}
             >
-              <span style={{ fontSize: '1.1rem' }} aria-label="Star" role="img">⭐</span>
+              <span style={{ fontSize: 'clamp(12px, 2.5vw, 14px)' }} aria-label="Star" role="img">⭐</span>
               {pkg.star} Star
             </span>
           </div>
           {/* Thumbnails */}
-          <div className="d-flex mt-2" style={{ gap: 16 }}>
+          <div className="d-flex mt-2" style={{ gap: 'clamp(8px, 2vw, 12px)' }}>
             <img
               src={thumb1}
               alt="thumb1"
               style={{
-                width: 120,
-                height: 90,                // fixed height
-                borderRadius: 8,
+                width: 'clamp(80px, 10vw, 95px)',
+                height: 'clamp(60px, 8vw, 75px)',
+                borderRadius: 'clamp(4px, 1vw, 6px)',
                 objectFit: 'cover',
                 background: '#eee'
               }}
@@ -79,9 +80,9 @@ export default function TravelPackageCard({ pkg }: { pkg: any }) {
               src={thumb2}
               alt="thumb2"
               style={{
-                width: 120,
-                height: 90,                // fixed height
-                borderRadius: 8,
+                width: 'clamp(80px, 10vw, 95px)',
+                height: 'clamp(60px, 8vw, 75px)',
+                borderRadius: 'clamp(4px, 1vw, 6px)',
                 objectFit: 'cover',
                 background: '#eee'
               }}
@@ -90,9 +91,9 @@ export default function TravelPackageCard({ pkg }: { pkg: any }) {
         </div>
 
         {/* Middle: Details */}
-        <div className="flex-grow-1" style={{ minWidth: 0 }}>
-          <div className="fw-bold fs-5">{pkg.title}</div>
-          <div className="fs-6 mb-2 text-muted">Delhi to Delhi</div>
+        <div className="flex-grow-1" style={{ padding: '0 clamp(8px, 2vw, 16px)' }}>
+          <div className="fw-bold" style={{ fontSize: 'clamp(16px, 3.5vw, 20px)' }}>{pkg.title}</div>
+          <div className="mb-2 text-muted" style={{ fontSize: 'clamp(13px, 2.5vw, 15px)' }}>Delhi to Delhi</div>
           <div className="d-flex align-items-center gap-3 mb-2">
             {pkg.flights && (
               <div>
@@ -100,21 +101,21 @@ export default function TravelPackageCard({ pkg }: { pkg: any }) {
                   style={{
                     backgroundColor: '#F5F5F5',
                     borderRadius: '100%',
-                    padding: '20%',
-                    width: '4rem',
-                    height: '4rem',
-                    display: 'block'
+                    width: 'clamp(2.5rem, 6vw, 3.5rem)',
+                    height: 'clamp(2.5rem, 6vw, 3.5rem)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
                   }}
                 >
                   <Image
                     src={'/icons/airplane.png'}
                     alt='Flights Icon'
-                    width={40}
-                    height={40}
+                    width={20}
+                    height={20}
                   />
-
                 </span>
-                <span className="mt-2 text-center fs-7 w-100 d-block text-muted">Flights</span>
+                <span className="mt-2 text-center w-100 d-block text-muted" style={{ fontSize: 'clamp(10px, 2vw, 12px)' }}>Flights</span>
               </div>
             )}
             {pkg.stay && (
@@ -123,20 +124,21 @@ export default function TravelPackageCard({ pkg }: { pkg: any }) {
                   style={{
                     backgroundColor: '#F5F5F5',
                     borderRadius: '100%',
-                    padding: '20%',
-                    width: '4rem',
-                    height: '4rem',
-                    display: 'block'
+                    width: 'clamp(2.5rem, 6vw, 3.5rem)',
+                    height: 'clamp(2.5rem, 6vw, 3.5rem)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
                   }}
                 >
                   <Image
                     src={'/icons/stay.png'}
                     alt='Stay Icon'
-                    width={40}
-                    height={40}
+                    width={20}
+                    height={20}
                   />
                 </span>
-                <span className="mt-2 text-center fs-7 w-100 d-block text-muted">Stay</span>
+                <span className="mt-2 text-center w-100 d-block text-muted" style={{ fontSize: 'clamp(10px, 2vw, 12px)' }}>Stay</span>
               </div>
             )}
             {pkg.meals && (
@@ -145,20 +147,21 @@ export default function TravelPackageCard({ pkg }: { pkg: any }) {
                   style={{
                     backgroundColor: '#F5F5F5',
                     borderRadius: '100%',
-                    padding: '20%',
-                    width: '4rem',
-                    height: '4rem',
-                    display: 'block'
+                    width: 'clamp(2.5rem, 6vw, 3.5rem)',
+                    height: 'clamp(2.5rem, 6vw, 3.5rem)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
                   }}
                 >
                   <Image
                     src={'/icons/dinner.png'}
                     alt='Meals Icon'
-                    width={40}
-                    height={40}
+                    width={20}
+                    height={20}
                   />
                 </span>
-                <span className="mt-2 text-center fs-7 w-100 d-block text-muted">Meals</span>
+                <span className="mt-2 text-center w-100 d-block text-muted" style={{ fontSize: 'clamp(10px, 2vw, 12px)' }}>Meals</span>
               </div>
             )}
             {pkg.sightseeing && (
@@ -167,34 +170,39 @@ export default function TravelPackageCard({ pkg }: { pkg: any }) {
                   style={{
                     backgroundColor: '#F5F5F5',
                     borderRadius: '100%',
-                    padding: '20%',
-                    width: '4rem',
-                    height: '4rem',
-                    display: 'block'
+                    width: 'clamp(2.5rem, 6vw, 3.5rem)',
+                    height: 'clamp(2.5rem, 6vw, 3.5rem)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
                   }}
                 >
                   <Image
                     src={'/icons/binoculars.png'}
-                    alt='Stay Icon'
-                    width={40}
-                    height={40}
+                    alt='Sightseeing Icon'
+                    width={20}
+                    height={20}
                   />
                 </span>
-                <span className="mt-2 text-center fs-7 w-100 d-block text-muted">Sightseeing</span>
+                <span className="mt-2 text-center w-100 d-block text-muted" style={{ fontSize: 'clamp(10px, 2vw, 12px)' }}>Sightseeing</span>
               </div>
             )}
             
           </div>
-          <span className="text-success">
+          <span className="text-success" style={{ fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
               +6 more amenities
             </span>
-          <div className="fs-6 mt-3" style={{ color: '#FF5F5F' }}>
+          <div className="mt-3" style={{ color: '#FF5F5F', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
             {pkg.seatsLeft === 'few' && 'Only few seats left'}
           </div>
         </div>
 
         {/* Right: Price & CTAs */}
-        <div className="d-flex flex-column align-items-center pb-5" style={{ minWidth: 200, backgroundColor: '#EEFEF6' }}>
+        <div className="d-flex flex-column align-items-center" style={{ 
+          backgroundColor: '#EEFEF6',
+          padding: 'clamp(12px, 3vw, 20px)',
+          borderRadius: 'clamp(8px, 2vw, 12px)'
+        }}>
           {pkg.specialOffer && (
             <span
               className="badge mb-2"
@@ -202,22 +210,26 @@ export default function TravelPackageCard({ pkg }: { pkg: any }) {
                 background: '#ffe9c7',
                 color: '#b05a00',
                 fontWeight: 600,
-                borderRadius: 7,
-                fontSize: 14,
-                padding: '6px 14px'
+                borderRadius: 'clamp(4px, 1vw, 6px)',
+                fontSize: 'clamp(10px, 2vw, 12px)',
+                padding: 'clamp(4px, 1vw, 6px) clamp(8px, 2vw, 12px)'
               }}
             >
               Special Offer
             </span>
           )}
-          <div className="fw-bold text-success fs-2 mb-1" style={{ fontSize: 34 }}>
+          <div className="fw-bold text-success mb-1" style={{ fontSize: 'clamp(20px, 5vw, 28px)' }}>
             ₹{pkg.price.toLocaleString('en-IN')}
           </div>
-          <div className="text-muted fw-semibold">Price Per Person</div>
-          <div className="d-flex flex-column gap-2 mt-3" style={{ width: 150 }}>
+          <div className="text-muted fw-semibold" style={{ fontSize: 'clamp(11px, 2vw, 13px)' }}>Price Per Person</div>
+          <div className="d-flex flex-column gap-2 mt-3" style={{ width: '100%' }}>
             <Button
               className="btn btn-success fw-bold text-white mb-1"
-              style={{ borderRadius: 22, fontSize: 16 }}
+              style={{ 
+                borderRadius: 'clamp(16px, 4vw, 22px)', 
+                fontSize: 'clamp(12px, 2.5vw, 14px)',
+                padding: 'clamp(8px, 2vw, 12px) clamp(12px, 3vw, 16px)'
+              }}
               onClick={() => {
                 console.log('button clicked');
                 console.log('Navigating to package:', pkg.id);
@@ -229,9 +241,10 @@ export default function TravelPackageCard({ pkg }: { pkg: any }) {
             <button
               className="btn btn-outline-success fw-semibold"
               style={{
-                borderRadius: 22,
-                fontSize: 16,
-                borderWidth: 2
+                borderRadius: 'clamp(16px, 4vw, 22px)',
+                fontSize: 'clamp(12px, 2.5vw, 14px)',
+                borderWidth: 2,
+                padding: 'clamp(8px, 2vw, 12px) clamp(12px, 3vw, 16px)'
               }}
             >
               SEND ENQUIRY

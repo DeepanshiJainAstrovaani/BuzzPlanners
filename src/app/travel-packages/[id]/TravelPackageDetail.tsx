@@ -153,75 +153,68 @@ export default function TravelPackageDetail({ params }: { params: Promise<{ id: 
   return (
     <div>
       <Header />
-      
+      <div className="px-md-5">
+
       {/* Hero Section */}
       <div style={{ paddingTop: '80px' }}>
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-8">
-              <Carousel>
-                {pkg.images.map((image: string, index: number) => (
-                  <Carousel.Item key={index}>
-                    <Image
-                      src={image}
-                      alt={`Package image ${index + 1}`}
-                      width={800}
-                      height={400}
-                      className="d-block w-100 rounded"
-                      style={{ objectFit: 'cover' }}
-                    />
-                  </Carousel.Item>
-                ))}
-              </Carousel>
-            </div>
-            
-            <div className="col-lg-4">
-              <Card className="h-100">
-                <Card.Body>
-                  <h3 className="fw-bold mb-3">{pkg.title}</h3>
-                  <div className="d-flex align-items-center mb-3">
-                    <Badge bg="primary" className="me-2">{pkg.duration}</Badge>
-                    <div className="d-flex align-items-center">
-                      <span className="text-warning me-1">★</span>
-                      <span>{pkg.rating}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="price-section mb-4">
-                    <div className="d-flex align-items-center">
-                      <span className="text-muted text-decoration-line-through me-2">
-                        ₹{pkg.originalPrice.toLocaleString()}
-                      </span>
-                      <span className="h4 text-success fw-bold mb-0">
-                        ₹{pkg.discountedPrice.toLocaleString()}
-                      </span>
-                    </div>
-                    <small className="text-muted">per person</small>
-                  </div>
-                  
-                  <Button 
-                    variant="success" 
-                    size="lg" 
-                    className="w-100 mb-3"
-                    style={{ backgroundColor: '#22b06b' }}
+        <div className="container-fluid px-0">
+          {/* Breadcrumb */}
+          <div className="mb-3">
+            <nav aria-label="breadcrumb">
+              <ol className="breadcrumb">
+                <li className="breadcrumb-item"><a href="/">Home</a></li>
+                <li className="breadcrumb-item"><a href="/travel-packages">Travel Packages</a></li>
+                <li className="breadcrumb-item active" aria-current="page">Thailand</li>
+              </ol>
+            </nav>
+          </div>
+
+          {/* Title and Duration */}
+          <div className="mb-4">
+            <div className="row">
+              <div className="col-lg-8">
+                <h1 className="fw-bold mb-2">{pkg.title}</h1>
+                <div className="d-flex align-items-center mb-3">
+                  <Badge 
+                    bg="primary" 
+                    className="me-3 px-3 py-2" 
+                    style={{ fontSize: '14px', backgroundColor: '#007bff' }}
                   >
-                    Book Now
-                  </Button>
-                  
-                  <Button variant="outline-primary" size="lg" className="w-100">
-                    Enquire Now
-                  </Button>
-                </Card.Body>
-              </Card>
+                    {pkg.duration}
+                  </Badge>
+                  <div className="d-flex align-items-center">
+                    <span className="text-warning me-1" style={{ fontSize: '16px' }}>★</span>
+                    <span className="fw-semibold">{pkg.rating} Star</span>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
+
+          {/* Main Image Carousel */}
+          <div className="position-relative mb-4">
+            <Carousel indicators={false} className="travel-carousel">
+              {pkg.images.map((image: string, index: number) => (
+                <Carousel.Item key={index}>
+                  <Image
+                    src={image}
+                    alt={`Package image ${index + 1}`}
+                    width={1200}
+                    height={500}
+                    className="d-block w-100"
+                    style={{ objectFit: 'cover', height: '500px' }}
+                  />
+                </Carousel.Item>
+              ))}
+            </Carousel>
           </div>
         </div>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="bg-light py-3 sticky-top" style={{ top: '70px', zIndex: 10 }}>
+      <div className="bg-white border-top border-bottom py-3 sticky-top" style={{ top: '70px', zIndex: 10 }}>
         <div className="container">
-          <div className="d-flex gap-4 overflow-auto">
+          <div className="d-flex gap-2 overflow-auto">
             {[
               { key: 'overview', label: 'Overview' },
               { key: 'itinerary', label: 'Itinerary' },
@@ -230,7 +223,13 @@ export default function TravelPackageDetail({ params }: { params: Promise<{ id: 
             ].map(({ key, label }) => (
               <button
                 key={key}
-                className={`btn ${activeTab === key ? 'btn-primary' : 'btn-outline-primary'} fw-semibold`}
+                className={`btn ${activeTab === key ? 'btn-primary' : 'btn-outline-secondary'} px-4 py-2 rounded-pill fw-semibold`}
+                style={{
+                  whiteSpace: 'nowrap',
+                  backgroundColor: activeTab === key ? '#007bff' : 'transparent',
+                  borderColor: activeTab === key ? '#007bff' : '#6c757d',
+                  color: activeTab === key ? 'white' : '#6c757d'
+                }}
                 onClick={() => scrollToSection(key as SectionKey)}
               >
                 {label}
@@ -241,9 +240,42 @@ export default function TravelPackageDetail({ params }: { params: Promise<{ id: 
       </div>
 
       {/* Content Sections */}
-      <div className="container py-5">
+      <div className="container py-4">
         <div className="row">
           <div className="col-lg-8">
+            {/* Price and Book Section - Mobile */}
+            <div className="d-lg-none mb-4">
+              <Card className="border-0 shadow-sm">
+                <Card.Body>
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                      <span className="h5 fw-bold me-2">Starts From</span>
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-center mb-3">
+                    <span className="text-muted text-decoration-line-through me-2 h6">
+                      ₹{pkg.originalPrice.toLocaleString()}
+                    </span>
+                    <span className="h4 fw-bold mb-0" style={{ color: '#28a745' }}>
+                      ₹{pkg.discountedPrice.toLocaleString()}
+                    </span>
+                  </div>
+                  <small className="text-muted d-block mb-3">Price Per Person</small>
+                  <div className="d-flex gap-2">
+                    <Button 
+                      variant="success" 
+                      className="flex-fill"
+                      style={{ backgroundColor: '#28a745', borderColor: '#28a745' }}
+                    >
+                      BOOK NOW
+                    </Button>
+                    <Button variant="outline-primary" className="flex-fill">
+                      SEND ENQUIRY
+                    </Button>
+                  </div>
+                </Card.Body>
+              </Card>
+            </div>
             {/* Overview Section */}
             <section ref={sectionRefs.overview} className="mb-5">
               <h2 className="fw-bold mb-4">Overview</h2>
@@ -343,43 +375,79 @@ export default function TravelPackageDetail({ params }: { params: Promise<{ id: 
 
           {/* Sidebar */}
           <div className="col-lg-4">
-            <div className="sticky-top" style={{ top: '140px' }}>
-              <Card className="mb-4">
-                <Card.Body>
-                  <h5 className="fw-bold mb-3">Need Help?</h5>
-                  <p className="text-muted mb-3">
-                    Our travel experts are available 24/7 to help you plan your perfect trip.
-                  </p>
-                  <Button variant="outline-primary" className="w-100 mb-2">
-                    Call: +91 9876543210
-                  </Button>
-                  <Button variant="outline-success" className="w-100">
-                    WhatsApp Chat
-                  </Button>
+            <div className="sticky-top d-none d-lg-block" style={{ top: '140px' }}>
+              {/* Price Card */}
+              <Card className="border-0 shadow-sm mb-4">
+                <Card.Body className="p-4">
+                  <div className="text-center mb-3">
+                    <h3 className="fw-bold mb-2">{pkg.title}</h3>
+                    <div className="d-flex align-items-center justify-content-center mb-3">
+                      <Badge 
+                        bg="primary" 
+                        className="me-3 px-3 py-2" 
+                        style={{ fontSize: '14px', backgroundColor: '#007bff' }}
+                      >
+                        {pkg.duration}
+                      </Badge>
+                      <div className="d-flex align-items-center">
+                        <span className="text-warning me-1" style={{ fontSize: '16px' }}>★</span>
+                        <span className="fw-semibold">{pkg.rating}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-center mb-4">
+                    <div className="d-flex align-items-center justify-content-center mb-2">
+                      <span className="text-muted text-decoration-line-through me-2 h6">
+                        ₹{pkg.originalPrice.toLocaleString()}
+                      </span>
+                      <span className="h4 fw-bold mb-0" style={{ color: '#28a745' }}>
+                        ₹{pkg.discountedPrice.toLocaleString()}
+                      </span>
+                    </div>
+                    <small className="text-muted">per person</small>
+                  </div>
+
+                  <div className="d-grid gap-2">
+                    <Button 
+                      variant="success" 
+                      size="lg"
+                      className="fw-semibold py-3"
+                      style={{ backgroundColor: '#28a745', borderColor: '#28a745' }}
+                    >
+                      Book Now
+                    </Button>
+                    <Button 
+                      variant="outline-primary" 
+                      size="lg"
+                      className="fw-semibold py-3"
+                    >
+                      Enquire Now
+                    </Button>
+                  </div>
                 </Card.Body>
               </Card>
 
-              <Card>
-                <Card.Body>
-                  <h5 className="fw-bold mb-3">Why Choose Us?</h5>
-                  <ul className="list-unstyled">
-                    <li className="mb-2 d-flex align-items-start">
-                      <span className="text-success me-2">✓</span>
-                      <span className="small">Best Price Guarantee</span>
-                    </li>
-                    <li className="mb-2 d-flex align-items-start">
-                      <span className="text-success me-2">✓</span>
-                      <span className="small">24/7 Customer Support</span>
-                    </li>
-                    <li className="mb-2 d-flex align-items-start">
-                      <span className="text-success me-2">✓</span>
-                      <span className="small">Hassle-free Booking</span>
-                    </li>
-                    <li className="mb-2 d-flex align-items-start">
-                      <span className="text-success me-2">✓</span>
-                      <span className="small">Secure Payment</span>
-                    </li>
-                  </ul>
+              {/* Contact Card */}
+              <Card className="border-0 shadow-sm mb-4">
+                <Card.Body className="p-4 text-center">
+                  <div className="mb-3">
+                    <span 
+                      className="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
+                      style={{ 
+                        width: '50px', 
+                        height: '50px', 
+                        backgroundColor: '#ffc107',
+                        color: 'black'
+                      }}
+                    >
+                      📞
+                    </span>
+                  </div>
+                  <h6 className="fw-bold mb-2">Call us at +91 9867356174</h6>
+                  <p className="text-muted small mb-3">
+                    Want a customized package? <span style={{ color: '#28a745', cursor: 'pointer' }}>Click Here</span>
+                  </p>
                 </Card.Body>
               </Card>
             </div>
@@ -420,7 +488,75 @@ export default function TravelPackageDetail({ params }: { params: Promise<{ id: 
           </div>
         </div>
       </div>
+      </div>
       <Footer />
+
+      {/* Custom Styles */}
+      <style jsx global>{`
+        .travel-carousel .carousel-control-prev,
+        .travel-carousel .carousel-control-next {
+          width: 50px;
+          height: 50px;
+          background-color: rgba(0, 0, 0, 0.5);
+          border-radius: 50%;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        .travel-carousel .carousel-control-prev {
+          left: 20px;
+        }
+
+        .travel-carousel .carousel-control-next {
+          right: 20px;
+        }
+
+        .travel-carousel .carousel-control-prev-icon,
+        .travel-carousel .carousel-control-next-icon {
+          width: 20px;
+          height: 20px;
+        }
+
+        .breadcrumb {
+          background: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        .breadcrumb-item a {
+          color: #007bff;
+          text-decoration: none;
+        }
+
+        .breadcrumb-item a:hover {
+          text-decoration: underline;
+        }
+
+        .breadcrumb-item.active {
+          color: #6c757d;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+          content: "›";
+          color: #6c757d;
+        }
+
+        @media (max-width: 991px) {
+          .travel-carousel .carousel-control-prev,
+          .travel-carousel .carousel-control-next {
+            width: 40px;
+            height: 40px;
+          }
+
+          .travel-carousel .carousel-control-prev {
+            left: 10px;
+          }
+
+          .travel-carousel .carousel-control-next {
+            right: 10px;
+          }
+        }
+      `}</style>
     </div>
   );
 }

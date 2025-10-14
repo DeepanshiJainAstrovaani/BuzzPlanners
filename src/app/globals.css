@@ -152,11 +152,6 @@ img, picture, video, svg {
     padding-right: 10px !important;
   }
 
-  .py-sm-5 {
-    padding-top: 10px !important;
-    padding-bottom: 10px !important;
-  }
-
   /* Make hero title smaller on mobile */
   .text-light.fw-semibold {
     font-size: 1.4rem !important;
@@ -231,6 +226,11 @@ img, picture, video, svg {
     visibility: hidden !important;
     height: 0 !important;
     overflow: hidden !important;
+  }
+
+  .py-sm-5 {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
   }
 
   /* make category list horizontal scrollable (touch friendly) */

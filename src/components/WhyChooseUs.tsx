@@ -26,8 +26,8 @@ const features = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="py-5" style={{ backgroundColor: '#f9fafb' }}>
-      <Container>
+    <section className="py-5 px-md-5" style={{ backgroundColor: '#f9fafb' }}>
+      <div>
         <div className="text-center mb-4">
           <h4 className="fw-bold">Why you should choose us?</h4>
         </div>
@@ -65,7 +65,7 @@ export default function WhyChooseUs() {
             </Col>
           ))}
         </Row>
-      </Container>
+      </div>
     </section>
   );
 }
