@@ -6,6 +6,7 @@ import { CalendarDays, Plane, Building2, TreePalm, Car } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import FlightSearchForm from './FlightSearchForm';
 import TravelPackageSearchForm from './TravelPackageSearchForm';
+import HotelSearchForm from './HotelSearchForm';
 import { useExperience } from '@/context/ExperienceContext';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
@@ -50,6 +51,11 @@ export default function HeroSearch() {
         router.push(`/travel-packages?${q.toString()}`);
     };
 
+    const handleHotelSearch = (params: any) => {
+        const q = new URLSearchParams(params as Record<string, string>);
+        router.push(`/hotels?${q.toString()}`);
+    };
+
     function renderSearchCard() {
         if (active === 'flights') {
             return (
@@ -58,7 +64,14 @@ export default function HeroSearch() {
                 </div>
             );
         }
-        if (active === 'hotels' || active === 'holiday' || active === 'trips') {
+        if (active === 'hotels') {
+            return (
+                <div>
+                    <HotelSearchForm onSearch={handleHotelSearch} defaultDest="NAI" />
+                </div>
+            );
+        }
+        if (active === 'holiday' || active === 'trips') {
             return (
                 <div>
                     <TravelPackageSearchForm onSearch={handleTravelSearch} defaultDest="KAS" />
