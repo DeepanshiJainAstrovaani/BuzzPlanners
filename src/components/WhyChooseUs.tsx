@@ -1,6 +1,6 @@
 // components/WhyChooseUs.tsx
 import React from 'react';
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
 import Image from 'next/image';
 
 const features = [
