@@ -2,12 +2,11 @@
 
 import DashboardHeader from '@/components/DashboardHeader';
 import DashboardSidebar from '@/components/DashboardSidebar';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function BookingManagementPage() {
   const pathname = usePathname();
-  const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -52,16 +51,6 @@ export default function BookingManagementPage() {
       >
         <div className="d-flex align-items-center justify-content-between mb-3 gap-2 flex-wrap">
           <h1 style={{ fontWeight: 600, fontSize: '1.2rem', margin: 0 }}>Booking Dashboard</h1>
-          <div className="d-flex gap-2">
-            <button
-              type="button"
-              className="btn btn-sm btn-outline-primary"
-              style={{ fontSize: 12, fontWeight: 500, padding: '4px 14px' }}
-              onClick={() => router.push('/dashboard/booking-management/pdf-design')}
-            >
-              PDF Design Preview
-            </button>
-          </div>
         </div>
 
         <section style={{ background: '#fff', border: '1px solid #e5e5e5', borderRadius: 12, padding: '28px 22px', textAlign: 'center' }}>

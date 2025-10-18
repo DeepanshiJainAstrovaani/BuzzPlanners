@@ -6,11 +6,99 @@
 .dateText { font-size: 14px; color: #222; opacity: 0.95; }
 .divider { border: none; border-top: 2px solid #E2D29C; margin: 12px 0; }
 .kv { font-size: 14px; margin-bottom: 6px; color: #222; }
+
+/* Action buttons container */
+.actionButtons { display: flex; align-items: center; gap: 8px; }
+
 /* Edit button aligned to right, with hover inversion */
 .editLink { background: #fbf3db; color: #222; border: 1px solid #222; border-radius: 10px; padding: 6px 18px; font-weight: 500; font-size: 12px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: all .2s ease; white-space: nowrap; }
 .editLink:hover { background: #222; color: #fff; }
 .editLink:active { transform: translateY(1px); }
 .editLink:focus-visible { outline: 2px solid rgba(0,0,0,.35); outline-offset: 2px; }
+
+/* Preview button with eye icon */
+.previewButton { 
+  background: #fbf3db; 
+  color: #222; 
+  border: 1px solid #222; 
+  border-radius: 10px; 
+  padding: 6px 12px; 
+  font-weight: 500; 
+  font-size: 16px; 
+  cursor: pointer; 
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center; 
+  transition: all .2s ease; 
+  white-space: nowrap; 
+}
+.previewButton:hover { background: #222; color: #fff; }
+.previewButton:active { transform: translateY(1px); }
+.previewButton:focus-visible { outline: 2px solid rgba(0,0,0,.35); outline-offset: 2px; }
+
+/* Modal styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modalContent {
+  background: white;
+  border-radius: 12px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+  position: relative;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px 10px 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.modalHeader h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background-color: #f0f0f0;
+  color: #222;
+}
+
+.pdfContainer {
+  padding: 20px;
+  min-height: 400px;
+}
 
 @media (max-width: 768px) {
   .infoCard { padding: 14px; border-radius: 10px; }
@@ -19,5 +107,13 @@
   .leftCol { flex: 1; min-width: 0; }
   .titleText { font-size: 16px; }
   .idText, .dateText, .kv { font-size: 13px; }
-  .editLink { margin-left: auto; padding: 5px 14px; }
+  .actionButtons { gap: 6px; }
+  .editLink { padding: 5px 14px; }
+  .previewButton { padding: 5px 10px; font-size: 14px; }
+  
+  .modalOverlay { padding: 10px; }
+  .modalContent { max-width: 95vw; max-height: 95vh; }
+  .modalHeader { padding: 15px 15px 10px 15px; }
+  .modalHeader h3 { font-size: 16px; }
+  .pdfContainer { padding: 15px; }
 }
